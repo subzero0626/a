@@ -1402,15 +1402,15 @@
 
         function startArtifactDraw() {
             // 테스트용으로 쿨다운 제거
-            // const now = Date.now();
-            // const cooldownTime = getArtifactCooldown() * 1000; // 유물 효과 적용된 쿨다운
-            // 
+             const now = Date.now();
+             const cooldownTime = getArtifactCooldown() * 1000; // 유물 효과 적용된 쿨다운
+             
             // // 쿨다운 확인
-            // if (now - lastArtifactDraw < cooldownTime) {
-            //     const remainingTime = Math.ceil((cooldownTime - (now - lastArtifactDraw)) / 1000);
-            //     alert(`아직 ${remainingTime}초 남았습니다.`);
-            //     return;
-            // }
+             if (now - lastArtifactDraw < cooldownTime) {
+                 const remainingTime = Math.ceil((cooldownTime - (now - lastArtifactDraw)) / 1000);
+                 alert(`아직 ${remainingTime}초 남았습니다.`);
+                 return;
+             }
             
             const button = document.getElementById('artifactDrawButton');
             const resultEl = document.getElementById('artifactResult');
@@ -1464,8 +1464,8 @@
                     resultEl.className = resultClass;
                     
                 // 쿨다운 시작 (테스트용으로 비활성화)
-                // lastArtifactDraw = now;
-                // startArtifactCooldown();
+                    lastArtifactDraw = now;
+                    startArtifactCooldown();
                     
                     // 버튼 복원
                     button.disabled = false;
@@ -1524,7 +1524,6 @@
         function getArtifactCooldown() {
             const artifact = artifactStorage.find(item => item.name === '세호로리의 유물석');
             if (!artifact) return baseArtifactCooldown;
-            
             const reduction = artifact.level * 0.1; // 레벨당 10% 감소
             return Math.max(10, baseArtifactCooldown * (1 - reduction)); // 최소 10초
         }
