@@ -1408,7 +1408,7 @@
             // // 쿨다운 확인
              if (now - lastArtifactDraw < cooldownTime) {
                  const remainingTime = Math.ceil((cooldownTime - (now - lastArtifactDraw)) / 1000);
-                 alert(`아직 ${remainingTime}초 남았습니다.`);
+                 alert(`아직 ${remainingTime * (1 - reduction)}초 남았습니다.`);
                  return;
              }
             
@@ -1911,6 +1911,7 @@
   </script>
 </body>
 </html>
+
 
 
 
