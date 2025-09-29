@@ -1532,7 +1532,7 @@
             const artifact = artifactStorage.find(item => item.name === '세호로리의 행운 포션');
             if (!artifact) return 0;
             
-            return artifact.level * 0.08; // 레벨당 8% 감소
+            return artifact.level * 8; // 레벨당 8% 감소
         }
         
         function getSpecialEffectBonus(participantName) {
@@ -1911,3 +1911,4 @@
   </script>
 </body>
 </html>
+
