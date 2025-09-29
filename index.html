@@ -916,9 +916,9 @@
             } else if (effectType === 'golden') {
                 realProbability = (baseProbability * 0.01).toFixed(4);
             } else if (effectType === 'shining') {
-                realProbability = (baseProbability * 0.2).toFixed(3);
+                realProbability = (baseProbability * 0.2).toFixed(2);
             } else if (effectType === 'sparkling') {
-                realProbability = (baseProbability * 0.05).toFixed(2);
+                realProbability = (baseProbability * 0.05).toFixed(3);
             }
             
             // 같은 아이템이 있는지 확인
@@ -1104,8 +1104,8 @@
                 const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
                 const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
                 const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(4);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(3);
-                const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(2);
+                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
+                const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(3);
                 
                 listHTML += `
                     <div class="probability-item">
@@ -1911,6 +1911,7 @@
   </script>
 </body>
 </html>
+
 
 
 
