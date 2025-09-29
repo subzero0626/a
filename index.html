@@ -912,11 +912,11 @@
             // 실제 확률 계산 (효과 포함)
             let realProbability = baseProbability;
             if (effectType === 'diamond') {
-                realProbability = (baseProbability * 0.002).toFixed(2);
+                realProbability = (baseProbability * 0.002).toFixed(4);
             } else if (effectType === 'golden') {
-                realProbability = (baseProbability * 0.01).toFixed(2);
+                realProbability = (baseProbability * 0.01).toFixed(4);
             } else if (effectType === 'shining') {
-                realProbability = (baseProbability * 0.2).toFixed(2);
+                realProbability = (baseProbability * 0.2).toFixed(3);
             } else if (effectType === 'sparkling') {
                 realProbability = (baseProbability * 0.05).toFixed(2);
             }
@@ -1101,10 +1101,10 @@
                 const specialEffectBonus = getSpecialEffectBonus(participant.name);
                 const rainbowBonus = getRainbowBonus();
                 
-                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(3);
-                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(2);
-                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(2);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
+                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
+                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
+                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(4);
+                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(3);
                 const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(2);
                 
                 listHTML += `
@@ -1121,19 +1121,19 @@
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(2)}%)</span>
+                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(3)}%)</span>
                                 <small>(뽑힌 후 5% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(2)}%)</span>
+                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(4)}%)</span>
                                 <small>(뽑힌 후 1% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(2)}%)</span>
+                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(4)}%)</span>
                                 <small>(뽑힌 후 0.2% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(3)}%)</span>
+                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(5)}%)</span>
                                 <small>(뽑힌 후 0.02% 확률)</small>
                             </div>
                         </div>
@@ -1199,10 +1199,10 @@
                 const specialEffectBonus = getSpecialEffectBonus(participant.name);
                 const rainbowBonus = getRainbowBonus();
                 
-                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(3);
-                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(2);
-                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(2);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
+                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
+                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
+                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(4);
+                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(3);
                 const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(2);
                 
                 listHTML += `
@@ -1219,19 +1219,19 @@
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(2)}%)</span>
+                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(3)}%)</span>
                                 <small>(뽑힌 후 5% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(2)}%)</span>
+                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(4)}%)</span>
                                 <small>(뽑힌 후 1% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(2)}%)</span>
+                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(4)}%)</span>
                                 <small>(뽑힌 후 0.2% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(3)}%)</span>
+                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(5)}%)</span>
                                 <small>(뽑힌 후 0.02% 확률)</small>
                             </div>
                         </div>
@@ -1509,7 +1509,7 @@
             
             const updateCooldown = () => {
                 if (remainingTime > 0) {
-                    cooldownEl.textContent = `다음 뽑기까지 ${remainingTime}초`;
+                    cooldownEl.textContent = `다음 뽑기까지 ${remainingTime * (1 - reduction)}초`;
                     remainingTime--;
                     setTimeout(updateCooldown, 1000);
                 } else {
@@ -1611,10 +1611,10 @@
                 const specialEffectBonus = getSpecialEffectBonus(participant.name);
                 const rainbowBonus = getRainbowBonus();
                 
-                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(3);
-                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(2);
-                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(2);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
+                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
+                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
+                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(4);
+                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(3);
                 const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(2);
                 listHTML += `
                     <div class="probability-item">
@@ -1630,19 +1630,19 @@
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(2)}%)</span>
+                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(3)}%)</span>
                                 <small>(뽑힌 후 5% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(2)}%)</span>
+                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(4)}%)</span>
                                 <small>(뽑힌 후 1% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(2)}%)</span>
+                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(4)}%)</span>
                                 <small>(뽑힌 후 0.2% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(3)}%)</span>
+                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(5)}%)</span>
                                 <small>(뽑힌 후 0.02% 확률)</small>
                             </div>
                         </div>
@@ -1733,10 +1733,10 @@
                 const specialEffectBonus = getSpecialEffectBonus(participant.name);
                 const rainbowBonus = getRainbowBonus();
                 
-                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(3);
-                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(2);
-                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(2);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
+                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
+                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
+                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(4);
+                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(3);
                 const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(2);
                 
                 listHTML += `
@@ -1753,19 +1753,19 @@
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(2)}%)</span>
+                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(3)}%)</span>
                                 <small>(뽑힌 후 5% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(2)}%)</span>
+                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(4)}%)</span>
                                 <small>(뽑힌 후 1% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(2)}%)</span>
+                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(4)}%)</span>
                                 <small>(뽑힌 후 0.2% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(3)}%)</span>
+                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(5)}%)</span>
                                 <small>(뽑힌 후 0.02% 확률)</small>
                             </div>
                         </div>
@@ -1911,6 +1911,7 @@
   </script>
 </body>
 </html>
+
 
 
 
