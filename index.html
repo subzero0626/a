@@ -1509,7 +1509,7 @@
             
             const updateCooldown = () => {
                 if (remainingTime > 0) {
-                    cooldownEl.textContent = `다음 뽑기까지 ${remainingTime}초`;
+                    cooldownEl.textContent = `다음 뽑기까지 ${remainingTime * (1 - reduction)}초`;
                     remainingTime--;
                     setTimeout(updateCooldown, 1000);
                 } else {
@@ -1911,6 +1911,7 @@
   </script>
 </body>
 </html>
+
 
 
 
