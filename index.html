@@ -795,7 +795,7 @@
                 resultDisplay.style.fontSize = '2.2em';
                 count++;
                 
-                if (count > 40) {
+                if (count > 30) {
                     clearInterval(interval);
                     finishDraw();
                 }
@@ -916,7 +916,7 @@
             } else if (effectType === 'golden') {
                 realProbability = (baseProbability * 0.01).toFixed(4);
             } else if (effectType === 'shining') {
-                realProbability = (baseProbability * 0.2).toFixed(2);
+                realProbability = (baseProbability * 0.2).toFixed(3);
             } else if (effectType === 'sparkling') {
                 realProbability = (baseProbability * 0.05).toFixed(3);
             }
@@ -1104,7 +1104,7 @@
                 const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
                 const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
                 const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(4);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
+                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(3);
                 const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(3);
                 
                 listHTML += `
@@ -1117,7 +1117,7 @@
                                 <span>특별 효과 확률</span>
                             </div>
                             <div class="effect-probability">
-                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${(shiningProbability - (probability * 0.2)).toFixed(2)}%)</span>
+                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${(shiningProbability - (probability * 0.2)).toFixed(3)}%)</span>
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
@@ -1215,7 +1215,7 @@
                                 <span>특별 효과 확률</span>
                             </div>
                             <div class="effect-probability">
-                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${(shiningProbability - (probability * 0.2)).toFixed(2)}%)</span>
+                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${(shiningProbability - (probability * 0.2)).toFixed(3)}%)</span>
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
@@ -1509,7 +1509,7 @@
             
             const updateCooldown = () => {
                 if (remainingTime > 0) {
-                    cooldownEl.textContent = `다음 뽑기까지 ${remainingTime * (1 - reduction)}초`;
+                    cooldownEl.textContent = `다음 뽑기까지 ${remainingTime}초`;
                     remainingTime--;
                     setTimeout(updateCooldown, 1000);
                 } else {
@@ -1911,6 +1911,7 @@
   </script>
 </body>
 </html>
+
 
 
 
