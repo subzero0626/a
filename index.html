@@ -660,8 +660,13 @@
         }
 
         /* 보관소 스타일 */
+        .storage-container .container {
+            max-width: 600px;
+            width: 95%;
+        }
+
         .storage-list {
-            max-height: 400px;
+            max-height: 600px;
             overflow-y: auto;
             margin-top: 20px;
         }
@@ -674,11 +679,11 @@
 
         .storage-item {
             background: #f8f9fa;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             border-left: 4px solid #28a745;
-            flex: 1;
-            min-width: 0;
+            width: 240px;
+            min-width: 240px;
             transition: all 0.3s ease;
             position: relative;
         }
@@ -727,9 +732,7 @@
         .storage-item:hover .action-btn { display: block; }
         .storage-item:hover .enhance-info { display: block; }
 
-        .storage-item:hover {
-            transform: translateY(-2px);
-        }
+        /* 기본 마우스 오버 효과 제거 - 강화된 아이템만 효과 적용 */
 
         .storage-item.diamond {
             background: linear-gradient(135deg, #b9f2ff 0%, #87ceeb 50%, #00bfff 100%);
@@ -831,7 +834,132 @@
             line-height: 1.2;
             display: none;
         }
-        .storage-item:hover .enhance-stats { display: block; }
+         .storage-item:hover .enhance-stats { display: block; }
+
+         /* 강화됨 라벨 스타일 */
+         .enhanced-label {
+             color: #6c757d;
+             font-size: 0.75em;
+             font-style: italic;
+             margin-top: 2px;
+         }
+
+         /* 강화 단계별 누적 효과 */
+         
+         /* 1강: 효과 없음 */
+         
+         /* 2강: 자동 광택 효과 (5초마다) */
+         .storage-item[data-enhance-level="2"] {
+             position: relative;
+             overflow: hidden;
+         }
+         .storage-item[data-enhance-level="2"]::after {
+             content: '';
+             position: absolute;
+             top: -50%;
+             left: -50%;
+             width: 200%;
+             height: 200%;
+             background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+             animation: autoShine 0.8s ease-in-out 5s infinite;
+             pointer-events: none;
+         }
+
+         /* 3강 이상: 마우스 오버시 광택 효과 */
+         .storage-item[data-enhance-level="3"]:hover,
+         .storage-item[data-enhance-level="4"]:hover,
+         .storage-item[data-enhance-level="5"]:hover {
+             position: relative;
+             overflow: hidden;
+         }
+         .storage-item[data-enhance-level="3"]:hover::after,
+         .storage-item[data-enhance-level="4"]:hover::after,
+         .storage-item[data-enhance-level="5"]:hover::after {
+             content: '';
+             position: absolute;
+             top: -50%;
+             left: -50%;
+             width: 200%;
+             height: 200%;
+             background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+             animation: shine 0.8s ease-in-out;
+             pointer-events: none;
+         }
+
+        /* 3강: 마우스 오버시 적당히 올라감 */
+        .storage-item[data-enhance-level="3"]:hover,
+        .storage-item[data-enhance-level="4"]:hover,
+        .storage-item[data-enhance-level="5"]:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        /* 4강: 마우스 오버시 회색 테두리 효과 */
+        .storage-item[data-enhance-level="4"]:hover,
+        .storage-item[data-enhance-level="5"]:hover {
+            border: 3px solid #6c757d;
+            transform: translateY(-4px);
+        }
+
+        /* 5강: 마우스 오버시 흔들림 효과 */
+        .storage-item[data-enhance-level="5"]:hover {
+            animation: maxLevelShake 0.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes autoShine {
+            0% { 
+                opacity: 0;
+                transform: translateX(-100%) translateY(-100%) rotate(45deg); 
+            }
+            50% { 
+                opacity: 1;
+                transform: translateX(0%) translateY(0%) rotate(45deg); 
+            }
+            100% { 
+                opacity: 0;
+                transform: translateX(100%) translateY(100%) rotate(45deg); 
+            }
+        }
+
+        @keyframes maxLevelShake {
+            0% {
+                transform: translateY(-4px) rotate(-1.5deg);
+                box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            }
+            100% {
+                transform: translateY(-4px) rotate(1.5deg);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            }
+        }
+
+
+         /* 강화된 세호 표시 스타일 */
+         .probability-item.enhanced {
+             background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+             border-left: 4px solid #f39c12;
+         }
+
+         .probability-item.enhanced .participant-name {
+             color: #d68910;
+             font-weight: bold;
+         }
+
+         .enhancement-indicator {
+             display: inline-block;
+             background: #f39c12;
+             color: white;
+             padding: 2px 8px;
+             border-radius: 12px;
+             font-size: 0.75em;
+             font-weight: bold;
+             margin-left: 8px;
+             animation: pulse 2s infinite;
+        }
 
   </style>
 </head>
@@ -883,7 +1011,7 @@
   </div>
 
         <!-- 보관소 화면 (오른쪽) -->
-        <div class="screen">
+        <div class="screen storage-container">
             <div class="container">
                 <h1>📦 보관소</h1>
                 <div id="storageContent">
@@ -1004,6 +1132,8 @@
         let rarestItem = null; // { name, realProbabilityNum }
         let startTime = Date.now();
         let playtimeTimer = null;
+        let lastEnhancementTime = 0; // 마지막 강화 시간
+        let enhancementCooldown = 1000; // 강화 쿨다운 (1초)
 
         // 상태 저장/불러오기 (localStorage)
         function saveState() {
@@ -1208,19 +1338,21 @@
             const baseProbabilityNum = participantData ? ((participantData.weight / totalWeight) * 100) : 0;
             const baseProbability = formatFiniteOrEllipsis(baseProbabilityNum);
             
-            // 실제 확률 계산 (효과 포함)
+            // 실제 확률 계산 (효과 포함, 강화 효과 반영)
             let realProbabilityNum = baseProbabilityNum;
+            const specialEffectBonus = getSpecialEffectBonus(winner);
+            
             if (effectType === 'rainbow') {
                 // 무지갯빛의 실확률 (독립 단계) 표기: 기본 확률 * 0.0002 * (1 + 무지갯빛 보석 보너스)
                 realProbabilityNum = baseProbabilityNum * 0.0002 * (1 + getRainbowBonus());
             } else if (effectType === 'diamond') {
-                realProbabilityNum = baseProbabilityNum * 0.002;
+                realProbabilityNum = baseProbabilityNum * 0.002 * (1 + specialEffectBonus);
             } else if (effectType === 'golden') {
-                realProbabilityNum = baseProbabilityNum * 0.01;
+                realProbabilityNum = baseProbabilityNum * 0.01 * (1 + specialEffectBonus);
             } else if (effectType === 'shining') {
-                realProbabilityNum = baseProbabilityNum * 0.2;
+                realProbabilityNum = baseProbabilityNum * 0.2 * (1 + specialEffectBonus);
             } else if (effectType === 'sparkling') {
-                realProbabilityNum = baseProbabilityNum * 0.05;
+                realProbabilityNum = baseProbabilityNum * 0.05 * (1 + specialEffectBonus);
             }
             const realProbability = formatFiniteOrEllipsis(realProbabilityNum);
             // 레어도 갱신 (가장 낮은 실확률)
@@ -1233,9 +1365,12 @@
                 }
             } catch (e) {}
             
-            // 같은 아이템이 있는지 확인
+            // 같은 아이템이 있는지 확인 (강화 단계도 고려)
+            // 뽑기로 얻은 아이템은 항상 강화 단계 0이므로, 강화 단계 0인 것만 찾음
             const existingItem = storage.find(item => 
-                item.name === winner && item.effectType === effectType
+                item.name === winner && 
+                item.effectType === effectType &&
+                (item.enhanceLevel || 0) === 0
             );
             
             if (existingItem) {
@@ -1297,12 +1432,31 @@
             bindUpgradeDelegation(storageSehoOverlay);
             bindUpgradeDelegation(storageArtiOverlay);
 
-            // 확률이 낮은 순으로 정렬 (무지갯빛 → 다이아 → 황금 → 번쩍이는 → 빛나는 → 일반)
+            // 확률이 낮은 순으로 정렬 (강화된 확률 기준)
             const sortedStorage = [...storage].sort((a, b) => {
-                const order = { 'rainbow': -1, 'diamond': 0, 'golden': 1, 'sparkling': 2, 'shining': 3, 'normal': 4 };
-                const av = order[a.effectType] ?? 5;
-                const bv = order[b.effectType] ?? 5;
-                return av - bv;
+                // 강화된 확률 계산
+                const getEffectiveProbability = (item) => {
+                    const baseProb = parseFloat(item.realProbability) || 0;
+                    const level = item.enhanceLevel || 0;
+                    if (level === 0) return baseProb;
+                    
+                    // 강화 단계에 따른 성공 확률들
+                    const enhanceChances = [0.8, 0.7, 0.55, 0.35, 0.1];
+                    let effectiveProb = baseProb;
+                    
+                    // 각 강화 단계의 성공 확률을 곱해서 최종 확률 계산
+                    for (let i = 0; i < level; i++) {
+                        effectiveProb *= enhanceChances[i] || 1;
+                    }
+                    
+                    return effectiveProb;
+                };
+                
+                const aProb = getEffectiveProbability(a);
+                const bProb = getEffectiveProbability(b);
+                
+                // 확률이 낮은 순으로 정렬
+                return aProb - bProb;
             });
 
             if (storageList) storageList.innerHTML = '';
@@ -1317,9 +1471,16 @@
                 for (let j = 0; j < 2 && i + j < sortedStorage.length; j++) {
                     const item = sortedStorage[i + j];
                     const div = document.createElement('div');
+                    
                     div.className = `storage-item ${item.effectType}`;
                     const originalIndex = storage.indexOf(item);
                     div.setAttribute('data-index', String(originalIndex));
+                    
+                    // 강화 단계에 따른 시각적 효과 적용
+                    const enhanceLevel = item.enhanceLevel || 0;
+                    if (enhanceLevel > 0) {
+                        div.setAttribute('data-enhance-level', String(enhanceLevel));
+                    }
                     
                     let displayName = item.name;
                     const level = Math.max(0, item.enhanceLevel || 0);
@@ -1346,9 +1507,12 @@
                     const infoText = getEnhanceInfoText(level);
                     const success = (enhanceChances[level] || 0);
                     const destroy = (1 - success) * 0.10;
+                    const enhancedLabel = level > 0 ? '<div class="enhanced-label">(강화됨)</div>' : '';
+                    
                     div.innerHTML = `
                         <div class=\"name\">${displayName}</div>
                         <div class=\"probability\">${probabilityText}</div>
+                        ${enhancedLabel}
                         <div class=\"time\">${item.date} ${item.time}</div>
                         ${countHtml}
                         <div class=\"enhance-stats\">성공확률: ${formatPercent(success)}<br>파괴확률: ${formatPercent(destroy)}</div>
@@ -1360,8 +1524,26 @@
                         if (level >= 5) {
                             upgBtn.style.opacity = '0.5';
                             upgBtn.style.cursor = 'not-allowed';
+                            upgBtn.disabled = true;
                         } else {
-                            upgBtn.onclick = (e) => { performUpgrade(originalIndex); e.stopPropagation(); };
+                            // 쿨타임 확인
+                            const now = Date.now();
+                            const isOnCooldown = (now - lastEnhancementTime) < enhancementCooldown;
+                            
+                            if (isOnCooldown) {
+                                upgBtn.disabled = true;
+                                upgBtn.style.opacity = '0.5';
+                                upgBtn.style.cursor = 'not-allowed';
+                                upgBtn.style.backgroundColor = '#adb5bd';
+                                upgBtn.textContent = '쿨타임...';
+                            } else {
+                                upgBtn.disabled = false;
+                                upgBtn.style.opacity = '1';
+                                upgBtn.style.cursor = 'pointer';
+                                upgBtn.style.backgroundColor = '#28a745';
+                                upgBtn.textContent = '강화하기';
+                                upgBtn.onclick = (e) => { performUpgrade(originalIndex); e.stopPropagation(); };
+                            }
                         }
                     }
                     row.appendChild(div);
@@ -1409,7 +1591,7 @@
         }
 
         // 강화 시스템
-        const enhanceChances = [0.8, 0.7, 0.55, 0.35, 0.1]; // 0->1 ... 4->5
+        const enhanceChances = [1.0, 1.0, 1.0, 1.0, 1.0]; // 0->1 ... 4->5 (100% 성공)
 
         function formatPercent(p) { return Math.round(p * 1000) / 10 + '%'; }
 
@@ -1460,6 +1642,15 @@
         function performUpgrade(index) {
             const item = storage[index];
             if (!item) return;
+            
+            // 쿨타임 확인
+            const now = Date.now();
+            if (now - lastEnhancementTime < enhancementCooldown) {
+                const remainingTime = Math.ceil((enhancementCooldown - (now - lastEnhancementTime)) / 1000);
+                alert(`강화 쿨타임 중입니다. ${remainingTime}초 후에 다시 시도해주세요.`);
+                return;
+            }
+            
             let level = Math.max(0, item.enhanceLevel || 0);
             if (level >= 5) return;
             const success = enhanceChances[level] || 0;
@@ -1484,8 +1675,54 @@
                     item.enhanceLevel = Math.max(0, level - 1);
                 }
             }
+            
+            // 강화 시간 기록
+            lastEnhancementTime = now;
+            
+            // 모든 강화 버튼 비활성화
+            disableAllEnhanceButtons();
+            
+            // 1초 후 버튼 다시 활성화
+            setTimeout(() => {
+                enableAllEnhanceButtons();
+            }, enhancementCooldown);
+            
             saveState();
             updateStorageDisplay();
+        }
+
+        // 모든 강화 버튼 비활성화
+        function disableAllEnhanceButtons() {
+            const buttons = document.querySelectorAll('.action-upgrade');
+            buttons.forEach(button => {
+                button.disabled = true;
+                button.style.opacity = '0.5';
+                button.style.cursor = 'not-allowed';
+                button.style.backgroundColor = '#adb5bd';
+                button.textContent = '강화중';
+            });
+        }
+
+        // 모든 강화 버튼 활성화
+        function enableAllEnhanceButtons() {
+            const buttons = document.querySelectorAll('.action-upgrade');
+            buttons.forEach(button => {
+                const itemDiv = button.closest('.storage-item');
+                if (!itemDiv) return;
+                
+                const idxAttr = itemDiv.getAttribute('data-index');
+                if (idxAttr == null) return;
+                const idx = parseInt(idxAttr, 10);
+                const item = storage[idx];
+                
+                if (item && (item.enhanceLevel || 0) < 5) {
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                    button.style.cursor = 'pointer';
+                    button.style.backgroundColor = '#28a745';
+                    button.textContent = '강화하기';
+                }
+            });
         }
 
         function switchOverlayTab(e, overlayId) {
@@ -2129,6 +2366,7 @@
                 const goldenProbability = formatFiniteOrEllipsis(probNum * 0.01 * (1 + specialEffectBonus));
                 const shiningProbability = formatFiniteOrEllipsis(probNum * 0.2 * (1 + specialEffectBonus));
                 const sparklingProbability = formatFiniteOrEllipsis(probNum * 0.05 * (1 + specialEffectBonus));
+                
                 listHTML += `
                     <div class="probability-item">
                         <span class="participant-name">${participant.name}</span>
