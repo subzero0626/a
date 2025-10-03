@@ -57,6 +57,71 @@
             z-index: 1000;
         }
 
+        /* 설정 패널 (좌측 상단) */
+        #settingsPanel {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            background: #ffffff;
+            border: 2px solid #adb5bd; /* 연한 회색 테두리 */
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            overflow: hidden;
+            z-index: 2100;
+            transition: width 0.25s ease, height 0.25s ease;
+        }
+        #settingsPanel.collapsed {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        #settingsPanel.open {
+            width: 320px;
+            max-height: 70vh;
+        }
+        /* 마우스 오버시 자동 확장 */
+        #settingsPanel:hover {
+            width: 320px;
+            height: auto; /* 세로로 길게 펼침 */
+            max-height: 70vh;
+        }
+        #settingsPanel:hover #settingsContent { display: block; }
+        #settingsHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #dee2e6;
+            cursor: pointer;
+        }
+        #settingsHeader .title { display: none; }
+        #settingsContent {
+            padding: 10px 12px;
+            display: none;
+        }
+        #settingsPanel.open #settingsContent { display: block; }
+        .settings-row { display: flex; align-items: center; justify-content: space-between; margin: 8px 0; }
+        .settings-key { color: #495057; font-weight: 700; }
+        .settings-val { color: #212529; font-weight: 800; }
+        .settings-reset {
+            margin-top: 10px;
+            width: 100%;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* 햄버거 아이콘 (회색 선 3개) */
+        .hamburger { display: inline-flex; flex-direction: column; gap: 4px; padding: 6px; }
+        .hamburger span { display: block; width: 22px; height: 3px; background: #6c757d; border-radius: 2px; }
+
         .dot {
             width: 12px;
             height: 12px;
@@ -159,6 +224,54 @@
             box-shadow: 0 0 25px rgba(0, 191, 255, 0.6);
         }
 
+        .result-display.rainbow {
+            background: #ff4d4d; /* 더 진한 시작 색 */
+            border: none; /* 테두리 제거 */
+            color: #000000; /* 글자색 검정 고정 */
+            font-weight: bold;
+            font-size: 2.5em;
+            animation: rainbowCycle 1.6s linear infinite, rainbowAura 1.6s ease-in-out infinite alternate, rainbowSparkle 0.7s ease-in-out infinite alternate;
+            box-shadow: 0 0 22px rgba(255,255,255,0.35);
+            position: relative;
+        }
+
+        .result-display.rainbow::after { display: none; }
+
+        /* 광택 효과 제거 (before 요소 삭제) */
+
+        @keyframes rainbowCycle {
+            0%   { background: #ff4d4d; color: #000000; }
+            16%  { background: #ff9f1a; color: #000000; }
+            33%  { background: #ffd60a; color: #000000; }
+            50%  { background: #2ecc71; color: #000000; }
+            66%  { background: #3498db; color: #000000; }
+            83%  { background: #6c5ce7; color: #000000; }
+            100% { background: #9b59b6; color: #000000; }
+        }
+
+        @keyframes rainbowAura {
+            0%   { box-shadow: 0 0 14px rgba(255,179,186,0.35), 0 0 28px rgba(255,217,179,0.25); }
+            50%  { box-shadow: 0 0 22px rgba(186,255,201,0.45), 0 0 36px rgba(186,225,255,0.35); }
+            100% { box-shadow: 0 0 18px rgba(208,179,255,0.4), 0 0 30px rgba(255,179,186,0.3); }
+        }
+
+        @keyframes rainbowBorder {
+            0%   { border-color: rgba(255,179,186,0.6); }
+            16%  { border-color: rgba(255,217,179,0.6); }
+            33%  { border-color: rgba(255,243,179,0.6); }
+            50%  { border-color: rgba(186,255,201,0.6); }
+            66%  { border-color: rgba(186,225,255,0.6); }
+            83%  { border-color: rgba(208,179,255,0.6); }
+            100% { border-color: rgba(255,179,186,0.6); }
+        }
+
+        @keyframes rainbowSparkle {
+            0% { filter: brightness(1) saturate(1); }
+            100% { filter: brightness(1.25) saturate(1.1); }
+        }
+
+        /* 광택 키프레임 제거 */
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -233,6 +346,12 @@
 
         .draw-button:active {
             transform: translateY(0);
+        }
+
+        .draw-button[disabled], .draw-button.disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            box-shadow: none;
         }
 
         /* 접이식 패널 공통 스타일 */
@@ -317,18 +436,18 @@
         /* 유물 컬렉션: 3x3 그리드 */
         .artifact-carousel { 
             width: 100%; 
-            height: 400px;
+            height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .artifact-grid { 
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(4, 1fr);
             gap: 15px;
             width: 100%;
-            max-width: 800px;
+            max-width: 1100px;
             height: 100%;
         }
         .artifact-card {
@@ -564,6 +683,50 @@
             position: relative;
         }
 
+        /* 보관소 아이템 선택 시 살짝 연해 보이도록 */
+        .storage-item.selected { filter: brightness(1.08) saturate(0.9); }
+        /* 오버 시에도 연해 보이도록 */
+        .storage-item:hover { filter: brightness(1.08) saturate(0.9); }
+
+        /* 보관소 아이템 내 액션 버튼들 */
+        .storage-item .action-btn {
+            position: absolute;
+            bottom: 8px;
+            padding: 6px 10px;
+            font-size: 0.85em;
+            font-weight: 800;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            user-select: none;
+            display: none; /* 기본 숨김 */
+        }
+        .storage-item .action-back {
+            left: 10px;
+            background: #dc3545; /* 빨간색 */
+        }
+        .storage-item .action-upgrade {
+            right: 10px;
+            background: #28a745; /* 초록색 */
+        }
+        .storage-item .enhance-info {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 42px; /* 버튼들 위에 표시 */
+            background: rgba(0,0,0,0.65);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            display: none; /* 기본 숨김 */
+        }
+
+        /* 오버 시 컨트롤과 정보 표시 */
+        .storage-item:hover .action-btn { display: block; }
+        .storage-item:hover .enhance-info { display: block; }
+
         .storage-item:hover {
             transform: translateY(-2px);
         }
@@ -594,6 +757,15 @@
             border-left-color: #ffc107;
             color: #f0ad4e;
             box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+        }
+
+        .storage-item.rainbow {
+            background: #ffe3e8; /* 조금 더 연한 파스텔톤 */
+            border-left-color: #ced4da; /* 연한 회색 구분선 */
+            color: #2b2d42;
+            animation: rainbowCycle 1.8s linear infinite;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+            filter: brightness(1.03) saturate(0.7);
         }
 
         .storage-item .name {
@@ -646,9 +818,42 @@
             background: #c82333;
         }
 
+        /* 강화 확률/파괴 확률 하단 좌측 표시 */
+        .storage-item .enhance-stats {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 6px 8px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            line-height: 1.2;
+            display: none;
+        }
+        .storage-item:hover .enhance-stats { display: block; }
+
   </style>
 </head>
 <body>
+    <!-- 설정 패널 -->
+    <div id="settingsPanel" class="collapsed" onclick="toggleSettingsPanelClick(event)">
+        <div id="settingsHeader">
+            <span class="title"></span>
+            <span class="hamburger" aria-label="menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span id="settingsChevron" style="display:none">▼</span>
+        </div>
+        <div id="settingsContent">
+            <div class="settings-row"><span class="settings-key">총 뽑기 횟수</span><span class="settings-val" id="statTotalDraws">0</span></div>
+            <div class="settings-row"><span class="settings-key">가장 낮은 확률로 획득</span><span class="settings-val" id="statRarest">-</span></div>
+            <div class="settings-row"><span class="settings-key">플레이 시간</span><span class="settings-val" id="statPlaytime">00:00:00</span></div>
+            <button class="settings-reset" onclick="resetAllData()">초기화</button>
+        </div>
+    </div>
     <div class="main-container" id="mainContainer">
         <!-- 확률표 화면 (왼쪽) -->
         <div class="screen">
@@ -725,18 +930,60 @@
     </div>
 
   <script>
-        // 참가자 목록과 확률 설정 (세호뽑기 확률: 꽝 70%, 나머지 3.75%씩)
+        // 소수 표시 포맷터: 유한소수는 끝자리까지, 무한소수는 소수 3자리 + '...'
+        function formatFiniteOrEllipsis(value, maxCheckDecimals = 12) {
+            const num = Number(value);
+            if (!isFinite(num)) return String(value);
+            const abs = Math.abs(num);
+            if (Math.abs(abs - Math.round(abs)) < 1e-12) return String(Math.round(num));
+            for (let k = 0; k <= maxCheckDecimals; k++) {
+                const scaled = num * Math.pow(10, k);
+                if (Math.abs(scaled - Math.round(scaled)) < 1e-9) {
+                    const fixed = num.toFixed(k);
+                    return fixed.replace(/\.?0+$/, '');
+                }
+            }
+            return num.toFixed(3) + '...';
+        }
+
+        // 확률표: 마우스 오버 시 상세 표시 (클릭 토글 제거)
+        function attachProbabilityToggle(hostId) {
+            const host = document.getElementById(hostId);
+            if (!host) return;
+            host.querySelectorAll('.probability-item').forEach(item => {
+                const detail = item.querySelector('.shining-info');
+                if (!detail) return;
+                // 인라인 스타일/클릭 핸들러 제거하여 CSS :hover로 동작
+                detail.style.display = '';
+                item.classList.remove('no-hover');
+                item.onclick = null;
+            });
+        }
+        // 참가자 목록과 확률 설정 (세호뽑기 확률: 꽝 70%, 10명의 세호 각각 3%)
         let participants = [
             { name: "꽝", weight: 70 },
-            { name: "세호로리", weight: 3.75 },
-            { name: "세호게이", weight: 3.75 },
-            { name: "세호퍼리", weight: 3.75 },
-            { name: "씹덕세호", weight: 3.75 },
-            { name: "마죠이스트 세호", weight: 3.75 },
-            { name: "평범한 세호", weight: 3.75 },
-            { name: "TS세호", weight: 3.75 },
-            { name: "쇼타세호", weight: 3.75 }
+            { name: "세호로리", weight: 3 },
+            { name: "세호게이", weight: 3 },
+            { name: "세호퍼리", weight: 3 },
+            { name: "씹덕세호", weight: 3 },
+            { name: "마죠이스트 세호", weight: 3 },
+            { name: "평범한 세호", weight: 3 },
+            { name: "TS세호", weight: 3 },
+            { name: "쇼타세호", weight: 3 },
+            { name: "에겐세호", weight: 3 },
+            { name: "니거세호", weight: 3 }
         ];
+        // 유물석 기반 유효 확률(가중치) 계산: 레벨당 꽝 -7, 각 세호 +0.7
+        function getEffectiveParticipants() {
+            const stone = artifactStorage.find(item => item.name === '세호로리의 유물석');
+            const level = stone ? stone.level : 0;
+            if (!level) return participants.map(p => ({ ...p }));
+            const adjusted = participants.map(p => ({ ...p }));
+            const miss = adjusted.find(p => p.name === '꽝');
+            if (miss) miss.weight = Math.max(0, miss.weight - 7 * level);
+            adjusted.forEach(p => { if (p.name !== '꽝') p.weight = p.weight + 0.7 * level; });
+            return adjusted;
+        }
         let isDrawing = false;
         let currentScreen = 1; // 0: 확률표, 1: 뽑기, 2: 보관소, 3: 유물 뽑기, 4: 유물 컬렉션
         
@@ -744,26 +991,69 @@
         window.onload = function() {
             goToScreen(1); // 랜덤뽑기 화면(가운데)으로 시작
             updateProbabilityTable(); // 확률표 초기화
+            loadState(); // 저장된 상태 불러오기
+            startPlaytimeTicker();
         };
         let storage = []; // 뽑힌 결과 저장소
         let startX = 0;
         let startY = 0;
         let artifactStorage = []; // 유물 저장소
         let lastArtifactDraw = 0; // 마지막 유물 뽑기 시간
-        let baseArtifactCooldown = 90; // 기본 유물 뽑기 쿨다운 (초)
+        let baseArtifactCooldown = 180; // 기본 유물 뽑기 쿨다운 (초)
+        let totalDraws = 0; // 총 뽑기 횟수
+        let rarestItem = null; // { name, realProbabilityNum }
+        let startTime = Date.now();
+        let playtimeTimer = null;
+
+        // 상태 저장/불러오기 (localStorage)
+        function saveState() {
+            try {
+                const data = {
+                    storage,
+                    artifactStorage,
+                    lastArtifactDraw,
+                    totalDraws,
+                    rarestItem,
+                    startTime
+                };
+                localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
+            } catch (e) { console.log('save failed'); }
+        }
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem('sehorory_state_v1');
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                if (Array.isArray(data.storage)) storage = data.storage;
+                if (Array.isArray(data.artifactStorage)) artifactStorage = data.artifactStorage;
+                if (typeof data.lastArtifactDraw === 'number') lastArtifactDraw = data.lastArtifactDraw;
+                if (typeof data.totalDraws === 'number') totalDraws = data.totalDraws;
+                if (data.rarestItem) rarestItem = data.rarestItem;
+                if (typeof data.startTime === 'number') startTime = data.startTime;
+                updateStorageDisplay();
+                initArtifactCarousel();
+                updateSettingsStats();
+                // 유물 뽑기 쿨다운 복구
+                const now = Date.now();
+                const remainingMs = getArtifactCooldown() * 1000 - (now - lastArtifactDraw);
+                if (remainingMs > 0) startArtifactCooldown();
+            } catch (e) { console.log('load failed'); }
+        }
 
         // 가중치 기반 랜덤 선택 함수
         function getWeightedRandom() {
-            const totalWeight = participants.reduce((sum, p) => sum + p.weight, 0);
+            const pool = getEffectiveParticipants();
+            const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
             let random = Math.random() * totalWeight;
             
-            for (let participant of participants) {
+            for (let participant of pool) {
                 random -= participant.weight;
                 if (random <= 0) {
                     return participant;
                 }
             }
-            return participants[participants.length - 1]; // fallback
+            return pool[pool.length - 1]; // fallback
         }
 
         // 뽑기 시작
@@ -786,8 +1076,9 @@
             resultDisplay.className = 'result-display reset';
             resultDisplay.style.fontSize = '2.2em';
 
-            // 애니메이션 효과
+            // 애니메이션 효과 (속도포션 적용)
             let count = 0;
+            const spinInterval = getSpinInterval();
             const interval = setInterval(() => {
                 const randomParticipant = getWeightedRandom();
                 resultDisplay.textContent = randomParticipant.name;
@@ -799,7 +1090,7 @@
                     clearInterval(interval);
                     finishDraw();
                 }
-            }, 40);
+            }, spinInterval);
         }
 
         // 뽑기 완료
@@ -808,14 +1099,17 @@
             
             const resultDisplay = document.getElementById('resultDisplay');
             
-            // 꽝은 특수효과/저장 없음
+            // 꽝 처리: 통계 증가만 하고 종료
             if (winner && winner.name === '꽝') {
                 resultDisplay.textContent = '꽝';
                 resultDisplay.className = 'result-display miss';
+                totalDraws += 1;
+                updateSettingsStats();
                 const button = document.getElementById('drawButton');
                 button.textContent = '🎯 뽑기 시작!';
                 button.disabled = false;
                 isDrawing = false;
+                saveState();
                 return;
             }
             
@@ -843,8 +1137,8 @@
                 return;
             }
             
+            // 0.02% 확률로 무지갯빛 (최우선)
             if (random5 < 0.0002 * (1 + rainbowBonus)) {
-                // 0.02% 확률로 무지갯빛 (최우선)
                 effectType = 'rainbow';
                 displayText = `무지갯빛 ${winner.name}`;
             } else if (random4 < 0.002 * (1 + specialEffectBonus)) {
@@ -886,7 +1180,10 @@
             }
             
             // 보관소에 추가 (효과 타입 포함)
-            addToStorage(winner.name, effectType, winner);
+            addToStorage(effectType === 'rainbow' ? `무지갯빛 ${winner.name}` : winner.name, effectType, winner);
+            totalDraws += 1;
+            updateSettingsStats();
+            saveState();
             
             // 화면들 동기화 갱신
             renderBelowProbability();
@@ -905,21 +1202,36 @@
             const timeString = now.toLocaleTimeString('ko-KR');
             
             // 원본 확률 계산
-            const totalWeight = participants.reduce((sum, p) => sum + p.weight, 0);
-            const participantData = participant || participants.find(p => p.name === winner);
-            const baseProbability = participantData ? ((participantData.weight / totalWeight) * 100).toFixed(2) : '0.00';
+            const pool = getEffectiveParticipants();
+            const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
+            const participantData = participant || pool.find(p => p.name === winner);
+            const baseProbabilityNum = participantData ? ((participantData.weight / totalWeight) * 100) : 0;
+            const baseProbability = formatFiniteOrEllipsis(baseProbabilityNum);
             
             // 실제 확률 계산 (효과 포함)
-            let realProbability = baseProbability;
-            if (effectType === 'diamond') {
-                realProbability = (baseProbability * 0.002).toFixed(2);
+            let realProbabilityNum = baseProbabilityNum;
+            if (effectType === 'rainbow') {
+                // 무지갯빛의 실확률 (독립 단계) 표기: 기본 확률 * 0.0002 * (1 + 무지갯빛 보석 보너스)
+                realProbabilityNum = baseProbabilityNum * 0.0002 * (1 + getRainbowBonus());
+            } else if (effectType === 'diamond') {
+                realProbabilityNum = baseProbabilityNum * 0.002;
             } else if (effectType === 'golden') {
-                realProbability = (baseProbability * 0.01).toFixed(2);
+                realProbabilityNum = baseProbabilityNum * 0.01;
             } else if (effectType === 'shining') {
-                realProbability = (baseProbability * 0.2).toFixed(2);
+                realProbabilityNum = baseProbabilityNum * 0.2;
             } else if (effectType === 'sparkling') {
-                realProbability = (baseProbability * 0.05).toFixed(2);
+                realProbabilityNum = baseProbabilityNum * 0.05;
             }
+            const realProbability = formatFiniteOrEllipsis(realProbabilityNum);
+            // 레어도 갱신 (가장 낮은 실확률)
+            try {
+                const rp = Number(realProbabilityNum);
+                if (!isNaN(rp) && rp >= 0) {
+                    if (!rarestItem || rp < rarestItem.realProbabilityNum) {
+                        rarestItem = { name: effectType === 'rainbow' ? `무지갯빛 ${winner}` : winner, realProbabilityNum: rp };
+                    }
+                }
+            } catch (e) {}
             
             // 같은 아이템이 있는지 확인
             const existingItem = storage.find(item => 
@@ -939,12 +1251,14 @@
                 date: now.toLocaleDateString('ko-KR'),
                 effectType: effectType,
                 baseProbability: baseProbability,
-                    realProbability: realProbability,
-                    count: 1
+                realProbability: realProbability,
+                count: 1,
+                enhanceLevel: 0
             });
             }
             
             updateStorageDisplay();
+            saveState();
         }
 
         // 보관소 표시 업데이트
@@ -962,10 +1276,33 @@
                 return;
             }
 
-            // 확률이 낮은 순으로 정렬 (다이아 → 황금 → 번쩍이는 → 빛나는 → 일반)
+            // 이벤트 위임으로 강화 버튼 처리 (메인/오버레이 각각)
+            function bindUpgradeDelegation(host) {
+                if (!host) return;
+                host.onclick = (e) => {
+                    const target = e.target;
+                    if (target && target.classList && target.classList.contains('action-upgrade')) {
+                        const itemDiv = target.closest('.storage-item');
+                        if (!itemDiv) return;
+                        const idxAttr = itemDiv.getAttribute('data-index');
+                        if (idxAttr == null) return;
+                        const idx = parseInt(idxAttr, 10);
+                        performUpgrade(idx);
+                        e.stopPropagation();
+                    }
+                };
+            }
+
+            bindUpgradeDelegation(storageList);
+            bindUpgradeDelegation(storageSehoOverlay);
+            bindUpgradeDelegation(storageArtiOverlay);
+
+            // 확률이 낮은 순으로 정렬 (무지갯빛 → 다이아 → 황금 → 번쩍이는 → 빛나는 → 일반)
             const sortedStorage = [...storage].sort((a, b) => {
-                const order = { 'diamond': 0, 'golden': 1, 'sparkling': 2, 'shining': 3, 'normal': 4 };
-                return order[a.effectType] - order[b.effectType];
+                const order = { 'rainbow': -1, 'diamond': 0, 'golden': 1, 'sparkling': 2, 'shining': 3, 'normal': 4 };
+                const av = order[a.effectType] ?? 5;
+                const bv = order[b.effectType] ?? 5;
+                return av - bv;
             });
 
             if (storageList) storageList.innerHTML = '';
@@ -981,18 +1318,24 @@
                     const item = sortedStorage[i + j];
                     const div = document.createElement('div');
                     div.className = `storage-item ${item.effectType}`;
+                    const originalIndex = storage.indexOf(item);
+                    div.setAttribute('data-index', String(originalIndex));
                     
                     let displayName = item.name;
+                    const level = Math.max(0, item.enhanceLevel || 0);
+                    if (level > 0) displayName = `${displayName} (+${level})`;
                     let probabilityText = `${item.realProbability}%`;
                     
-                    if (item.effectType === 'diamond') {
-                        displayName = `💎 다이아몬드색 ${item.name} 💎`;
+                    if (item.effectType === 'rainbow') {
+                        displayName = `🌈 ${displayName} 🌈`;
+                    } else if (item.effectType === 'diamond') {
+                        displayName = `💎 다이아몬드색 ${displayName} 💎`;
                     } else if (item.effectType === 'golden') {
-                        displayName = `🏆 황금색 ${item.name} 🏆`;
+                        displayName = `🏆 황금색 ${displayName} 🏆`;
                     } else if (item.effectType === 'sparkling') {
-                        displayName = `⚡ 번쩍이는 ${item.name} ⚡`;
+                        displayName = `⚡ 번쩍이는 ${displayName} ⚡`;
                     } else if (item.effectType === 'shining') {
-                        displayName = `✨ 빛나는 ${item.name} ✨`;
+                        displayName = `✨ 빛나는 ${displayName} ✨`;
                     }
                     
                     let countHtml = '';
@@ -1000,18 +1343,33 @@
                         countHtml = `<div class="count">×${item.count}</div>`;
                     }
                     
+                    const infoText = getEnhanceInfoText(level);
+                    const success = (enhanceChances[level] || 0);
+                    const destroy = (1 - success) * 0.10;
                     div.innerHTML = `
-                        <div class="name">${displayName}</div>
-                        <div class="probability">${probabilityText}</div>
-                        <div class="time">${item.date} ${item.time}</div>
+                        <div class=\"name\">${displayName}</div>
+                        <div class=\"probability\">${probabilityText}</div>
+                        <div class=\"time\">${item.date} ${item.time}</div>
                         ${countHtml}
+                        <div class=\"enhance-stats\">성공확률: ${formatPercent(success)}<br>파괴확률: ${formatPercent(destroy)}</div>
+                        <div class=\"action-btn action-upgrade\">강화하기</div>
                     `;
+
+                    const upgBtn = div.querySelector('.action-upgrade');
+                    if (upgBtn) {
+                        if (level >= 5) {
+                            upgBtn.style.opacity = '0.5';
+                            upgBtn.style.cursor = 'not-allowed';
+                        } else {
+                            upgBtn.onclick = (e) => { performUpgrade(originalIndex); e.stopPropagation(); };
+                        }
+                    }
                     row.appendChild(div);
                 }
                 
-                if (storageList) storageList.appendChild(row.cloneNode(true));
+                if (storageList) storageList.appendChild(row);
                 if (storageSehoOverlay) storageSehoOverlay.appendChild(row.cloneNode(true));
-                if (storageArtiOverlay) storageArtiOverlay.appendChild(row);
+                if (storageArtiOverlay) storageArtiOverlay.appendChild(row.cloneNode(true));
             }
         }
 
@@ -1050,6 +1408,86 @@
             initArtifactCollection();
         }
 
+        // 강화 시스템
+        const enhanceChances = [0.8, 0.7, 0.55, 0.35, 0.1]; // 0->1 ... 4->5
+
+        function formatPercent(p) { return Math.round(p * 1000) / 10 + '%'; }
+
+        function getEnhanceInfoText(level) {
+            if (level >= 5) return '최대 강화 단계(5강)입니다.';
+            const success = enhanceChances[level] || 0;
+            const fail = 1 - success;
+            const destroy = fail * 0.10;
+            return `강화 확률: ${formatPercent(success)} / 파괴 확률: ${formatPercent(destroy)} (실패 시 1단계 하락, 0강 미만 하락 없음)`;
+        }
+
+        function injectEnhanceControls(container, index) {
+            const item = storage[index];
+            if (!item) return;
+            const level = Math.max(0, item.enhanceLevel || 0);
+            const info = document.createElement('div');
+            info.className = 'enhance-info';
+            info.textContent = getEnhanceInfoText(level);
+            container.appendChild(info);
+
+            const back = document.createElement('div');
+            back.className = 'action-btn action-back';
+            back.textContent = '뒤로가기';
+            back.onclick = (e) => {
+                container.classList.remove('selected');
+                if (info) info.remove();
+                back.remove();
+                if (upg) upg.remove();
+                e.stopPropagation();
+            };
+            container.appendChild(back);
+
+            const upg = document.createElement('div');
+            upg.className = 'action-btn action-upgrade';
+            upg.textContent = '강화하기';
+            if (level >= 5) {
+                upg.style.opacity = '0.5';
+                upg.style.cursor = 'not-allowed';
+            } else {
+                upg.onclick = (e) => {
+                    performUpgrade(index);
+                    e.stopPropagation();
+                };
+            }
+            container.appendChild(upg);
+        }
+
+        function performUpgrade(index) {
+            const item = storage[index];
+            if (!item) return;
+            let level = Math.max(0, item.enhanceLevel || 0);
+            if (level >= 5) return;
+            const success = enhanceChances[level] || 0;
+            const fail = 1 - success;
+            const destroy = fail * 0.10;
+            const r = Math.random();
+            if (r < success) {
+                level += 1;
+                item.enhanceLevel = level;
+            } else {
+                // 실패
+                const r2 = Math.random();
+                if (r2 < destroy) {
+                    // 파괴: 동일 항목 수량 감소 또는 제거
+                    if ((item.count || 1) > 1) {
+                        item.count -= 1;
+                    } else {
+                        storage.splice(index, 1);
+                    }
+                } else {
+                    // 하락: 0 미만으로는 내려가지 않음
+                    item.enhanceLevel = Math.max(0, level - 1);
+                }
+            }
+            saveState();
+            updateStorageDisplay();
+        }
+
         function switchOverlayTab(e, overlayId) {
             const overlay = document.getElementById(overlayId);
             overlay.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
@@ -1083,9 +1521,10 @@
         function renderOverlayProbability() {
             const probHost = document.querySelector('#sehoOverlay #sehoProb');
             if (!probHost) return;
-            const totalWeight = participants.reduce((sum, p) => sum + p.weight, 0);
-            const sortedParticipants = [...participants].sort((a, b) => b.weight - a.weight);
-            let listHTML = '<div class="probability-list">';
+            const pool = getEffectiveParticipants();
+            const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
+            const sortedParticipants = [...pool].sort((a, b) => b.weight - a.weight);
+            let listHTML = '<div class="probability-list" id="probListInline">';
             sortedParticipants.forEach(participant => {
                 const probability = ((participant.weight / totalWeight) * 100).toFixed(2);
                 if (participant.name === '꽝') {
@@ -1142,6 +1581,7 @@
             });
             listHTML += '</div>';
             probHost.innerHTML = listHTML;
+            attachProbabilityToggle('probListOverlay');
         }
 
         // 세호 인라인 패널 초기화 및 토글/탭
@@ -1181,11 +1621,13 @@
             const inline = document.getElementById('probabilityContentInline');
             if (!inline) return;
             // 기존 updateProbabilityTable 로직을 재사용하여 HTML 생성
-            const totalWeight = participants.reduce((sum, p) => sum + p.weight, 0);
-            const sortedParticipants = [...participants].sort((a, b) => b.weight - a.weight);
-            let listHTML = '<div class="probability-list">';
+            const pool = getEffectiveParticipants();
+            const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
+            const sortedParticipants = [...pool].sort((a, b) => b.weight - a.weight);
+            let listHTML = '<div class="probability-list" id="probListOverlay">';
             sortedParticipants.forEach(participant => {
-                const probability = ((participant.weight / totalWeight) * 100).toFixed(2);
+                const probNum = (participant.weight / totalWeight) * 100;
+                const probability = formatFiniteOrEllipsis(probNum);
                 if (participant.name === '꽝') {
                     listHTML += `
                         <div class="probability-item no-hover">
@@ -1199,11 +1641,11 @@
                 const specialEffectBonus = getSpecialEffectBonus(participant.name);
                 const rainbowBonus = getRainbowBonus();
                 
-                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
-                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
-                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(3);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
-                const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(3);
+                const rainbowProbability = formatFiniteOrEllipsis(probNum * 0.0002 * (1 + rainbowBonus));
+                const diamondProbability = formatFiniteOrEllipsis(probNum * 0.002 * (1 + specialEffectBonus));
+                const goldenProbability = formatFiniteOrEllipsis(probNum * 0.01 * (1 + specialEffectBonus));
+                const shiningProbability = formatFiniteOrEllipsis(probNum * 0.2 * (1 + specialEffectBonus));
+                const sparklingProbability = formatFiniteOrEllipsis(probNum * 0.05 * (1 + specialEffectBonus));
                 
                 listHTML += `
                     <div class="probability-item">
@@ -1215,23 +1657,23 @@
                                 <span>특별 효과 확률</span>
                             </div>
                             <div class="effect-probability">
-                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${(shiningProbability - (probability * 0.2)).toFixed(2)}%)</span>
+                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.2 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(3)}%)</span>
+                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.05 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 5% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(3)}%)</span>
+                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.01 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 1% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(4)}%)</span>
+                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.002 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 0.2% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(5)}%)</span>
+                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.0002 * rainbowBonus)}%)</span>
                                 <small>(뽑힌 후 0.02% 확률)</small>
                             </div>
                         </div>
@@ -1240,6 +1682,7 @@
             });
             listHTML += '</div>';
             inline.innerHTML = listHTML;
+            attachProbabilityToggle('probListInline');
         }
 
         // 유물 컬렉션 그리드 초기화
@@ -1249,15 +1692,16 @@
             
             grid.innerHTML = '';
             
-            // 새로운 유물 이름들
+            // 유물 이름들 (컬렉션)
             const artifactNames = [
                 '세호로리의 부적', '세호퍼리의 부적', '세호게이의 부적',
                 '마죠이스트세호의 부적', '씹덕세호의 부적', 'TS세호의 부적',
-                '쇼타세호의 부적', '세호로리의 속도포션', '세호로리의 행운 포션',
+                '쇼타세호의 부적', '에겐세호의 부적', '니거세호의 부적',
+                '세호로리의 속도포션', '세호로리의 행운 포션',
                 '세호로리의 유물석', '세호로리의 무지갯빛 보석'
             ];
             
-            for (let i = 0; i < 11; i++) {
+            for (let i = 0; i < artifactNames.length; i++) {
                 const card = document.createElement('div');
                 const isLocked = true; // 처음에는 모든 유물이 잠겨있음
                 card.className = 'artifact-card' + (isLocked ? ' locked' : '');
@@ -1336,6 +1780,8 @@
                 '씹덕세호의 부적': '특별효과 확률 증가',
                 'TS세호의 부적': '특별효과 확률 증가',
                 '쇼타세호의 부적': '특별효과 확률 증가',
+                '에겐세호의 부적': '특별효과 확률 증가',
+                '니거세호의 부적': '특별효과 확률 증가',
                 '세호로리의 속도포션': '뽑기 속도 증가',
                 '세호로리의 행운 포션': '꽝 확률 감소',
                 '세호로리의 유물석': '유물 뽑기 대기시간 감소',
@@ -1350,7 +1796,7 @@
                 if (artifactName.includes('부적')) {
                     return baseStat + ' (15% 증가)';
                 } else if (artifactName === '세호로리의 속도포션') {
-                    return baseStat + ' (20% 감소)';
+                    return baseStat + ' (10% 감소)';
                 } else if (artifactName === '세호로리의 행운 포션') {
                     return baseStat + ' (8% 감소)';
                 } else if (artifactName === '세호로리의 유물석') {
@@ -1363,7 +1809,7 @@
                 if (artifactName.includes('부적')) {
                     return baseStat + ' (30% 증가)';
                 } else if (artifactName === '세호로리의 속도포션') {
-                    return baseStat + ' (40% 감소)';
+                    return baseStat + ' (25% 감소)';
                 } else if (artifactName === '세호로리의 행운 포션') {
                     return baseStat + ' (16% 감소)';
                 } else if (artifactName === '세호로리의 유물석') {
@@ -1376,7 +1822,7 @@
                 if (artifactName.includes('부적')) {
                     return baseStat + ' (45% 증가)';
                 } else if (artifactName === '세호로리의 속도포션') {
-                    return baseStat + ' (60% 감소)';
+                    return baseStat + ' (50% 감소)';
                 } else if (artifactName === '세호로리의 행운 포션') {
                     return baseStat + ' (24% 감소)';
                 } else if (artifactName === '세호로리의 유물석') {
@@ -1408,7 +1854,12 @@
             // // 쿨다운 확인
              if (now - lastArtifactDraw < cooldownTime) {
                  const remainingTime = Math.ceil((cooldownTime - (now - lastArtifactDraw)) / 1000);
-                 alert(`아직 ${remainingTime}초 남았습니다.`);
+                 const button = document.getElementById('artifactDrawButton');
+                 if (button) {
+                     button.disabled = true;
+                     button.classList.add('disabled');
+                     button.textContent = `대기중... (${remainingTime}s)`;
+                 }
                  return;
              }
             
@@ -1421,20 +1872,17 @@
             // 버튼 비활성화
             button.disabled = true;
             button.textContent = '뽑는 중...';
+            button.classList.add('disabled');
             
-            // 유물 이름들
-            const artifactNames = [
-                '세호로리의 부적', '세호퍼리의 부적', '세호게이의 부적',
-                '마죠이스트세호의 부적', '씹덕세호의 부적', '세호로리의 속도포션',
-                '세호로리의 행운 포션', '세호로리의 유물석', '세호로리의 무지개빛 보석'
-            ];
+            // 사용 가능한 유물 목록 기반 (전체 유물 획득 확률 50%, 유물 간 균등 분배)
+            const availableArtifacts = getAvailableArtifacts();
             
             // 애니메이션
             resultEl.className = 'result-display reset';
             let count = 0;
             const interval = setInterval(() => {
-                const randomIndex = Math.floor(Math.random() * artifactNames.length);
-                resultEl.textContent = artifactNames[randomIndex];
+                const randomIndex = Math.floor(Math.random() * Math.max(availableArtifacts.length, 1));
+                resultEl.textContent = availableArtifacts.length > 0 ? availableArtifacts[randomIndex] : '꽝';
                 count++;
                 
                 if (count > 20) {
@@ -1445,10 +1893,9 @@
                     let result = '꽝';
                     let resultClass = 'result-display reset';
                     
-                    if (random < 0.55) { // 55% 확률로 유물 획득 (각 유물 5%)
-                        const availableArtifacts = getAvailableArtifacts();
+                    if (random < 0.5) { // 50% 확률로 유물 획득 (유물 간 균등)
                         if (availableArtifacts.length > 0) {
-                            const artifactIndex = Math.floor((random / 0.55) * availableArtifacts.length);
+                            const artifactIndex = Math.floor(Math.random() * availableArtifacts.length);
                             result = availableArtifacts[artifactIndex];
                             resultClass = 'result-display golden';
                             
@@ -1466,10 +1913,12 @@
                 // 쿨다운 시작 (테스트용으로 비활성화)
                  lastArtifactDraw = now;
                  startArtifactCooldown();
+                 saveState();
                     
                     // 버튼 복원
-                    button.disabled = false;
-                    button.textContent = '🏺 유물 뽑기';
+                    button.disabled = true;
+                    button.classList.add('disabled');
+                    startArtifactCooldown();
                 }
             }, 80);
         }
@@ -1498,26 +1947,76 @@
             
             // 유물 컬렉션 업데이트
             updateArtifactDisplay();
+            saveState();
         }
         
         // 유물 뽑기 쿨다운 시작
         function startArtifactCooldown() {
             const cooldownEl = document.getElementById('artifactCooldown');
+            const button = document.getElementById('artifactDrawButton');
             if (!cooldownEl) return;
             
-            let remainingTime = getArtifactCooldown();
+            let remainingTime = Math.ceil((getArtifactCooldown() * 1000 - (Date.now() - lastArtifactDraw)) / 1000);
+            if (isNaN(remainingTime) || remainingTime < 0) remainingTime = getArtifactCooldown();
             
             const updateCooldown = () => {
                 if (remainingTime > 0) {
                     cooldownEl.textContent = `다음 뽑기까지 ${remainingTime}초`;
+                    if (button) {
+                        button.disabled = true;
+                        button.classList.add('disabled');
+                        button.textContent = `대기중... (${remainingTime}s)`;
+                    }
                     remainingTime--;
                     setTimeout(updateCooldown, 1000);
                 } else {
                     cooldownEl.textContent = '유물 뽑기 준비 완료!';
+                    if (button) {
+                        button.disabled = false;
+                        button.classList.remove('disabled');
+                        button.textContent = '🏺 유물 뽑기';
+                    }
+                    saveState();
                 }
             };
             
             updateCooldown();
+        }
+
+        // 설정 패널 토글 및 통계 갱신/초기화
+        function toggleSettingsPanel() {
+            const panel = document.getElementById('settingsPanel');
+            if (!panel) return;
+            const isOpen = panel.classList.contains('open');
+            panel.classList.toggle('open', !isOpen);
+            panel.classList.toggle('collapsed', isOpen);
+        }
+
+        function updateSettingsStats() {
+            const td = document.getElementById('statTotalDraws');
+            const rr = document.getElementById('statRarest');
+            if (td) td.textContent = totalDraws;
+            if (rr) {
+                if (!rarestItem) rr.textContent = '-';
+                else rr.textContent = `${rarestItem.name} (${formatFiniteOrEllipsis(rarestItem.realProbabilityNum)}%)`;
+            }
+            const pt = document.getElementById('statPlaytime');
+            if (pt) pt.textContent = formatElapsedTime(Date.now() - startTime);
+        }
+
+        function resetAllData() {
+            if (!confirm('정말 초기화하시겠습니까? 모든 기록이 삭제됩니다.')) return;
+            storage = [];
+            artifactStorage = [];
+            lastArtifactDraw = 0;
+            totalDraws = 0;
+            rarestItem = null;
+            startTime = Date.now();
+            updateStorageDisplay();
+            initArtifactCarousel();
+            updateSettingsStats();
+            saveState();
+            alert('초기화가 완료되었습니다.');
         }
         
         // 유물 효과 계산 함수들
@@ -1530,10 +2029,21 @@
         }
         
         function getMissReduction() {
-            const artifact = artifactStorage.find(item => item.name === '세호로리의 행운 포션');
+            // 유물석 기준: 레벨당 7%p 꽝 감소
+            const artifact = artifactStorage.find(item => item.name === '세호로리의 유물석');
             if (!artifact) return 0;
-            
-            return artifact.level * 8; // 레벨당 8% 감소
+            return artifact.level * 7;
+        }
+
+        // 속도포션 레벨에 따라 뽑기 스핀 간격 감소 (기본 40ms)
+        function getSpinInterval() {
+            const base = 40;
+            const speedPot = artifactStorage.find(item => item.name === '세호로리의 속도포션');
+            if (!speedPot) return base;
+            const lv = speedPot.level || 1;
+            const map = { 1: 0.10, 2: 0.25, 3: 0.50 };
+            const reduce = map[lv] || 0.10;
+            return Math.max(8, Math.round(base * (1 - reduce)));
         }
         
         function getSpecialEffectBonus(participantName) {
@@ -1558,7 +2068,8 @@
             const allArtifacts = [
                 '세호로리의 부적', '세호퍼리의 부적', '세호게이의 부적',
                 '마죠이스트세호의 부적', '씹덕세호의 부적', 'TS세호의 부적',
-                '쇼타세호의 부적', '세호로리의 속도포션', '세호로리의 행운 포션',
+                '쇼타세호의 부적', '에겐세호의 부적', '니거세호의 부적',
+                '세호로리의 속도포션', '세호로리의 행운 포션',
                 '세호로리의 유물석', '세호로리의 무지갯빛 보석'
             ];
             
@@ -1590,15 +2101,16 @@
             // 확률순으로 정렬 (높은 확률부터)
             const sortedParticipants = [...participants].sort((a, b) => b.weight - a.weight);
             
-            let listHTML = '<div class="probability-list">';
+            let listHTML = '<div class="probability-list" id="probListBelow">';
             
             sortedParticipants.forEach(participant => {
-                const probability = ((participant.weight / totalWeight) * 100).toFixed(2);
+                const probNum = (participant.weight / totalWeight) * 100;
+                const probability = formatFiniteOrEllipsis(probNum);
                 if (participant.name === '꽝') {
                     // 꽝 확률에 유물 효과 적용
                     const missReduction = getMissReduction();
-                    const missProbability = Math.max(0, parseFloat(probability) - missReduction);
-                    const missDisplay = missReduction > 0 ? `${missProbability.toFixed(2)}% <span class="artifact-effect">(-${missReduction.toFixed(2)}%)</span>` : `${probability}%`;
+                    const missProbability = Math.max(0, probNum - missReduction);
+                    const missDisplay = missReduction > 0 ? `${formatFiniteOrEllipsis(missProbability)}% <span class="artifact-effect">(-${formatFiniteOrEllipsis(missReduction)}%)</span>` : `${probability}%`;
                     
                     listHTML += `
                     <div class="probability-item no-hover">
@@ -1612,11 +2124,11 @@
                 const specialEffectBonus = getSpecialEffectBonus(participant.name);
                 const rainbowBonus = getRainbowBonus();
                 
-                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
-                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
-                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(3);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
-                const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(3);
+                const rainbowProbability = formatFiniteOrEllipsis(probNum * 0.0002 * (1 + rainbowBonus));
+                const diamondProbability = formatFiniteOrEllipsis(probNum * 0.002 * (1 + specialEffectBonus));
+                const goldenProbability = formatFiniteOrEllipsis(probNum * 0.01 * (1 + specialEffectBonus));
+                const shiningProbability = formatFiniteOrEllipsis(probNum * 0.2 * (1 + specialEffectBonus));
+                const sparklingProbability = formatFiniteOrEllipsis(probNum * 0.05 * (1 + specialEffectBonus));
                 listHTML += `
                     <div class="probability-item">
                         <span class="participant-name">${participant.name}</span>
@@ -1627,23 +2139,23 @@
                                 <span>특별 효과 확률</span>
                             </div>
                             <div class="effect-probability">
-                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${(shiningProbability - (probability * 0.2)).toFixed(2)}%)</span>
+                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.2 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(3)}%)</span>
+                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.05 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 5% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(3)}%)</span>
+                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.01 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 1% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(4)}%)</span>
+                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.002 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 0.2% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(5)}%)</span>
+                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.0002 * rainbowBonus)}%)</span>
                                 <small>(뽑힌 후 0.02% 확률)</small>
                             </div>
                         </div>
@@ -1653,6 +2165,7 @@
             
             listHTML += '</div>';
             content.innerHTML = listHTML;
+            attachProbabilityToggle('probListMain');
         }
 
         // 화면 전환
@@ -1711,16 +2224,18 @@
         function renderBelowProbability() {
             const probHost = document.getElementById('sehoProbBelow');
             if (!probHost) return;
-            const totalWeight = participants.reduce((sum, p) => sum + p.weight, 0);
-            const sortedParticipants = [...participants].sort((a, b) => b.weight - a.weight);
+            const pool = getEffectiveParticipants();
+            const totalWeight = pool.reduce((sum, p) => sum + p.weight, 0);
+            const sortedParticipants = [...pool].sort((a, b) => b.weight - a.weight);
             let listHTML = '<div class="probability-list">';
             sortedParticipants.forEach(participant => {
-                const probability = ((participant.weight / totalWeight) * 100).toFixed(2);
+                const probNum = (participant.weight / totalWeight) * 100;
+                const probability = formatFiniteOrEllipsis(probNum);
                 if (participant.name === '꽝') {
                     // 꽝 확률에 유물 효과 적용
                     const missReduction = getMissReduction();
-                    const missProbability = Math.max(0, parseFloat(probability) - missReduction);
-                    const missDisplay = missReduction > 0 ? `${missProbability.toFixed(2)}% <span class="artifact-effect">(-${missReduction.toFixed(2)}%)</span>` : `${probability}%`;
+                    const missProbability = Math.max(0, probNum - missReduction);
+                    const missDisplay = missReduction > 0 ? `${formatFiniteOrEllipsis(missProbability)}% <span class="artifact-effect">(-${formatFiniteOrEllipsis(missReduction)}%)</span>` : `${probability}%`;
                     
                     listHTML += `
                     <div class="probability-item no-hover">
@@ -1734,11 +2249,11 @@
                 const specialEffectBonus = getSpecialEffectBonus(participant.name);
                 const rainbowBonus = getRainbowBonus();
                 
-                const rainbowProbability = (probability * 0.0002 * (1 + rainbowBonus)).toFixed(5);
-                const diamondProbability = (probability * 0.002 * (1 + specialEffectBonus)).toFixed(4);
-                const goldenProbability = (probability * 0.01 * (1 + specialEffectBonus)).toFixed(3);
-                const shiningProbability = (probability * 0.2 * (1 + specialEffectBonus)).toFixed(2);
-                const sparklingProbability = (probability * 0.05 * (1 + specialEffectBonus)).toFixed(3);
+                const rainbowProbability = formatFiniteOrEllipsis(probNum * 0.0002 * (1 + rainbowBonus));
+                const diamondProbability = formatFiniteOrEllipsis(probNum * 0.002 * (1 + specialEffectBonus));
+                const goldenProbability = formatFiniteOrEllipsis(probNum * 0.01 * (1 + specialEffectBonus));
+                const shiningProbability = formatFiniteOrEllipsis(probNum * 0.2 * (1 + specialEffectBonus));
+                const sparklingProbability = formatFiniteOrEllipsis(probNum * 0.05 * (1 + specialEffectBonus));
                 
                 listHTML += `
                     <div class="probability-item">
@@ -1750,23 +2265,23 @@
                                 <span>특별 효과 확률</span>
                             </div>
                             <div class="effect-probability">
-                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${(shiningProbability - (probability * 0.2)).toFixed(2)}%)</span>
+                                ✨ 빛나는 ${participant.name}: ${shiningProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.2 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 20% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${(sparklingProbability - (probability * 0.05)).toFixed(3)}%)</span>
+                                ⚡ 번쩍이는 ${participant.name}: ${sparklingProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.05 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 5% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${(goldenProbability - (probability * 0.01)).toFixed(3)}%)</span>
+                                🏆 황금색 ${participant.name}: ${goldenProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.01 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 1% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${(diamondProbability - (probability * 0.002)).toFixed(4)}%)</span>
+                                💎 다이아몬드색 ${participant.name}: ${diamondProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.002 * specialEffectBonus)}%)</span>
                                 <small>(뽑힌 후 0.2% 확률)</small>
                             </div>
                             <div class="effect-probability">
-                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${(rainbowProbability - (probability * 0.0002)).toFixed(5)}%)</span>
+                                🌈 무지갯빛 ${participant.name}: ${rainbowProbability}% <span class="artifact-effect">(+${formatFiniteOrEllipsis(probNum * 0.0002 * rainbowBonus)}%)</span>
                                 <small>(뽑힌 후 0.02% 확률)</small>
                             </div>
                         </div>
@@ -1774,6 +2289,7 @@
             });
             listHTML += '</div>';
             probHost.innerHTML = listHTML;
+            attachProbabilityToggle('probListBelow');
         }
 
         function openBottomPanel(which) {
@@ -1907,6 +2423,44 @@
             } catch (e) {
                 console.log('Audio not supported');
             }
+        }
+
+        function playRainbowSound() {
+            // 무지갯빛 사운드 효과 (반짝이는 상승 아르페지오)
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const gain = audioContext.createGain();
+                gain.connect(audioContext.destination);
+                gain.gain.setValueAtTime(0.28, audioContext.currentTime);
+                const freqs = [659.25, 783.99, 987.77, 1318.51, 1567.98, 1975.53];
+                freqs.forEach((f, i) => {
+                    const o = audioContext.createOscillator();
+                    o.type = 'triangle';
+                    o.frequency.setValueAtTime(f, audioContext.currentTime + i * 0.07);
+                    o.connect(gain);
+                    const start = audioContext.currentTime + i * 0.07;
+                    o.start(start);
+                    o.stop(start + 0.22);
+                });
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+
+        function startPlaytimeTicker() {
+            if (playtimeTimer) clearInterval(playtimeTimer);
+            playtimeTimer = setInterval(() => {
+                const pt = document.getElementById('statPlaytime');
+                if (pt) pt.textContent = formatElapsedTime(Date.now() - startTime);
+            }, 1000);
+        }
+
+        function formatElapsedTime(ms) {
+            const totalSec = Math.max(0, Math.floor(ms / 1000));
+            const h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+            const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+            const s = String(totalSec % 60).padStart(2, '0');
+            return `${h}:${m}:${s}`;
         }
 
   </script>
