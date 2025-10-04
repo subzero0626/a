@@ -1673,7 +1673,45 @@
             const r = Math.random();
             if (r < success) {
                 level += 1;
-                item.enhanceLevel = level;
+                
+                // 강화 성공 시 - 같은 강화 단계 아이템이 있으면 합치기
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('ko-KR');
+                
+                // 같은 강화 단계의 아이템이 있는지 확인
+                const existingEnhancedItem = storage.find(storageItem => 
+                    storageItem.name === item.name && 
+                    storageItem.effectType === item.effectType &&
+                    (storageItem.enhanceLevel || 0) === level
+                );
+                
+                if (existingEnhancedItem) {
+                    // 같은 강화 단계가 있으면 개수 증가
+                    existingEnhancedItem.count = (existingEnhancedItem.count || 1) + 1;
+                    existingEnhancedItem.time = timeString;
+                    existingEnhancedItem.date = now.toLocaleDateString('ko-KR');
+                } else {
+                    // 새로운 강화 단계 아이템 추가
+                    const newItem = {
+                        name: item.name,
+                        time: timeString,
+                        date: now.toLocaleDateString('ko-KR'),
+                        effectType: item.effectType,
+                        baseProbability: item.baseProbability,
+                        realProbability: item.realProbability,
+                        count: 1,
+                        enhanceLevel: level
+                    };
+                    storage.push(newItem);
+                }
+                
+                // 기존 아이템 개수 감소 또는 제거
+                if ((item.count || 1) > 1) {
+                    item.count -= 1;
+                } else {
+                    storage.splice(index, 1);
+                }
+                
                 // 강화 성공 사운드 (5강은 특별한 사운드)
                 if (level === 5) {
                     setTimeout(() => playMaxEnhanceSuccessSound(), 200);
@@ -1694,7 +1732,48 @@
                     setTimeout(() => playEnhanceDestroySound(), 200);
                 } else {
                     // 하락: 0 미만으로는 내려가지 않음
-                    item.enhanceLevel = Math.max(0, level - 1);
+                    const newLevel = Math.max(0, level - 1);
+                    
+                    if (newLevel !== level) {
+                        // 강화 단계가 바뀌는 경우
+                        const now = new Date();
+                        const timeString = now.toLocaleTimeString('ko-KR');
+                        
+                        // 같은 강화 단계의 아이템이 있는지 확인
+                        const existingItem = storage.find(storageItem => 
+                            storageItem.name === item.name && 
+                            storageItem.effectType === item.effectType &&
+                            (storageItem.enhanceLevel || 0) === newLevel
+                        );
+                        
+                        if (existingItem) {
+                            // 같은 강화 단계가 있으면 개수 증가
+                            existingItem.count = (existingItem.count || 1) + 1;
+                            existingItem.time = timeString;
+                            existingItem.date = now.toLocaleDateString('ko-KR');
+                        } else {
+                            // 새로운 강화 단계 아이템 추가
+                            const newItem = {
+                                name: item.name,
+                                time: timeString,
+                                date: now.toLocaleDateString('ko-KR'),
+                                effectType: item.effectType,
+                                baseProbability: item.baseProbability,
+                                realProbability: item.realProbability,
+                                count: 1,
+                                enhanceLevel: newLevel
+                            };
+                            storage.push(newItem);
+                        }
+                        
+                        // 기존 아이템 개수 감소 또는 제거
+                        if ((item.count || 1) > 1) {
+                            item.count -= 1;
+                        } else {
+                            storage.splice(index, 1);
+                        }
+                    }
+                    
                     // 실패 사운드
                     setTimeout(() => playEnhanceFailSound(), 200);
                 }
@@ -2859,4 +2938,3 @@
   </script>
 </body>
 </html>
-
