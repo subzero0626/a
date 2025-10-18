@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -203,12 +203,20 @@
             background: rgba(255, 255, 255, 0.5);
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .dot.active {
             background: white;
             transform: scale(1.2);
         }
+
+        .dot.locked {
+            background: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
 
         h1 {
             color: #333;
@@ -638,10 +646,21 @@
             text-align: center;
             color: #6c757d;
             font-size: 1.1em;
-            margin-bottom: 35px;
+            margin-bottom: 15px;
             padding: 12px;
             background: #f8f9fa;
             border-radius: 8px;
+        }
+
+        .shop-probability {
+            text-align: center;
+            color: #495057;
+            font-size: 0.85em;
+            margin-bottom: 25px;
+            padding: 8px 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            font-weight: 500;
         }
 
         .shop-items {
@@ -942,6 +961,86 @@
             max-width: 900px;
         }
 
+        /* 테마별 배경 그라데이션 */
+        body.theme-orange {
+            background: linear-gradient(135deg, #ff7043 0%, #ff5722 100%) !important;
+        }
+
+        body.theme-green {
+            background: linear-gradient(135deg, #66bb6a 0%, #2e7d32 100%) !important;
+        }
+
+        body.theme-gray {
+            background: linear-gradient(135deg, #78909c 0%, #37474f 100%) !important;
+        }
+
+        body.theme-yellow {
+            background: linear-gradient(135deg, #ffeb3b 0%, #ff8f00 100%) !important;
+        }
+
+        body.theme-pink {
+            background: linear-gradient(135deg, #f06292 0%, #ad1457 100%) !important;
+        }
+
+        body.theme-purple {
+            background: linear-gradient(135deg, #ba68c8 0%, #7b1fa2 100%) !important;
+        }
+
+        /* 테마 선택 버튼 */
+        .theme-selector {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .theme-button {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-button:hover {
+            transform: scale(1.1);
+            border-color: #007bff;
+        }
+
+        .theme-button.active {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+        }
+
+        .theme-button.default {
+            background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+        }
+
+        .theme-button.orange {
+            background: linear-gradient(135deg, #ff8a65 0%, #ff5722 100%);
+        }
+
+        .theme-button.green {
+            background: linear-gradient(135deg, #81c784 0%, #4caf50 100%);
+        }
+
+        .theme-button.gray {
+            background: linear-gradient(135deg, #90a4ae 0%, #607d8b 100%);
+        }
+
+        .theme-button.yellow {
+            background: linear-gradient(135deg, #fff176 0%, #ffc107 100%);
+        }
+
+        .theme-button.pink {
+            background: linear-gradient(135deg, #f48fb1 0%, #e91e63 100%);
+        }
+
+        .theme-button.purple {
+            background: linear-gradient(135deg, #ba68c8 0%, #7b1fa2 100%);
+        }
+
         .storage-row {
             display: flex;
             gap: 15px;
@@ -1076,6 +1175,34 @@
             text-align: center;
         }
 
+        .storage-item .sell-button {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 24px;
+            height: 24px;
+            background: #dc3545;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .storage-item .sell-button:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .storage-item:hover .sell-button {
+            display: flex;
+        }
+
         .clear-storage {
             background: #dc3545;
       color: white;
@@ -1121,20 +1248,20 @@
          
         /* 2강: 마우스 오버시 광택 효과 */
         .storage-item[data-enhance-level="2"]:hover {
-            position: relative;
-            overflow: hidden;
-        }
+             position: relative;
+             overflow: hidden;
+         }
         .storage-item[data-enhance-level="2"]:hover::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+             content: '';
+             position: absolute;
+             top: -50%;
+             left: -50%;
+             width: 200%;
+             height: 200%;
+             background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
             animation: shine 0.8s ease-in-out;
-            pointer-events: none;
-        }
+             pointer-events: none;
+         }
 
          /* 3강 이상: 마우스 오버시 광택 효과 */
          .storage-item[data-enhance-level="3"]:hover,
@@ -1271,6 +1398,10 @@
             <div class="settings-row"><span class="settings-key">총 뽑기 횟수</span><span class="settings-val" id="statTotalDraws">0</span></div>
             <div class="settings-row rarest"><span class="settings-key">가장 낮은 확률로 획득</span><span class="settings-val" id="statRarest">-</span></div>
             <div class="settings-row"><span class="settings-key">플레이 시간</span><span class="settings-val" id="statPlaytime">00:00:00</span></div>
+            <div class="settings-row"><span class="settings-key">테마 변경</span></div>
+            <div class="theme-selector" id="themeSelector">
+                <!-- 테마 버튼들이 여기에 동적으로 추가됩니다 -->
+            </div>
             <button class="settings-reset" onclick="resetAllData()">초기화</button>
         </div>
     </div>
@@ -1292,6 +1423,7 @@
             <div class="shop-container">
                 <h2>🛒 상점</h2>
                 <div class="shop-timer" id="shopTimer">갱신까지: 30:00</div>
+                <div class="shop-probability" id="shopProbability">일반 45% | 희귀 27.5% | 레어 17.5% | 영웅 7.5% | 전설 2.5%</div>
                 <div class="shop-items" id="shopItems">
                     <div class="shop-item">
                         <div class="shop-item-name">???</div>
@@ -1385,13 +1517,13 @@
 
     <!-- 네비게이션 도트 -->
     <div class="navigation-dots">
-        <div class="dot" onclick="goToScreen(0)"></div>
-        <div class="dot" onclick="goToScreen(1)"></div>
-        <div class="dot" onclick="goToScreen(2)"></div>
-        <div class="dot active" onclick="goToScreen(3)"></div>
-        <div class="dot" onclick="goToScreen(4)"></div>
-        <div class="dot" onclick="goToScreen(5)"></div>
-        <div class="dot" onclick="goToScreen(6)"></div>
+         <div class="dot" id="dot-0" onclick="goToScreen(0)"></div>
+         <div class="dot" id="dot-1" onclick="goToScreen(1)"></div>
+         <div class="dot" id="dot-2" onclick="goToScreen(2)"></div>
+         <div class="dot active" id="dot-3" onclick="goToScreen(3)"></div>
+         <div class="dot" id="dot-4" onclick="goToScreen(4)"></div>
+         <div class="dot" id="dot-5" onclick="goToScreen(5)"></div>
+         <div class="dot" id="dot-6" onclick="goToScreen(6)"></div>
     </div>
 
   <script>
@@ -1446,7 +1578,7 @@
             
             // 유물석 효과 적용 - 레벨당 8%p 절대값 감소하고 줄어든 만큼을 세호에게 분배
             if (level) {
-                const miss = adjusted.find(p => p.name === '꽝');
+            const miss = adjusted.find(p => p.name === '꽝');
                 if (miss) {
                     const totalWeight = adjusted.reduce((sum, p) => sum + p.weight, 0);
                     const reductionPercent = 8 * level; // 레벨당 8%p (절대값)
@@ -1480,6 +1612,33 @@
                 adjusted = adjusted.filter(p => p.name !== '꽝');
             }
             
+            // 용사의 심판 효과 적용
+            if (specialItemCount > 0) {
+                // 꽝 제거
+                adjusted = adjusted.filter(p => p.name !== '꽝');
+                
+                // 모든 특별효과 확률을 20%로 설정
+                const specialEffects = adjusted.filter(p => 
+                    p.name.includes('무지갯빛') || 
+                    p.name.includes('다이아몬드색') || 
+                    p.name.includes('황금색') || 
+                    p.name.includes('번쩍이는') || 
+                    p.name.includes('빛나는')
+                );
+                
+                if (specialEffects.length > 0) {
+                    // 특별효과들의 가중치를 20%로 통일
+                    const specialWeight = 20;
+                    specialEffects.forEach(p => p.weight = specialWeight);
+                    
+                    // 나머지 확률을 일반 세호들에게 분배
+                    const normalSehos = adjusted.filter(p => !specialEffects.includes(p));
+                    const remainingWeight = 100 - (specialEffects.length * specialWeight);
+                    const normalWeight = remainingWeight / normalSehos.length;
+                    normalSehos.forEach(p => p.weight = normalWeight);
+                }
+            }
+            
             return adjusted;
         }
         let isDrawing = false;
@@ -1489,44 +1648,66 @@
         let sehoCoin = 0; // 초기 세호코인
         let activeBuffs = []; // 활성 버프 목록 { type, level, endTime }
         let purchasedThemes = []; // 구매한 테마 목록
-        let currentTheme = 'default'; // 현재 테마
+         let currentTheme = 'default'; // 현재 테마
+         let specialItemCount = 0; // 용사의 심판 개수
+         let noCooldownCount = 0; // 주말 효과 카운터
+         let nameChangedItems = []; // 이름이 바뀐 아이템들 (변환기 효과)
+         let nameChangeTimer = null; // 이름 변경 효과 타이머
         
         // 상점 관련 변수
         let shopItems = []; // 현재 상점에 있는 물품들
         let purchasedInCurrentShop = []; // 현재 상점에서 구매한 아이템 인덱스
         let allShopItems = [
-            // 포션류
-            { name: '행운포션Ⅰ', price: 10, rarity: 'common', type: 'potion', effect: 'luck', level: 1, minQty: 1, maxQty: 10, rarityChance: 52.5 },
-            { name: '행운포션Ⅱ', price: 30, rarity: 'rare', type: 'potion', effect: 'luck', level: 2, minQty: 1, maxQty: 5, rarityChance: 25 },
-            { name: '행운포션Ⅲ', price: 100, rarity: 'epic', type: 'potion', effect: 'luck', level: 3, minQty: 1, maxQty: 3, rarityChance: 12.5 },
-            { name: '속도포션Ⅰ', price: 10, rarity: 'common', type: 'potion', effect: 'speed', level: 1, minQty: 1, maxQty: 10, rarityChance: 52.5 },
-            { name: '속도포션Ⅱ', price: 30, rarity: 'rare', type: 'potion', effect: 'speed', level: 2, minQty: 1, maxQty: 5, rarityChance: 25 },
-            { name: '속도포션Ⅲ', price: 100, rarity: 'epic', type: 'potion', effect: 'speed', level: 3, minQty: 1, maxQty: 3, rarityChance: 12.5 },
-            // 테마
-            { name: '테마_주황', price: 7500, rarity: 'hero', type: 'theme', themeColor: 'orange', oneTime: true, rarityChance: 7.5 },
-            { name: '테마_초록', price: 7500, rarity: 'hero', type: 'theme', themeColor: 'green', oneTime: true, rarityChance: 7.5 },
-            { name: '테마_회색', price: 7500, rarity: 'hero', type: 'theme', themeColor: 'gray', oneTime: true, rarityChance: 7.5 },
-            { name: '테마_노란색', price: 7500, rarity: 'hero', type: 'theme', themeColor: 'yellow', oneTime: true, rarityChance: 7.5 },
-            { name: '테마_핑크색', price: 7500, rarity: 'hero', type: 'theme', themeColor: 'pink', oneTime: true, rarityChance: 7.5 }
+            // 포션류 - 일반 등급
+            { name: '행운포션Ⅰ', price: 10, rarity: 'common', type: 'potion', effect: 'luck', level: 1, minQty: 1, maxQty: 10 },
+            { name: '속도포션Ⅰ', price: 10, rarity: 'common', type: 'potion', effect: 'speed', level: 1, minQty: 1, maxQty: 10 },
+            // 포션류 - 희귀 등급
+            { name: '행운포션Ⅱ', price: 30, rarity: 'rare', type: 'potion', effect: 'luck', level: 2, minQty: 1, maxQty: 5 },
+            { name: '속도포션Ⅱ', price: 30, rarity: 'rare', type: 'potion', effect: 'speed', level: 2, minQty: 1, maxQty: 5 },
+            // 포션류 - 레어 등급 그룹
+            { name: '행운포션Ⅲ', price: 100, rarity: 'epic', type: 'potion', effect: 'luck', level: 3, minQty: 1, maxQty: 3 },
+            { name: '속도포션Ⅲ', price: 100, rarity: 'epic', type: 'potion', effect: 'speed', level: 3, minQty: 1, maxQty: 3 },
+            // 희귀 등급 아이템
+            { name: '쓸데없는 변환기', price: 30, rarity: 'rare', type: 'special', effect: 'name_converter', minQty: 1, maxQty: 1 },
+            // 레어 등급 아이템
+            { name: '주말', price: 250, rarity: 'epic', type: 'special', effect: 'remove_cooldown', minQty: 1, maxQty: 1 },
+            { name: '1339포션', price: 250, rarity: 'epic', type: 'potion', effect: 'speed_boost', level: 4, minQty: 1, maxQty: 1 },
+            { name: '보조배터리', price: 250, rarity: 'epic', type: 'special', effect: 'refresh_shop', minQty: 1, maxQty: 1 },
+            { name: '럭키박스', price: 250, rarity: 'epic', type: 'special', effect: 'lucky_box', minQty: 1, maxQty: 1 },
+            // 테마 - 영웅 등급
+            { name: '테마_주황', price: 5000, rarity: 'hero', type: 'theme', themeColor: 'orange', oneTime: true },
+            { name: '테마_초록', price: 5000, rarity: 'hero', type: 'theme', themeColor: 'green', oneTime: true },
+            { name: '테마_회색', price: 5000, rarity: 'hero', type: 'theme', themeColor: 'gray', oneTime: true },
+            { name: '테마_노란색', price: 5000, rarity: 'hero', type: 'theme', themeColor: 'yellow', oneTime: true },
+            { name: '테마_핑크색', price: 5000, rarity: 'hero', type: 'theme', themeColor: 'pink', oneTime: true },
+            { name: '테마_보라', price: 5000, rarity: 'hero', type: 'theme', themeColor: 'purple', oneTime: true },
+            // 특수 아이템 - 영웅 등급
+            { name: '용사의 심판', price: 5000, rarity: 'hero', type: 'potion', effect: 'guaranteed_special', minQty: 1, maxQty: 1 }
         ]; // 전체 상점 물품 목록
         let shopRefreshTime = 0; // 다음 상점 갱신 시간 (타임스탬프)
         let shopTimerInterval = null;
         
         // 페이지 로드 시 랜덤뽑기 화면으로 시작
         window.onload = function() {
-            // 테스트용: localStorage 초기화 (한 번만 실행)
-            // localStorage.removeItem('sehorory_state_v1');
-            
-            goToScreen(3); // 랜덤뽑기 화면(가운데)으로 시작
+             // 테스트용: localStorage 초기화 (한 번만 실행)
+             // localStorage.removeItem('sehorory_state_v1');
+             
+             goToScreen(3); // 랜덤뽑기 화면(가운데)으로 시작
             updateProbabilityTable(); // 확률표 초기화
             loadState(); // 저장된 상태 불러오기
             startPlaytimeTicker();
-            updateTrumpCardInfo(); // 트럼프카드 정보 업데이트
-            initShop(); // 상점 초기화
-            updateItemStorageDisplay(); // 아이템 보관소 초기화
-            updateCoinDisplay(); // 세호코인 표시 업데이트
-            updateBuffDisplay(); // 버프 표시 업데이트
-            startBuffTimer(); // 버프 타이머 시작
+             updateTrumpCardInfo(); // 트럼프카드 정보 업데이트
+             initShop(); // 상점 초기화
+             updateItemStorageDisplay(); // 아이템 보관소 초기화
+             updateCoinDisplay(); // 세호코인 표시 업데이트
+             updateBuffDisplay(); // 버프 표시 업데이트
+             startBuffTimer(); // 버프 타이머 시작
+             updateDotStates(); // 도트 상태 초기화
+             // 테마 선택기 초기화 (DOM이 준비된 후)
+             setTimeout(() => {
+                 initThemeSelector();
+                 applyTheme(currentTheme);
+             }, 100);
         };
         let storage = []; // 뽑힌 결과 저장소
         let startX = 0;
@@ -1547,24 +1728,27 @@
         // 상태 저장/불러오기 (localStorage)
         function saveState() {
             try {
-                const data = {
-                    storage,
-                    artifactStorage,
-                    lastArtifactDraw,
-                    totalDraws,
-                    rarestItem,
-                    startTime,
-                    pausedTime,
-                    sehoDrawCount,
-                    shopItems,
-                    shopRefreshTime,
-                    purchasedInCurrentShop,
-                    sehoCoin,
-                    activeBuffs,
-                    purchasedThemes,
-                    currentTheme,
-                    itemStorage
-                };
+                 const data = {
+                     storage,
+                     artifactStorage,
+                     lastArtifactDraw,
+                     totalDraws,
+                     rarestItem,
+                     startTime,
+                     pausedTime,
+                     sehoDrawCount,
+                     shopItems,
+                     shopRefreshTime,
+                     purchasedInCurrentShop,
+                     sehoCoin,
+                     activeBuffs,
+                     purchasedThemes,
+                     currentTheme,
+                     itemStorage,
+                     specialItemCount,
+                     noCooldownCount,
+                     nameChangedItems
+                 };
                 localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
             } catch (e) { console.log('save failed'); }
         }
@@ -1616,7 +1800,10 @@
                 if (Array.isArray(data.activeBuffs)) activeBuffs = data.activeBuffs;
                 if (Array.isArray(data.purchasedThemes)) purchasedThemes = data.purchasedThemes;
                 if (typeof data.currentTheme === 'string') currentTheme = data.currentTheme;
-                if (Array.isArray(data.itemStorage)) itemStorage = data.itemStorage;
+                 if (Array.isArray(data.itemStorage)) itemStorage = data.itemStorage;
+                 if (typeof data.specialItemCount === 'number') specialItemCount = data.specialItemCount;
+                 if (typeof data.noCooldownCount === 'number') noCooldownCount = data.noCooldownCount;
+                 if (Array.isArray(data.nameChangedItems)) nameChangedItems = data.nameChangedItems;
                 
                 updateStorageDisplay();
                 initArtifactCarousel();
@@ -1686,23 +1873,24 @@
             
             const resultDisplay = document.getElementById('resultDisplay');
             
-            // 꽝 처리: 통계 증가만 하고 종료 (트럼프카드 효과 발동 시에는 꽝이 나올 수 없음)
+             // 꽝 처리: 통계 증가만 하고 종료 (트럼프카드 효과 발동 시에는 꽝이 나올 수 없음)
             if (winner && winner.name === '꽝') {
                 resultDisplay.textContent = '꽝';
                 resultDisplay.className = 'result-display miss';
                 totalDraws += 1;
-                // 꽝이어도 세호 뽑기 횟수 증가 (트럼프카드 효과를 위해)
-                sehoDrawCount += 1;
+                 // 꽝이어도 세호 뽑기 횟수 증가 (트럼프카드 효과를 위해)
+                 sehoDrawCount += 1;
                 updateSettingsStats();
-                // 트럼프카드 정보 업데이트
-                updateTrumpCardInfo();
+                 updateDotStates(); // 도트 상태 업데이트
+                 // 트럼프카드 정보 업데이트
+                 updateTrumpCardInfo();
                 const button = document.getElementById('drawButton');
                 button.textContent = '🎯 뽑기 시작!';
                 button.disabled = false;
                 isDrawing = false;
                 saveState();
                 return;
-            }
+             }
             
             // 세호를 뽑았을 때 세호 뽑기 횟수 증가
             if (winner && winner.name !== '꽝') {
@@ -1772,21 +1960,21 @@
                 }
             } else {
                 // 일반 뽑기: 원래 확률대로
-                if (random5 < 0.0002 * (1 + rainbowBonus)) {
-                    effectType = 'rainbow';
-                    displayText = `무지갯빛 ${winner.name}`;
-                } else if (random4 < 0.002 * (1 + specialEffectBonus)) {
-                    effectType = 'diamond';
-                    displayText = `다이아몬드색 ${winner.name}`;
-                } else if (random3 < 0.01 * (1 + specialEffectBonus)) {
-                    effectType = 'golden';
-                    displayText = `황금색 ${winner.name}`;
-                } else if (random1 < 0.2 * (1 + specialEffectBonus)) {
-                    effectType = 'shining';
-                    displayText = `빛나는 ${winner.name}`;
-                } else if (random2 < 0.05 * (1 + specialEffectBonus)) {
-                    effectType = 'sparkling';
-                    displayText = `번쩍이는 ${winner.name}`;
+            if (random5 < 0.0002 * (1 + rainbowBonus)) {
+                effectType = 'rainbow';
+                displayText = `무지갯빛 ${winner.name}`;
+            } else if (random4 < 0.002 * (1 + specialEffectBonus)) {
+                effectType = 'diamond';
+                displayText = `다이아몬드색 ${winner.name}`;
+            } else if (random3 < 0.01 * (1 + specialEffectBonus)) {
+                effectType = 'golden';
+                displayText = `황금색 ${winner.name}`;
+            } else if (random1 < 0.2 * (1 + specialEffectBonus)) {
+                effectType = 'shining';
+                displayText = `빛나는 ${winner.name}`;
+            } else if (random2 < 0.05 * (1 + specialEffectBonus)) {
+                effectType = 'sparkling';
+                displayText = `번쩍이는 ${winner.name}`;
                 }
             }
             
@@ -1810,10 +1998,11 @@
                 resultDisplay.className = 'result-display winner';
             }
             
-            // 보관소에 추가 (원본 이름만 전달, effectType은 별도로)
-            addToStorage(winner.name, effectType, winner);
+             // 보관소에 추가 (원본 이름만 전달, effectType은 별도로)
+             addToStorage(winner.name, effectType, winner);
             totalDraws += 1;
             updateSettingsStats();
+             updateDotStates(); // 도트 상태 업데이트
             saveState();
             
             // 화면들 동기화 갱신
@@ -1907,6 +2096,11 @@
             });
             }
             
+            // 용사의 심판 효과 사용
+            if (specialItemCount > 0) {
+                specialItemCount--;
+            }
+            
             updateStorageDisplay();
             saveState();
         }
@@ -1987,9 +2181,15 @@
                     const item = sortedStorage[i + j];
                     const div = document.createElement('div');
                     
-                    div.className = `storage-item ${item.effectType}`;
-                    const originalIndex = storage.indexOf(item);
-                    div.setAttribute('data-index', String(originalIndex));
+                     div.className = `storage-item ${item.effectType}`;
+                     const originalIndex = storage.indexOf(item);
+                     div.setAttribute('data-index', String(originalIndex));
+                     
+                     // 이름이 바뀐 아이템 표시
+                     if (nameChangedItems.includes(originalIndex)) {
+                         div.style.border = '3px solid #ff6b6b';
+                         div.style.animation = 'pulse 1s ease-in-out infinite';
+                     }
                     
                     // 강화 단계에 따른 시각적 효과 적용
                     const enhanceLevel = item.enhanceLevel || 0;
@@ -2028,6 +2228,7 @@
                     const destroyColor = rates.hasArtifactEffect ? 'style="color: #87CEEB;"' : '';
                     
                     div.innerHTML = `
+                        <button class=\"sell-button\" onclick=\"sellItem(${originalIndex}, event)\" title=\"판매\">🗑️</button>
                         <div class=\"name\">${displayName}</div>
                         <div class=\"probability\">${probabilityText}</div>
                         ${enhancedLabel}
@@ -2223,17 +2424,22 @@
             container.appendChild(upg);
         }
 
-        function performUpgrade(index) {
-            const item = storage[index];
-            if (!item) return;
-            
-            // 쿨타임 확인
-            const now = Date.now();
-            if (now - lastEnhancementTime < enhancementCooldown) {
-                const remainingTime = Math.ceil((enhancementCooldown - (now - lastEnhancementTime)) / 1000);
-                alert(`강화 쿨타임 중입니다. ${remainingTime}초 후에 다시 시도해주세요.`);
-                return;
-            }
+         function performUpgrade(index) {
+             const item = storage[index];
+             if (!item) return;
+             
+             // 쿨타임 확인 (주말 효과가 있으면 쿨타임 무시)
+             const now = Date.now();
+             if (noCooldownCount <= 0 && now - lastEnhancementTime < enhancementCooldown) {
+                 const remainingTime = Math.ceil((enhancementCooldown - (now - lastEnhancementTime)) / 1000);
+                 alert(`강화 쿨타임 중입니다. ${remainingTime}초 후에 다시 시도해주세요.`);
+                 return;
+             }
+             
+             // 주말 효과 사용
+             if (noCooldownCount > 0) {
+                 noCooldownCount--;
+             }
             
             // 강화 시작 사운드
             playEnhanceStartSound();
@@ -2933,17 +3139,55 @@
 
         function resetAllData() {
             if (!confirm('정말 초기화하시겠습니까? 모든 기록이 삭제됩니다.')) return;
+            
+            // 모든 게임 데이터 초기화
             storage = [];
             artifactStorage = [];
             lastArtifactDraw = 0;
             totalDraws = 0;
             rarestItem = null;
             startTime = Date.now();
+            pausedTime = 0;
+            lastPauseTime = 0;
+            sehoDrawCount = 0;
+            
+            // 상점 관련 데이터 초기화
+            shopItems = [];
+            shopRefreshTime = 0;
+            purchasedInCurrentShop = [];
+            
+            // 세호코인 & 버프 관련 데이터 초기화
+            sehoCoin = 0;
+            activeBuffs = [];
+            purchasedThemes = [];
+            currentTheme = 'default';
+            
+            // 아이템 보관소 초기화
+            itemStorage = [];
+            
+             // 특수 아이템 초기화
+             specialItemCount = 0;
+             noCooldownCount = 0;
+             nameChangedItems = [];
+             if (nameChangeTimer) clearTimeout(nameChangeTimer);
+            
+            // 화면 업데이트
             updateStorageDisplay();
+            updateItemStorageDisplay();
             initArtifactCarousel();
             updateSettingsStats();
+            updateCoinDisplay();
+            updateBuffDisplay();
+            updateDotStates();
+            updateShopDisplay();
+            initThemeSelector();
+            applyTheme(currentTheme);
+            
+            // localStorage 완전 삭제
+            localStorage.removeItem('sehorory_state_v1');
+            
             saveState();
-            alert('초기화가 완료되었습니다.');
+            alert('모든 데이터가 초기화되었습니다.');
         }
         
         // 유물 효과 계산 함수들
@@ -2962,28 +3206,35 @@
             return artifact.level * 7;
         }
 
-        // 속도포션 레벨에 따라 뽑기 스핀 간격 감소 (기본 40ms)
-        function getSpinInterval() {
-            const base = 40;
-            let totalReduction = 0;
-            
-            // 유물 시간가속기 효과
-            const speedArtifact = artifactStorage.find(item => item.name === '세호로리의 시간가속기');
-            if (speedArtifact) {
-                const lv = speedArtifact.level || 1;
-                const map = { 1: 0.10, 2: 0.25, 3: 0.50 };
-                totalReduction += map[lv] || 0.10;
-            }
-            
-            // 속도 포션 효과
-            const speedBuff = activeBuffs.find(b => b.type === 'speed' && b.endTime > Date.now());
-            if (speedBuff) {
-                const buffReduction = [0.075, 0.15, 0.30][speedBuff.level - 1];
-                totalReduction += buffReduction;
-            }
-            
-            return Math.max(8, Math.round(base * (1 - totalReduction)));
-        }
+         // 속도포션 레벨에 따라 뽑기 스핀 간격 감소 (기본 40ms)
+         function getSpinInterval() {
+             const base = 40;
+             let totalReduction = 0;
+             
+             // 유물 시간가속기 효과
+             const speedArtifact = artifactStorage.find(item => item.name === '세호로리의 시간가속기');
+             if (speedArtifact) {
+                 const lv = speedArtifact.level || 1;
+             const map = { 1: 0.10, 2: 0.25, 3: 0.50 };
+                 totalReduction += map[lv] || 0.10;
+             }
+             
+             // 속도 포션 효과
+             const speedBuff = activeBuffs.find(b => b.type === 'speed' && b.endTime > Date.now());
+             if (speedBuff) {
+                 const buffReduction = [0.075, 0.15, 0.30][speedBuff.level - 1];
+                 totalReduction += buffReduction;
+             }
+             
+             // 1339포션 효과 (15~50% 랜덤 감소)
+             const speedBoostBuff = activeBuffs.find(b => b.type === 'speed_boost' && b.endTime > Date.now());
+             if (speedBoostBuff) {
+                 const randomReduction = 0.15 + Math.random() * 0.35; // 15%~50%
+                 totalReduction += randomReduction;
+             }
+             
+             return Math.max(8, Math.round(base * (1 - totalReduction)));
+         }
         
         function getSpecialEffectBonus(participantName) {
             // 해당 세호의 부적만 적용
@@ -3122,14 +3373,64 @@
             attachProbabilityToggle('probListMain');
         }
 
+         // 도트 상태 업데이트 (뽑기 횟수에 따른 잠금 해제)
+         function updateDotStates() {
+             // 아이템 보관소 (0번): 150회 이상
+             const dot0 = document.getElementById('dot-0');
+             if (totalDraws >= 150) {
+                 dot0.classList.remove('locked');
+             } else {
+                 dot0.classList.add('locked');
+             }
+             
+             // 상점 (1번): 150회 이상
+             const dot1 = document.getElementById('dot-1');
+             if (totalDraws >= 150) {
+                 dot1.classList.remove('locked');
+             } else {
+                 dot1.classList.add('locked');
+             }
+             
+             // 유물 뽑기 (5번): 50회 이상
+             const dot5 = document.getElementById('dot-5');
+             if (totalDraws >= 50) {
+                 dot5.classList.remove('locked');
+             } else {
+                 dot5.classList.add('locked');
+             }
+             
+             // 유물 컬렉션 (6번): 50회 이상
+             const dot6 = document.getElementById('dot-6');
+             if (totalDraws >= 50) {
+                 dot6.classList.remove('locked');
+             } else {
+                 dot6.classList.add('locked');
+             }
+        }
+
         // 화면 전환
         function goToScreen(screenIndex) {
-            // 아이템 보관소(0)와 상점(1) 잠금
-            if (screenIndex === 0 || screenIndex === 1) {
-                alert('이 기능은 아직 잠겨있습니다!');
-                return;
-            }
-            
+             // 뽑기 횟수 제한 확인
+             if (screenIndex === 0 && totalDraws < 150) {
+                 alert('아이템 보관소는 150회 뽑기 이상부터 이용할 수 있습니다!');
+                 return;
+             }
+             
+             if (screenIndex === 1 && totalDraws < 150) {
+                 alert('상점은 150회 뽑기 이상부터 이용할 수 있습니다!');
+                 return;
+             }
+             
+             if (screenIndex === 5 && totalDraws < 50) {
+                 alert('유물 뽑기는 50회 뽑기 이상부터 이용할 수 있습니다!');
+                 return;
+             }
+             
+             if (screenIndex === 6 && totalDraws < 50) {
+                 alert('유물 컬렉션은 50회 뽑기 이상부터 이용할 수 있습니다!');
+                 return;
+             }
+             
             currentScreen = screenIndex;
             const container = document.getElementById('mainContainer');
             container.style.transform = `translateX(-${screenIndex * 100}vw)`;
@@ -3139,12 +3440,12 @@
                 dot.classList.toggle('active', index === screenIndex);
             });
             if (screenIndex === 0) {
-                updateItemStorageDisplay();
+                 updateItemStorageDisplay();
             } else if (screenIndex === 2) {
-                updateProbabilityTable();
+                 updateProbabilityTable();
             } else if (screenIndex === 4) {
-                updateStorageDisplay();
-            } else if (screenIndex === 6) {
+                 updateStorageDisplay();
+             } else if (screenIndex === 6) {
                 initArtifactCarousel();
             }
         }
@@ -3575,8 +3876,13 @@
         function initShop() {
             const now = Date.now();
             
-            // 테스트용: 항상 새로 갱신
-            refreshShop();
+            // 저장된 상점 데이터가 없거나 갱신 시간이 지났을 때만 갱신
+            if (shopItems.length === 0 || now >= shopRefreshTime) {
+                refreshShop();
+            } else {
+                // 저장된 상점 데이터가 있으면 화면 업데이트만
+                updateShopDisplay();
+            }
             
             // 타이머 시작
             startShopTimer();
@@ -3590,30 +3896,75 @@
             shopItems = [];
             purchasedInCurrentShop = []; // 구매 기록 초기화
             
+            // 등급별 확률: 일반 45%, 희귀 27.5%, 레어 17.5%, 영웅 7.5%, 전설 2.5%
+            const rarityProbabilities = {
+                'common': 45,
+                'rare': 27.5,
+                'epic': 17.5,
+                'hero': 7.5,
+                'legendary': 2.5
+            };
+            
             // 등급별 확률에 따라 3개 선택
             for (let i = 0; i < 3; i++) {
-                // 구매 가능한 아이템만 필터링 (1회 구매 제한 아이템은 이미 구매했으면 제외)
-                const availableItems = allShopItems.filter(item => {
-                    if (item.oneTime && purchasedThemes.includes(item.name)) {
-                        return false;
-                    }
-                    return true;
-                });
+                // 1단계: 등급 선택
+                const random = Math.random() * 100;
+                let selectedRarity = 'common';
+                let cumulative = 0;
                 
-                if (availableItems.length === 0) break;
-                
-                // 등급별 확률로 가중치 랜덤 선택
-                const totalWeight = availableItems.reduce((sum, item) => sum + item.rarityChance, 0);
-                let random = Math.random() * totalWeight;
-                
-                let selectedItem = availableItems[0];
-                for (const item of availableItems) {
-                    random -= item.rarityChance;
-                    if (random <= 0) {
-                        selectedItem = item;
+                for (const [rarity, probability] of Object.entries(rarityProbabilities)) {
+                    cumulative += probability;
+                    if (random <= cumulative) {
+                        selectedRarity = rarity;
                         break;
                     }
                 }
+                
+                // 2단계: 해당 등급의 아이템 중에서 랜덤 선택
+                const availableItems = allShopItems.filter(item => {
+                    // 구매 가능한 아이템만 필터링
+                    if (item.oneTime && purchasedThemes.includes(item.name)) {
+                        return false;
+                    }
+                    return item.rarity === selectedRarity;
+                });
+                
+                if (availableItems.length === 0) {
+                    // 해당 등급에 아이템이 없으면 일반 등급으로 대체
+                    const commonItems = allShopItems.filter(item => {
+                        if (item.oneTime && purchasedThemes.includes(item.name)) {
+                            return false;
+                        }
+                        return item.rarity === 'common';
+                    });
+                    if (commonItems.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * commonItems.length);
+                        const selectedItem = commonItems[randomIndex];
+                        
+                        // 포션인 경우 개수 랜덤 결정
+                        if (selectedItem.type === 'potion') {
+                            const qty = Math.floor(Math.random() * (selectedItem.maxQty - selectedItem.minQty + 1)) + selectedItem.minQty;
+                            shopItems.push({
+                                ...selectedItem,
+                                quantity: qty,
+                                displayName: `${selectedItem.name} x${qty}`,
+                                totalPrice: selectedItem.price * qty
+                            });
+                        } else {
+                            shopItems.push({
+                                ...selectedItem,
+                                quantity: 1,
+                                displayName: selectedItem.name,
+                                totalPrice: selectedItem.price
+                            });
+                        }
+                    }
+                    continue;
+                }
+                
+                // 해당 등급의 아이템 중에서 랜덤 선택
+                const randomIndex = Math.floor(Math.random() * availableItems.length);
+                const selectedItem = availableItems[randomIndex];
                 
                 // 포션인 경우 개수 랜덤 결정
                 if (selectedItem.type === 'potion') {
@@ -3666,19 +4017,33 @@
                     const isSoldOut = purchasedInCurrentShop.includes(index);
                     itemDiv.className = `shop-item ${rarityClass}${isSoldOut ? ' sold-out' : ''}`;
                     
-                    // 아이템 설명 생성
-                    let description = '';
-                    if (item.type === 'potion') {
-                        if (item.effect === 'luck') {
-                            const reduction = [5, 10, 20][item.level - 1];
-                            description = `5분동안 꽝 확률 ${reduction}% 감소`;
-                        } else if (item.effect === 'speed') {
-                            const reduction = [7.5, 15, 30][item.level - 1];
-                            description = `5분동안 뽑기 속도 ${reduction}% 감소`;
-                        }
-                    } else if (item.type === 'theme') {
-                        description = `배경 테마 변경 (1회 구매)`;
-                    }
+                     // 아이템 설명 생성
+                     let description = '';
+                     if (item.type === 'potion') {
+                         if (item.effect === 'luck') {
+                             const reduction = [5, 10, 20][item.level - 1];
+                             description = `5분동안 꽝 확률 ${reduction}% 감소`;
+                         } else if (item.effect === 'speed') {
+                             const reduction = [7.5, 15, 30][item.level - 1];
+                             description = `5분동안 뽑기 속도 ${reduction}% 감소`;
+                         } else if (item.effect === 'speed_boost') {
+                             description = `10분동안 뽑기 속도 15~50% 감소`;
+                         }
+                     } else if (item.type === 'theme') {
+                         description = `배경 테마 변경 (1회 구매)`;
+                     } else if (item.type === 'special') {
+                         if (item.effect === 'guaranteed_special') {
+                             description = `다음 뽑기에서 특별효과 확률 20%로 고정 (꽝 시 횟수 감소 안됨)`;
+                         } else if (item.effect === 'remove_cooldown') {
+                             description = `다음 50회 뽑기 쿨타임 삭제`;
+                         } else if (item.effect === 'refresh_shop') {
+                             description = `3회까지 사용가능 / 사용시 즉시 상점 갱신`;
+                         } else if (item.effect === 'lucky_box') {
+                             description = `행운포션Ⅱ 1~10개, 속도포션Ⅱ 1~10개 획득`;
+                         } else if (item.effect === 'name_converter') {
+                             description = `보관소 세호 3개의 이름 변경`;
+                         }
+                     }
                     
                     itemDiv.innerHTML = `
                         <div class="shop-item-name">${item.displayName || item.name}</div>
@@ -3736,18 +4101,30 @@
             // 구매 기록 추가
             purchasedInCurrentShop.push(itemIndex);
             
-            // 아이템 타입에 따라 처리
-            if (item.type === 'potion') {
-                // 포션은 아이템 보관소에 추가
-                addToItemStorage(item.name, item.quantity);
-                alert(`${item.displayName}을(를) 구매했습니다! 아이템 보관소를 확인하세요.`);
-            } else if (item.type === 'theme') {
-                // 테마는 구매 목록에 추가
-                if (!purchasedThemes.includes(item.name)) {
-                    purchasedThemes.push(item.name);
-                }
-                alert(`${item.name}을(를) 구매했습니다! 설정에서 테마를 변경할 수 있습니다.`);
-            }
+             // 아이템 타입에 따라 처리
+             if (item.type === 'potion') {
+                 // 포션은 아이템 보관소에 추가
+                 addToItemStorage(item.name, item.quantity);
+                 alert(`${item.displayName}을(를) 구매했습니다! 아이템 보관소를 확인하세요.`);
+              } else if (item.type === 'theme') {
+                  // 테마는 구매 목록에 추가
+                  if (!purchasedThemes.includes(item.name)) {
+                      purchasedThemes.push(item.name);
+                      // 테마 선택기 업데이트
+                      initThemeSelector();
+                  }
+                  alert(`${item.name}을(를) 구매했습니다! 설정에서 테마를 변경할 수 있습니다.`);
+              } else if (item.type === 'special') {
+                  if (item.effect === 'guaranteed_special') {
+                      // 용사의 심판
+                      specialItemCount += item.quantity;
+                      alert(`${item.name}을(를) 구매했습니다! 다음 뽑기에서 특별효과가 적용됩니다.`);
+                  } else {
+                      // 기타 특수 아이템들은 아이템 보관소에 추가
+                      addToItemStorage(item.name, item.quantity);
+                      alert(`${item.displayName}을(를) 구매했습니다! 아이템 보관소를 확인하세요.`);
+                  }
+              }
             
             // 화면 갱신
             updateShopDisplay();
@@ -3881,34 +4258,81 @@
             }, 1000);
         }
 
-        // 포션 사용
-        function usePotion(type, level) {
-            // 같은 타입의 다른 레벨 포션이 이미 활성화되어 있는지 확인
-            const existingSameBuff = activeBuffs.find(b => b.type === type);
-            if (existingSameBuff) {
-                alert('이미 같은 효과의 포션을 사용 중입니다!');
-                return false;
-            }
-            
-            const now = Date.now();
-            const duration = 5 * 60 * 1000; // 5분
-            
-            // 같은 포션이 있으면 시간만 연장
-            const existing = activeBuffs.find(b => b.type === type && b.level === level);
-            if (existing) {
-                existing.endTime = Math.max(existing.endTime, now) + duration;
-            } else {
-                activeBuffs.push({
-                    type: type,
-                    level: level,
-                    endTime: now + duration
-                });
-            }
-            
-            updateBuffDisplay();
-            saveState();
-            return true;
-        }
+         // 포션 사용
+         function usePotion(type, level) {
+             // 같은 타입의 다른 레벨 포션이 이미 활성화되어 있는지 확인
+             const existingSameBuff = activeBuffs.find(b => b.type === type);
+             if (existingSameBuff) {
+                 alert('이미 같은 효과의 포션을 사용 중입니다!');
+                 return false;
+             }
+             
+             const now = Date.now();
+             let duration = 5 * 60 * 1000; // 기본 5분
+             
+             // 1339포션은 10분
+             if (type === 'speed_boost') {
+                 duration = 10 * 60 * 1000;
+             }
+             
+             // 같은 포션이 있으면 시간만 연장
+             const existing = activeBuffs.find(b => b.type === type && b.level === level);
+             if (existing) {
+                 existing.endTime = Math.max(existing.endTime, now) + duration;
+             } else {
+                 activeBuffs.push({
+                     type: type,
+                     level: level,
+                     endTime: now + duration
+                 });
+             }
+             
+             updateBuffDisplay();
+             saveState();
+             return true;
+         }
+
+         // 특수 아이템 사용
+         function useSpecialItem(effect, item) {
+             if (effect === 'remove_cooldown') {
+                 // 주말 효과
+                 noCooldownCount += 50;
+                 alert('주말을 사용했습니다! 다음 50회 뽑기에서 쿨타임이 삭제됩니다.');
+                 return true;
+             } else if (effect === 'refresh_shop') {
+                 // 보조배터리 효과
+                 if (item.usesLeft === undefined) {
+                     item.usesLeft = 3;
+                 }
+                 if (item.usesLeft > 0) {
+                     item.usesLeft--;
+                     refreshShop();
+                     alert(`보조배터리를 사용했습니다! 상점이 갱신되었습니다. (남은 사용 횟수: ${item.usesLeft})`);
+                     return true;
+                 } else {
+                     alert('보조배터리의 사용 횟수가 모두 소모되었습니다!');
+                     return false;
+                 }
+             } else if (effect === 'lucky_box') {
+                 // 럭키박스 효과
+                 const luckCount = Math.floor(Math.random() * 10) + 1;
+                 const speedCount = Math.floor(Math.random() * 10) + 1;
+                 
+                 addToItemStorage('행운포션Ⅱ', luckCount);
+                 addToItemStorage('속도포션Ⅱ', speedCount);
+                 
+                 // 화면 상단에 결과 표시
+                 showLuckyBoxResult(luckCount, speedCount);
+                 alert(`럭키박스를 사용했습니다! 행운포션Ⅱ ${luckCount}개, 속도포션Ⅱ ${speedCount}개를 획득했습니다!`);
+                 return true;
+             } else if (effect === 'name_converter') {
+                 // 쓸데없는 변환기 효과
+                 convertSehoNames();
+                 alert('쓸데없는 변환기를 사용했습니다! 보관소의 세호 3개의 이름이 바뀝니다.');
+                 return true;
+             }
+             return false;
+         }
 
         // 아이템 보관소에 아이템 추가
         function addToItemStorage(itemName, quantity = 1) {
@@ -3932,29 +4356,271 @@
             saveState();
         }
 
-        // 아이템 보관소에서 아이템 사용
-        function useItemFromStorage(index) {
-            if (index < 0 || index >= itemStorage.length) return;
+         // 아이템 보관소에서 아이템 사용
+         function useItemFromStorage(index) {
+             if (index < 0 || index >= itemStorage.length) return;
+             
+             const item = itemStorage[index];
+             const itemData = allShopItems.find(si => si.name === item.name);
+             
+             if (!itemData) return;
+             
+             if (itemData.type === 'potion') {
+                 if (usePotion(itemData.effect, itemData.level)) {
+                     item.count--;
+                     if (item.count <= 0) {
+                         itemStorage.splice(index, 1);
+                     }
+                     updateItemStorageDisplay();
+                     saveState();
+                     alert(`${item.name}을(를) 사용했습니다!`);
+                 }
+             } else if (itemData.type === 'special') {
+                 if (useSpecialItem(itemData.effect, item)) {
+                     item.count--;
+                     if (item.count <= 0) {
+                         itemStorage.splice(index, 1);
+                     }
+                     updateItemStorageDisplay();
+                     saveState();
+                 }
+             }
+         }
+
+        // 세호 판매 함수
+        function sellItem(index, event) {
+            event.stopPropagation(); // 이벤트 버블링 방지
             
-            const item = itemStorage[index];
-            const itemData = allShopItems.find(si => si.name === item.name);
+            if (index < 0 || index >= storage.length) return;
             
-            if (!itemData) return;
+            const item = storage[index];
+            const sellPrice = calculateSellPrice(item, 1); // 하나씩만 판매
             
-            if (itemData.type === 'potion') {
-                if (usePotion(itemData.effect, itemData.level)) {
-                    item.count--;
-                    if (item.count <= 0) {
-                        itemStorage.splice(index, 1);
-                    }
-                    updateItemStorageDisplay();
-                    saveState();
-                    alert(`${item.name}을(를) 사용했습니다!`);
-                }
+            if (!confirm(`판매하시겠습니까? (${sellPrice} 세호코인, 소수점 반올림됨)`)) {
+                return;
             }
+            
+            // 개수가 1개 이상이면 1개만 감소, 아니면 아이템 제거
+            if ((item.count || 1) > 1) {
+                item.count -= 1;
+            } else {
+                storage.splice(index, 1);
+            }
+            
+            // 세호코인 증가
+            sehoCoin += sellPrice;
+            
+            // 화면 업데이트
+            updateStorageDisplay();
+            updateCoinDisplay();
+            saveState();
+            
+            alert(`${item.name}을(를) ${sellPrice} 세호코인에 판매했습니다!`);
         }
+
+        // 세호 판매 가격 계산
+        function calculateSellPrice(item, sellCount = 1) {
+            let basePrice;
+            
+            // 특수 효과별 기본 가격
+            if (item.effectType === 'rainbow') {
+                basePrice = 20000; // 무지갯빛 특별효과
+            } else if (item.effectType === 'diamond') {
+                basePrice = 1250; // 다이아몬드색 특별효과
+            } else if (item.effectType === 'golden') {
+                basePrice = 200; // 황금색 특별효과
+            } else if (item.effectType === 'sparkling') {
+                basePrice = 30; // 번쩍이는 특별효과
+            } else if (item.effectType === 'shining') {
+                basePrice = 5; // 빛나는 특별효과
+            } else {
+                basePrice = 1; // 일반종류 모든 세호
+            }
+            
+            // 강화 단계별 가격 배수 적용
+            const enhanceLevel = item.enhanceLevel || 0;
+            if (enhanceLevel === 1) {
+                basePrice *= 1.1; // 1강: 1.1배
+            } else if (enhanceLevel === 2) {
+                basePrice *= 1.25; // 2강: 1.25배
+            } else if (enhanceLevel === 3) {
+                basePrice *= 1.5; // 3강: 1.5배
+            } else if (enhanceLevel === 4) {
+                basePrice *= 2; // 4강: 2배
+            } else if (enhanceLevel === 5) {
+                basePrice *= 4; // 5강: 4배
+            }
+            
+            // 판매 개수만큼 가격 증가
+            basePrice *= sellCount;
+            
+            // 소수점 반올림
+            return Math.round(basePrice);
+        }
+
+        // ========== 테마 시스템 ==========
+        
+        // 테마 선택기 초기화
+        function initThemeSelector() {
+            const selector = document.getElementById('themeSelector');
+            if (!selector) return;
+            
+            // 기존 버튼들 제거
+            selector.innerHTML = '';
+            
+            // 기본 테마 (항상 사용 가능)
+            const defaultButton = createThemeButton('default', '기본');
+            selector.appendChild(defaultButton);
+            
+            // 구매한 테마들만 추가
+            purchasedThemes.forEach(themeName => {
+                const themeColor = themeName.replace('테마_', '');
+                const button = createThemeButton(themeColor, themeColor);
+                selector.appendChild(button);
+            });
+            
+            // 현재 테마 활성화 표시
+            updateThemeButtons();
+        }
+        
+        // 테마 버튼 생성
+        function createThemeButton(themeColor, displayName) {
+            const button = document.createElement('div');
+            button.className = `theme-button ${themeColor}`;
+            button.title = displayName;
+            button.onclick = () => changeTheme(themeColor);
+            return button;
+        }
+        
+        // 테마 변경
+        function changeTheme(themeColor) {
+            if (themeColor !== 'default' && !purchasedThemes.includes(`테마_${themeColor}`)) {
+                alert('이 테마는 구매하지 않았습니다!');
+                return;
+            }
+            
+            currentTheme = themeColor;
+            applyTheme(themeColor);
+            updateThemeButtons();
+            saveState();
+        }
+        
+        // 테마 적용
+        function applyTheme(themeColor) {
+            const body = document.body;
+            
+            // 기존 테마 클래스 제거
+            body.className = body.className.replace(/theme-\w+/g, '');
+            
+            // 새 테마 클래스 추가
+            if (themeColor !== 'default') {
+                body.classList.add(`theme-${themeColor}`);
+            }
+            
+            console.log('Applied theme:', themeColor, 'Body classes:', body.className);
+        }
+        
+         // 테마 버튼 상태 업데이트
+         function updateThemeButtons() {
+             const buttons = document.querySelectorAll('.theme-button');
+             buttons.forEach(button => {
+                 button.classList.remove('active');
+                 const themeColor = button.className.match(/theme-button (\w+)/)[1];
+                 if (themeColor === currentTheme) {
+                     button.classList.add('active');
+                 }
+             });
+         }
+
+         // 럭키박스 결과 표시
+         function showLuckyBoxResult(luckCount, speedCount) {
+             const resultDiv = document.createElement('div');
+             resultDiv.style.cssText = `
+                 position: fixed;
+                 top: 50%;
+                 left: 50%;
+                 transform: translate(-50%, -50%);
+                 background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+                 border: 3px solid #b8860b;
+                 border-radius: 15px;
+                 padding: 30px;
+                 color: #8b4513;
+                 font-size: 1.5em;
+                 font-weight: bold;
+                 text-align: center;
+                 z-index: 10000;
+                 box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+                 animation: pulse 0.5s ease-in-out;
+             `;
+             resultDiv.innerHTML = `
+                 <div style="margin-bottom: 15px;">🎁 럭키박스 결과 🎁</div>
+                 <div>행운포션Ⅱ x${luckCount}</div>
+                 <div>속도포션Ⅱ x${speedCount}</div>
+             `;
+             document.body.appendChild(resultDiv);
+             
+             setTimeout(() => {
+                 if (resultDiv.parentNode) {
+                     resultDiv.parentNode.removeChild(resultDiv);
+                 }
+             }, 3000);
+         }
+
+         // 세호 이름 변환
+         function convertSehoNames() {
+             if (storage.length === 0) return;
+             
+             const sehoNames = ['세호로리', '세호게이', '세호퍼리', '씹덕세호', '마죠이스트 세호', 
+                              '평범한 세호', 'TS세호', '쇼타세호', '에겐세호', '니거세호'];
+             
+             // 이름이 바뀐 아이템들 초기화
+             nameChangedItems = [];
+             
+             // 랜덤하게 3개 선택 (최대 storage.length개)
+             const maxItems = Math.min(3, storage.length);
+             const selectedIndices = [];
+             
+             while (selectedIndices.length < maxItems) {
+                 const randomIndex = Math.floor(Math.random() * storage.length);
+                 if (!selectedIndices.includes(randomIndex)) {
+                     selectedIndices.push(randomIndex);
+                 }
+             }
+             
+             selectedIndices.forEach(index => {
+                 const item = storage[index];
+                 if (item && item.name !== '꽝') {
+                     // 원본 이름에서 특별효과 제거
+                     const originalName = item.name.replace(/✨ 빛나는 |⚡ 번쩍이는 |🏆 황금색 |💎 다이아몬드색 |🌈 무지갯빛 |🌈/g, '');
+                     
+                     // 새로운 이름 선택
+                     const newName = sehoNames[Math.floor(Math.random() * sehoNames.length)];
+                     
+                     // 특별효과가 있다면 다시 추가
+                     let finalName = newName;
+                     if (item.effectType === 'shining') finalName = `✨ 빛나는 ${newName} ✨`;
+                     else if (item.effectType === 'sparkling') finalName = `⚡ 번쩍이는 ${newName} ⚡`;
+                     else if (item.effectType === 'golden') finalName = `🏆 황금색 ${newName} 🏆`;
+                     else if (item.effectType === 'diamond') finalName = `💎 다이아몬드색 ${newName} 💎`;
+                     else if (item.effectType === 'rainbow') finalName = `🌈 ${newName} 🌈`;
+                     
+                     item.name = finalName;
+                     nameChangedItems.push(index);
+                 }
+             });
+             
+             // 10초 후 이름 변경 효과 제거
+             if (nameChangeTimer) clearTimeout(nameChangeTimer);
+             nameChangeTimer = setTimeout(() => {
+                 nameChangedItems = [];
+                 updateStorageDisplay();
+             }, 10000);
+             
+             updateStorageDisplay();
+         }
 
   </script>
 </body>
 </html>
+
 
