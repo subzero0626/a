@@ -1774,6 +1774,18 @@
             saveState(); // 상태 저장
         }
 
+        // 테스트용 돈 주는 함수
+        function giveTestMoney() {
+            sehoCoin = 1000;
+            updateCoinDisplay();
+            saveState();
+            alert('테스트용으로 1000 세호코인을 지급했습니다!');
+        }
+
+        // 테스트용 함수들을 전역으로 노출
+        window.giveTestMoney = giveTestMoney;
+        window.initializeTestArtifacts = initializeTestArtifacts;
+
         function loadState() {
             try {
                 const raw = localStorage.getItem('sehorory_state_v1');
@@ -2649,10 +2661,18 @@
             sortedParticipants.forEach(participant => {
                 const probability = ((participant.weight / totalWeight) * 100).toFixed(2);
                 if (participant.name === '꽝') {
+                    // 행운포션 효과 표시
+                    const luckBuff = activeBuffs.find(b => b.type === 'luck' && b.endTime > Date.now());
+                    let missDisplay = `${probability}%`;
+                    if (luckBuff) {
+                        const reductionPercent = [5, 10, 20][luckBuff.level - 1];
+                        missDisplay = `${probability}%(-${reductionPercent}%)`;
+                    }
+                    
                     listHTML += `
                         <div class="probability-item no-hover">
                             <span class="participant-name">${participant.name}</span>
-                            <span class="probability-value">${probability}%</span>
+                            <span class="probability-value">${missDisplay}</span>
                         </div>
                     `;
                     return;
@@ -2750,10 +2770,18 @@
                 const probNum = (participant.weight / totalWeight) * 100;
                 const probability = formatFiniteOrEllipsis(probNum);
                 if (participant.name === '꽝') {
+                    // 행운포션 효과 표시
+                    const luckBuff = activeBuffs.find(b => b.type === 'luck' && b.endTime > Date.now());
+                    let missDisplay = `${probability}%`;
+                    if (luckBuff) {
+                        const reductionPercent = [5, 10, 20][luckBuff.level - 1];
+                        missDisplay = `${probability}%(-${reductionPercent}%)`;
+                    }
+                    
                     listHTML += `
                         <div class="probability-item no-hover">
                             <span class="participant-name">${participant.name}</span>
-                            <span class="probability-value">${probability}%</span>
+                            <span class="probability-value">${missDisplay}</span>
                         </div>
                     `;
                     return;
@@ -3305,16 +3333,13 @@
                 const probNum = (participant.weight / totalWeight) * 100;
                 const probability = formatFiniteOrEllipsis(probNum);
                 if (participant.name === '꽝') {
-                    // 원래 꽝 확률 계산
-                    const originalMiss = participants.find(p => p.name === '꽝');
-                    const originalTotal = participants.reduce((sum, p) => sum + p.weight, 0);
-                    const originalProbNum = (originalMiss.weight / originalTotal) * 100;
-                    
-                    // 감소량 계산
-                    const reduction = originalProbNum - probNum;
-                    const displayText = reduction > 0 
-                        ? `${formatFiniteOrEllipsis(originalProbNum)}% <span class="artifact-effect">(-${formatFiniteOrEllipsis(reduction)}%)</span>`
-                        : `${probability}%`;
+                    // 행운포션 효과 표시
+                    const luckBuff = activeBuffs.find(b => b.type === 'luck' && b.endTime > Date.now());
+                    let displayText = `${probability}%`;
+                    if (luckBuff) {
+                        const luckReduction = [5, 10, 20][luckBuff.level - 1];
+                        displayText = `${probability}%(-${luckReduction}%)`;
+                    }
                     
                     listHTML += `
                     <div class="probability-item no-hover">
@@ -3495,10 +3520,13 @@
                 const probNum = (participant.weight / totalWeight) * 100;
                 const probability = formatFiniteOrEllipsis(probNum);
                 if (participant.name === '꽝') {
-                    // 꽝 확률에 유물 효과 적용
-                    const missReduction = getMissReduction();
-                    const missProbability = Math.max(0, probNum - missReduction);
-                    const missDisplay = missReduction > 0 ? `${formatFiniteOrEllipsis(missProbability)}% <span class="artifact-effect">(-${formatFiniteOrEllipsis(missReduction)}%)</span>` : `${probability}%`;
+                    // 행운포션 효과 표시
+                    const luckBuff = activeBuffs.find(b => b.type === 'luck' && b.endTime > Date.now());
+                    let missDisplay = `${probability}%`;
+                    if (luckBuff) {
+                        const luckReduction = [5, 10, 20][luckBuff.level - 1];
+                        missDisplay = `${probability}%(-${luckReduction}%)`;
+                    }
                     
                     listHTML += `
                     <div class="probability-item no-hover">
@@ -4224,11 +4252,13 @@
             
             container.innerHTML = '';
             const now = Date.now();
+            let hasActiveBuffs = false;
             
             activeBuffs.forEach((buff, index) => {
                 const remaining = Math.max(0, buff.endTime - now);
                 if (remaining === 0) return; // 만료된 버프는 표시하지 않음
                 
+                hasActiveBuffs = true;
                 const minutes = Math.floor(remaining / 60000);
                 const seconds = Math.floor((remaining % 60000) / 1000);
                 const timeStr = `${minutes}:${String(seconds).padStart(2, '0')}`;
@@ -4236,12 +4266,21 @@
                 const buffDiv = document.createElement('div');
                 buffDiv.className = `buff-icon ${buff.type}`;
                 buffDiv.innerHTML = `
-                    <div class="buff-name">${buff.type === 'luck' ? '행운' : '속도'}${buff.level}</div>
+                    <div class="buff-name">${buff.type === 'luck' ? '행운' : buff.type === 'speed' ? '속도' : '1339'}${buff.level}</div>
                     <div class="buff-timer">${timeStr}</div>
                 `;
-                buffDiv.title = `${buff.type === 'luck' ? '행운포션' : '속도포션'}Ⅰ`.repeat(buff.level) + '\n남은 시간: ' + timeStr;
+                buffDiv.title = `${buff.type === 'luck' ? '행운포션' : buff.type === 'speed' ? '속도포션' : '1339포션'}Ⅰ`.repeat(buff.level) + '\n남은 시간: ' + timeStr;
                 container.appendChild(buffDiv);
             });
+            
+            // 버프 상태가 변경되었을 때 확률 표시 업데이트
+            if (!hasActiveBuffs && activeBuffs.length > 0) {
+                // 버프가 만료되었을 때 확률 표시 업데이트
+                updateProbabilityTable();
+                if (typeof renderInlineProbability === 'function') renderInlineProbability();
+                if (typeof renderOverlayProbability === 'function') renderOverlayProbability(true);
+                if (typeof renderBelowProbability === 'function') renderBelowProbability();
+            }
         }
 
         // 버프 타이머 시작
@@ -4260,13 +4299,6 @@
 
          // 포션 사용
          function usePotion(type, level) {
-             // 같은 타입의 다른 레벨 포션이 이미 활성화되어 있는지 확인
-             const existingSameBuff = activeBuffs.find(b => b.type === type);
-             if (existingSameBuff) {
-                 alert('이미 같은 효과의 포션을 사용 중입니다!');
-                 return false;
-             }
-             
              const now = Date.now();
              let duration = 5 * 60 * 1000; // 기본 5분
              
@@ -4275,19 +4307,35 @@
                  duration = 10 * 60 * 1000;
              }
              
-             // 같은 포션이 있으면 시간만 연장
-             const existing = activeBuffs.find(b => b.type === type && b.level === level);
-             if (existing) {
-                 existing.endTime = Math.max(existing.endTime, now) + duration;
+             // 같은 타입의 다른 레벨 포션이 이미 활성화되어 있는지 확인
+             const existingDifferentLevel = activeBuffs.find(b => b.type === type && b.level !== level && b.endTime > now);
+             if (existingDifferentLevel) {
+                 alert('이미 같은 효과의 다른 레벨 포션을 사용 중입니다!');
+                 return false;
+             }
+             
+             // 같은 레벨의 포션이 있으면 시간만 연장
+             const existingSameLevel = activeBuffs.find(b => b.type === type && b.level === level && b.endTime > now);
+             if (existingSameLevel) {
+                 existingSameLevel.endTime = Math.max(existingSameLevel.endTime, now) + duration;
+                 alert(`같은 포션을 사용했습니다! 지속시간이 ${Math.floor(duration / 60000)}분 연장되었습니다.`);
              } else {
                  activeBuffs.push({
                      type: type,
                      level: level,
                      endTime: now + duration
                  });
+                 alert(`${type === 'luck' ? '행운포션' : type === 'speed' ? '속도포션' : '1339포션'}을 사용했습니다!`);
              }
              
              updateBuffDisplay();
+             
+             // 확률 표시 즉시 업데이트
+             updateProbabilityTable();
+             if (typeof renderInlineProbability === 'function') renderInlineProbability();
+             if (typeof renderOverlayProbability === 'function') renderOverlayProbability(true);
+             if (typeof renderBelowProbability === 'function') renderBelowProbability();
+             
              saveState();
              return true;
          }
@@ -4373,7 +4421,6 @@
                      }
                      updateItemStorageDisplay();
                      saveState();
-                     alert(`${item.name}을(를) 사용했습니다!`);
                  }
              } else if (itemData.type === 'special') {
                  if (useSpecialItem(itemData.effect, item)) {
