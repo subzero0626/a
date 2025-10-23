@@ -1148,6 +1148,16 @@
             word-break: break-word;
         }
 
+        .storage-item .item-description {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 2px;
+            margin-bottom: 4px;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
         .storage-item .probability {
             color: #007bff;
             font-size: 0.9em;
@@ -1384,7 +1394,7 @@
     </div>
 
     <!-- 설정 패널 -->
-    <div id="settingsPanel" class="collapsed" onclick="toggleSettingsPanelClick(event)">
+    <div id="settingsPanel" class="collapsed" onclick="toggleSettingsPanel()">
         <div id="settingsHeader">
             <span class="title"></span>
             <span class="hamburger" aria-label="menu">
@@ -1570,13 +1580,13 @@
             { name: "에겐세호", weight: 3 },
             { name: "니거세호", weight: 3 }
         ];
-        // 유물석 기반 유효 확률(가중치) 계산: 레벨당 꽝 -7, 각 세호 +0.7
+        // 세호로리의 7목걸이 기반 유효 확률(가중치) 계산: 레벨당 꽝 8% 감소
         function getEffectiveParticipants() {
-            const stone = artifactStorage.find(item => item.name === '세호로리의 유물석');
-            const level = stone ? stone.level : 0;
+            const necklace = artifactStorage.find(item => item.name === '세호로리의 7목걸이');
+            const level = necklace ? necklace.level : 0;
             let adjusted = participants.map(p => ({ ...p }));
             
-            // 유물석 효과 적용 - 레벨당 8%p 절대값 감소하고 줄어든 만큼을 세호에게 분배
+            // 세호로리의 7목걸이 효과 적용 - 레벨당 8%p 절대값 감소하고 줄어든 만큼을 세호에게 분배
             if (level) {
             const miss = adjusted.find(p => p.name === '꽝');
                 if (miss) {
@@ -1584,6 +1594,22 @@
                     const reductionPercent = 8 * level; // 레벨당 8%p (절대값)
                     const reducedWeight = totalWeight * (reductionPercent / 100); // 전체 가중치의 8%
                     miss.weight = Math.max(0, miss.weight - reducedWeight);
+                    // 줄어든 확률을 모든 세호에게 균등 분배
+                    const sehos = adjusted.filter(p => p.name !== '꽝');
+                    const perSeho = reducedWeight / sehos.length;
+                    sehos.forEach(p => p.weight += perSeho);
+                }
+            }
+            
+            // 샤오미폰 효과 적용 - 꽝 확률 8% 감소
+            const xiaomiBuff = activeBuffs.find(b => b.type === 'xiaomi_phone' && b.endTime > Date.now());
+            if (xiaomiBuff) {
+                const miss = adjusted.find(p => p.name === '꽝');
+                if (miss) {
+                    const totalWeight = adjusted.reduce((sum, p) => sum + p.weight, 0);
+                    const reducedWeight = totalWeight * 0.08; // 8% 감소
+                    miss.weight = Math.max(0, miss.weight - reducedWeight);
+                    
                     // 줄어든 확률을 모든 세호에게 균등 분배
                     const sehos = adjusted.filter(p => p.name !== '꽝');
                     const perSeho = reducedWeight / sehos.length;
@@ -1667,8 +1693,6 @@
             // 포션류 - 레어 등급 그룹
             { name: '행운포션Ⅲ', price: 100, rarity: 'epic', type: 'potion', effect: 'luck', level: 3, minQty: 1, maxQty: 3 },
             { name: '속도포션Ⅲ', price: 100, rarity: 'epic', type: 'potion', effect: 'speed', level: 3, minQty: 1, maxQty: 3 },
-            // 희귀 등급 아이템
-            { name: '쓸데없는 변환기', price: 30, rarity: 'rare', type: 'special', effect: 'name_converter', minQty: 1, maxQty: 1 },
             // 레어 등급 아이템
             { name: '주말', price: 250, rarity: 'epic', type: 'special', effect: 'remove_cooldown', minQty: 1, maxQty: 1 },
             { name: '1339포션', price: 250, rarity: 'epic', type: 'potion', effect: 'speed_boost', level: 4, minQty: 1, maxQty: 1 },
@@ -1682,7 +1706,9 @@
             { name: '테마_핑크색', price: 5000, rarity: 'hero', type: 'theme', themeColor: 'pink', oneTime: true },
             { name: '테마_보라', price: 5000, rarity: 'hero', type: 'theme', themeColor: 'purple', oneTime: true },
             // 특수 아이템 - 영웅 등급
-            { name: '용사의 심판', price: 5000, rarity: 'hero', type: 'potion', effect: 'guaranteed_special', minQty: 1, maxQty: 1 }
+            { name: '용사의 심판', price: 5000, rarity: 'hero', type: 'potion', effect: 'guaranteed_special', minQty: 1, maxQty: 1 },
+            { name: '샤오미폰', price: 75, rarity: 'rare', type: 'special', effect: 'xiaomi_phone', minQty: 1, maxQty: 1 },
+            { name: '시원한 물', price: 75, rarity: 'rare', type: 'special', effect: 'cold_water', minQty: 1, maxQty: 1 }
         ]; // 전체 상점 물품 목록
         let shopRefreshTime = 0; // 다음 상점 갱신 시간 (타임스탬프)
         let shopTimerInterval = null;
@@ -1699,16 +1725,75 @@
              updateTrumpCardInfo(); // 트럼프카드 정보 업데이트
              initShop(); // 상점 초기화
              updateItemStorageDisplay(); // 아이템 보관소 초기화
-             updateCoinDisplay(); // 세호코인 표시 업데이트
-             updateBuffDisplay(); // 버프 표시 업데이트
-             startBuffTimer(); // 버프 타이머 시작
-             updateDotStates(); // 도트 상태 초기화
-             // 테마 선택기 초기화 (DOM이 준비된 후)
-             setTimeout(() => {
-                 initThemeSelector();
-                 applyTheme(currentTheme);
-             }, 100);
+            
+            // 사용자 활동 감지 이벤트 리스너 추가
+            setupActivityListeners();
+            
+            updateCoinDisplay(); // 세호코인 표시 업데이트
+            updateBuffDisplay(); // 버프 표시 업데이트
+            startBuffTimer(); // 버프 타이머 시작
+            updateDotStates(); // 도트 상태 초기화
+            // 테마 선택기 초기화 (DOM이 준비된 후)
+            setTimeout(() => {
+                initThemeSelector();
+                applyTheme(currentTheme);
+            }, 100);
         };
+        
+        // 사용자 활동 감지 이벤트 리스너 설정
+        function setupActivityListeners() {
+            // 뽑기 버튼 클릭
+            const drawButton = document.getElementById('drawButton');
+            if (drawButton) {
+                drawButton.addEventListener('click', updateActivity);
+            }
+            
+            // 상점 버튼 클릭
+            const shopButton = document.getElementById('shopButton');
+            if (shopButton) {
+                shopButton.addEventListener('click', updateActivity);
+            }
+            
+            // 설정 버튼 클릭
+            const settingsButton = document.getElementById('settingsButton');
+            if (settingsButton) {
+                settingsButton.addEventListener('click', updateActivity);
+            }
+            
+            // 상점 아이템 구매
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('shop-item') || e.target.closest('.shop-item')) {
+                    updateActivity();
+                }
+            });
+            
+            // 테마 변경
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('theme-button') || e.target.closest('.theme-button')) {
+                    updateActivity();
+                }
+            });
+            
+            // 아이템 사용
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('use-item') || e.target.closest('.use-item')) {
+                    updateActivity();
+                }
+            });
+            
+            // 키보드 입력 (스페이스바 뽑기 등)
+            document.addEventListener('keydown', function(e) {
+                if (e.code === 'Space' || e.code === 'Enter') {
+                    updateActivity();
+                }
+            });
+            
+            // 마우스 움직임
+            document.addEventListener('mousemove', updateActivity);
+            
+            // 스크롤
+            document.addEventListener('scroll', updateActivity);
+        }
         let storage = []; // 뽑힌 결과 저장소
         let startX = 0;
         let startY = 0;
@@ -1722,18 +1807,20 @@
         let lastEnhancementTime = 0; // 마지막 강화 시간
         let pausedTime = 0; // 일시정지된 시간 누적
         let lastPauseTime = 0; // 마지막 일시정지 시점
+        let lastActivityTime = Date.now(); // 마지막 사용자 활동 시간
+        let activityTimeout = null; // 활동 타임아웃
         let enhancementCooldown = 1000; // 강화 쿨다운 (1초)
         let sehoDrawCount = 0; // 세호 뽑기 횟수 추적
 
         // 상태 저장/불러오기 (localStorage)
         function saveState() {
             try {
-                 const data = {
-                     storage,
-                     artifactStorage,
-                     lastArtifactDraw,
-                     totalDraws,
-                     rarestItem,
+                const data = {
+                    storage,
+                    artifactStorage,
+                    lastArtifactDraw,
+                    totalDraws,
+                    rarestItem,
                      startTime,
                      pausedTime,
                      sehoDrawCount,
@@ -1748,43 +1835,12 @@
                      specialItemCount,
                      noCooldownCount,
                      nameChangedItems
-                 };
+                };
                 localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
             } catch (e) { console.log('save failed'); }
         }
 
         // 테스트용 유물 초기화 함수
-        function initializeTestArtifacts() {
-            const artifactNames = [
-                '세호로리의 부적', '세호퍼리의 부적', '세호게이의 부적',
-                '마죠이스트세호의 부적', '씹덕세호의 부적', 'TS세호의 부적',
-                '쇼타세호의 부적', '에겐세호의 부적', '니거세호의 부적',
-                '세호로리의 시간가속기', '세호로리의 7목걸이',
-                '세호로리의 유물석', '세호로리의 무지갯빛 보석',
-                '세호로리의 신성한 망치', '세호로리의 트럼프카드'
-            ];
-            artifactNames.forEach(name => {
-                artifactStorage.push({
-                    name: name,
-                    level: 3,
-                    date: new Date().toLocaleDateString('ko-KR'),
-                    time: new Date().toLocaleTimeString('ko-KR')
-                });
-            });
-            saveState(); // 상태 저장
-        }
-
-        // 테스트용 돈 주는 함수
-        function giveTestMoney() {
-            sehoCoin = 1000;
-            updateCoinDisplay();
-            saveState();
-            alert('테스트용으로 1000 세호코인을 지급했습니다!');
-        }
-
-        // 테스트용 함수들을 전역으로 노출
-        window.giveTestMoney = giveTestMoney;
-        window.initializeTestArtifacts = initializeTestArtifacts;
 
         function loadState() {
             try {
@@ -2193,9 +2249,9 @@
                     const item = sortedStorage[i + j];
                     const div = document.createElement('div');
                     
-                     div.className = `storage-item ${item.effectType}`;
-                     const originalIndex = storage.indexOf(item);
-                     div.setAttribute('data-index', String(originalIndex));
+                    div.className = `storage-item ${item.effectType}`;
+                    const originalIndex = storage.indexOf(item);
+                    div.setAttribute('data-index', String(originalIndex));
                      
                      // 이름이 바뀐 아이템 표시
                      if (nameChangedItems.includes(originalIndex)) {
@@ -2239,9 +2295,13 @@
                     const successColor = rates.hasArtifactEffect ? 'style="color: #87CEEB;"' : '';
                     const destroyColor = rates.hasArtifactEffect ? 'style="color: #87CEEB;"' : '';
                     
+                    const itemDescription = getItemDescription(item.name);
+                    const descriptionHtml = itemDescription ? `<div class=\"item-description\">${itemDescription}</div>` : '';
+                    
                     div.innerHTML = `
                         <button class=\"sell-button\" onclick=\"sellItem(${originalIndex}, event)\" title=\"판매\">🗑️</button>
                         <div class=\"name\">${displayName}</div>
+                        ${descriptionHtml}
                         <div class=\"probability\">${probabilityText}</div>
                         ${enhancedLabel}
                         <div class=\"time\">${item.date} ${item.time}</div>
@@ -2400,6 +2460,60 @@
             return `강화 확률: <span ${colorStyle}>${formatPercent(rates.success)}</span> / 파괴 확률: <span ${colorStyle}>${formatPercent(rates.destroy)}</span> (실패 시 1단계 하락, 0강 미만 하락 없음)`;
         }
 
+        // 아이템 설명 반환 함수 (상점 아이템만)
+        function getItemDescription(itemName) {
+            // 세호류는 설명 없음
+            const sehoTypes = ['세호로리', '세호게이', '세호퍼리', '씹덕세호', '마죠이스트세호', 
+                             '평범한세호', 'TS세호', '쇼타세호', '에겐세호', '니거세호', '꽝'];
+            
+            // 특별효과 제거 후 기본 이름으로 검색
+            let cleanName = itemName.replace(/✨ 빛나는 |⚡ 번쩍이는 |🏆 황금색 |💎 다이아몬드색 |🌈 무지갯빛 |🌈/g, '');
+            
+            // 기존 수식어들 제거
+            const existingPrefixes = ['세호로리', '세호게이', '세호퍼리', '씹덕세호', '마죠이스트세호', 
+                                   '평범한세호', 'TS세호', '쇼타세호', '에겐세호', '니거세호'];
+            
+            for (const prefix of existingPrefixes) {
+                if (cleanName.startsWith(prefix)) {
+                    cleanName = cleanName.substring(prefix.length);
+                    break;
+                }
+            }
+
+            // 세호류나 꽝이면 설명 없음
+            for (const sehoType of sehoTypes) {
+                if (cleanName.includes(sehoType)) {
+                    return null;
+                }
+            }
+
+            // 상점 아이템 설명
+            const descriptions = {
+                '행운포션Ⅰ': '꽝 확률 5% 감소',
+                '행운포션Ⅱ': '꽝 확률 10% 감소',
+                '행운포션Ⅲ': '꽝 확률 20% 감소',
+                '속도포션Ⅰ': '뽑기 속도 7.5% 증가',
+                '속도포션Ⅱ': '뽑기 속도 15% 증가',
+                '속도포션Ⅲ': '뽑기 속도 30% 증가',
+                '1339포션': '뽑기 속도 15-50% 증가',
+                '주말': '다음 50회 뽑기 쿨타임 삭제',
+                '보조배터리': '상점 즉시 갱신',
+                '럭키박스': '행운포션Ⅱ, 속도포션Ⅱ 랜덤 획득',
+                '용사의 심판': '다음 뽑기 특별효과 확률 20%',
+                '샤오미폰': '꽝 확률 8% 감소, 10초마다 8% 확률로 제거',
+                '시원한 물': '영구적으로 뽑기속도 +2% (무제한 중첩)'
+            };
+
+            // 상점 아이템 설명 찾기
+            for (const [key, description] of Object.entries(descriptions)) {
+                if (cleanName.includes(key)) {
+                    return description;
+                }
+            }
+
+            return null;
+        }
+
         function injectEnhanceControls(container, index) {
             const item = storage[index];
             if (!item) return;
@@ -2436,17 +2550,17 @@
             container.appendChild(upg);
         }
 
-         function performUpgrade(index) {
-             const item = storage[index];
-             if (!item) return;
-             
+        function performUpgrade(index) {
+            const item = storage[index];
+            if (!item) return;
+            
              // 쿨타임 확인 (주말 효과가 있으면 쿨타임 무시)
-             const now = Date.now();
+            const now = Date.now();
              if (noCooldownCount <= 0 && now - lastEnhancementTime < enhancementCooldown) {
-                 const remainingTime = Math.ceil((enhancementCooldown - (now - lastEnhancementTime)) / 1000);
-                 alert(`강화 쿨타임 중입니다. ${remainingTime}초 후에 다시 시도해주세요.`);
-                 return;
-             }
+                const remainingTime = Math.ceil((enhancementCooldown - (now - lastEnhancementTime)) / 1000);
+                alert(`강화 쿨타임 중입니다. ${remainingTime}초 후에 다시 시도해주세요.`);
+                return;
+            }
              
              // 주말 효과 사용
              if (noCooldownCount > 0) {
@@ -2955,9 +3069,9 @@
                 } else if (artifactName === '세호로리의 시간가속기') {
                     return baseStat + ' (10% 감소)';
                 } else if (artifactName === '세호로리의 7목걸이') {
-                    return baseStat + ' (7% 감소)';
+                    return baseStat + ' (8% 감소)';
                 } else if (artifactName === '세호로리의 유물석') {
-                    return baseStat + ' (꽝 8% 감소, 유물뽑기 시간 10% 감소)';
+                    return baseStat + ' (유물뽑기 시간 10% 감소)';
                 } else if (artifactName === '세호로리의 무지갯빛 보석') {
                     return baseStat + ' (75% 증가)';
                 }
@@ -2968,9 +3082,9 @@
                 } else if (artifactName === '세호로리의 시간가속기') {
                     return baseStat + ' (25% 감소)';
                 } else if (artifactName === '세호로리의 7목걸이') {
-                    return baseStat + ' (14% 감소)';
+                    return baseStat + ' (16% 감소)';
                 } else if (artifactName === '세호로리의 유물석') {
-                    return baseStat + ' (꽝 16% 감소, 유물뽑기 시간 20% 감소)';
+                    return baseStat + ' (유물뽑기 시간 20% 감소)';
                 } else if (artifactName === '세호로리의 무지갯빛 보석') {
                     return baseStat + ' (150% 증가)';
                 }
@@ -2981,9 +3095,9 @@
                 } else if (artifactName === '세호로리의 시간가속기') {
                     return baseStat + ' (50% 감소)';
                 } else if (artifactName === '세호로리의 7목걸이') {
-                    return baseStat + ' (21% 감소)';
+                    return baseStat + ' (24% 감소)';
                 } else if (artifactName === '세호로리의 유물석') {
-                    return baseStat + ' (꽝 24% 감소, 유물뽑기 시간 30% 감소)';
+                    return baseStat + ' (유물뽑기 시간 30% 감소)';
                 } else if (artifactName === '세호로리의 무지갯빛 보석') {
                     return baseStat + ' (225% 증가)';
                 }
@@ -3162,7 +3276,16 @@
                 }
             }
             const pt = document.getElementById('statPlaytime');
-            if (pt) pt.textContent = formatElapsedTime(Date.now() - startTime);
+            if (pt) {
+                const currentTime = Date.now();
+                const timeSinceLastActivity = currentTime - lastActivityTime;
+                
+                // 10초 이상 활동이 없으면 플레이타임 카운트 멈춤
+                if (timeSinceLastActivity < 10000) {
+                    const totalPlaytime = currentTime - startTime - pausedTime;
+                    pt.textContent = formatElapsedTime(totalPlaytime);
+                }
+            }
         }
 
         function resetAllData() {
@@ -3177,6 +3300,7 @@
             startTime = Date.now();
             pausedTime = 0;
             lastPauseTime = 0;
+            lastActivityTime = Date.now();
             sehoDrawCount = 0;
             
             // 상점 관련 데이터 초기화
@@ -3227,23 +3351,17 @@
             return Math.max(10, baseArtifactCooldown * (1 - reduction)); // 최소 10초
         }
         
-        function getMissReduction() {
-            // 유물석 기준: 레벨당 7%p 꽝 감소
-            const artifact = artifactStorage.find(item => item.name === '세호로리의 유물석');
-            if (!artifact) return 0;
-            return artifact.level * 7;
-        }
 
-         // 속도포션 레벨에 따라 뽑기 스핀 간격 감소 (기본 40ms)
-         function getSpinInterval() {
-             const base = 40;
+        // 속도포션 레벨에 따라 뽑기 스핀 간격 감소 (기본 40ms)
+        function getSpinInterval() {
+             const base = 50;
              let totalReduction = 0;
              
              // 유물 시간가속기 효과
              const speedArtifact = artifactStorage.find(item => item.name === '세호로리의 시간가속기');
              if (speedArtifact) {
                  const lv = speedArtifact.level || 1;
-             const map = { 1: 0.10, 2: 0.25, 3: 0.50 };
+            const map = { 1: 0.10, 2: 0.25, 3: 0.50 };
                  totalReduction += map[lv] || 0.10;
              }
              
@@ -3261,8 +3379,22 @@
                  totalReduction += randomReduction;
              }
              
+             // 시원한 물 효과 (영구 뽑기속도 증가)
+             const coldWaterBuff = activeBuffs.find(b => b.type === 'cold_water' && b.endTime > Date.now());
+             if (coldWaterBuff) {
+                 const coldWaterReduction = coldWaterBuff.level * 0.02; // 레벨당 2% 감소
+                 totalReduction += coldWaterReduction;
+             }
+             
              return Math.max(8, Math.round(base * (1 - totalReduction)));
          }
+
+        // 현재 뽑기 속도 계산 (뽑기 시작 후 다음 뽑기까지의 시간)
+        function getCurrentDrawSpeed() {
+            const interval = getSpinInterval();
+            const totalTime = interval * 12; // 12번 회전 후 결과 표시
+            return totalTime;
+        }
         
         function getSpecialEffectBonus(participantName) {
             // 해당 세호의 부적만 적용
@@ -3435,26 +3567,6 @@
 
         // 화면 전환
         function goToScreen(screenIndex) {
-             // 뽑기 횟수 제한 확인
-             if (screenIndex === 0 && totalDraws < 150) {
-                 alert('아이템 보관소는 150회 뽑기 이상부터 이용할 수 있습니다!');
-                 return;
-             }
-             
-             if (screenIndex === 1 && totalDraws < 150) {
-                 alert('상점은 150회 뽑기 이상부터 이용할 수 있습니다!');
-                 return;
-             }
-             
-             if (screenIndex === 5 && totalDraws < 50) {
-                 alert('유물 뽑기는 50회 뽑기 이상부터 이용할 수 있습니다!');
-                 return;
-             }
-             
-             if (screenIndex === 6 && totalDraws < 50) {
-                 alert('유물 컬렉션은 50회 뽑기 이상부터 이용할 수 있습니다!');
-                 return;
-             }
              
             currentScreen = screenIndex;
             const container = document.getElementById('mainContainer');
@@ -3862,14 +3974,34 @@
             }
         }
 
+        // 사용자 활동 감지 및 플레이타임 업데이트
+        function updateActivity() {
+            lastActivityTime = Date.now();
+            
+            // 기존 타임아웃 클리어
+            if (activityTimeout) {
+                clearTimeout(activityTimeout);
+            }
+            
+            // 10초 후 활동 중지로 간주
+            activityTimeout = setTimeout(() => {
+                // 활동 중지 상태로 변경 (플레이타임 카운트 멈춤)
+            }, 10000);
+        }
+
         function startPlaytimeTicker() {
             if (playtimeTimer) clearInterval(playtimeTimer);
             playtimeTimer = setInterval(() => {
                 const pt = document.getElementById('statPlaytime');
                 if (pt) {
                     const currentTime = Date.now();
-                    const totalPlaytime = currentTime - startTime - pausedTime;
-                    pt.textContent = formatElapsedTime(totalPlaytime);
+                    const timeSinceLastActivity = currentTime - lastActivityTime;
+                    
+                    // 10초 이상 활동이 없으면 플레이타임 카운트 멈춤
+                    if (timeSinceLastActivity < 10000) {
+                        const totalPlaytime = currentTime - startTime - pausedTime;
+                        pt.textContent = formatElapsedTime(totalPlaytime);
+                    }
                 }
             }, 1000);
         }
@@ -3919,7 +4051,7 @@
         // 상점 물품 갱신 (랜덤 3개 선택)
         function refreshShop() {
             const now = Date.now();
-            shopRefreshTime = now + 30 * 60 * 1000; // 30분 후
+            shopRefreshTime = now + 15 * 60 * 1000; // 15분 후
             
             shopItems = [];
             purchasedInCurrentShop = []; // 구매 기록 초기화
@@ -4066,12 +4198,10 @@
                              description = `다음 50회 뽑기 쿨타임 삭제`;
                          } else if (item.effect === 'refresh_shop') {
                              description = `3회까지 사용가능 / 사용시 즉시 상점 갱신`;
-                         } else if (item.effect === 'lucky_box') {
-                             description = `행운포션Ⅱ 1~10개, 속도포션Ⅱ 1~10개 획득`;
-                         } else if (item.effect === 'name_converter') {
-                             description = `보관소 세호 3개의 이름 변경`;
-                         }
-                     }
+                        } else if (item.effect === 'lucky_box') {
+                            description = `행운포션Ⅱ 1~10개, 속도포션Ⅱ 1~10개 획득`;
+                        }
+                    }
                     
                     itemDiv.innerHTML = `
                         <div class="shop-item-name">${item.displayName || item.name}</div>
@@ -4210,13 +4340,22 @@
                 const count = item.count || 1;
                 const date = item.date || '';
                 const time = item.time || '';
+                const description = getItemDescription(name);
+                const descriptionHtml = description ? `<div class="item-description">${description}</div>` : '';
+                
+                // 보조배터리인 경우 남은 사용 횟수 표시
+                let displayName = name;
+                if (name === '보조배터리' && item.usesLeft !== undefined) {
+                    displayName = `보조배터리(${item.usesLeft}회 남음)`;
+                }
                 
                 html += `
                     <div class="storage-item" data-index="${index}" style="cursor: pointer;">
                         <div class="storage-item-header">
-                            <span class="storage-item-name">${name}</span>
+                            <span class="storage-item-name">${displayName}</span>
                             <span class="storage-item-count">x${count}</span>
                         </div>
+                        ${descriptionHtml}
                         <div class="storage-item-info">
                             <span class="storage-item-date">${date} ${time}</span>
                         </div>
@@ -4265,11 +4404,32 @@
                 
                 const buffDiv = document.createElement('div');
                 buffDiv.className = `buff-icon ${buff.type}`;
+                
+                let buffName = '';
+                let buffTitle = '';
+                
+                if (buff.type === 'luck') {
+                    buffName = `행운${buff.level}`;
+                    buffTitle = `행운포션${buff.level}\n남은 시간: ${timeStr}`;
+                } else if (buff.type === 'speed') {
+                    buffName = `속도${buff.level}`;
+                    buffTitle = `속도포션${buff.level}\n남은 시간: ${timeStr}`;
+                } else if (buff.type === 'speed_boost') {
+                    buffName = '1339';
+                    buffTitle = `1339포션\n남은 시간: ${timeStr}`;
+                } else if (buff.type === 'xiaomi_phone') {
+                    buffName = '샤오미폰';
+                    buffTitle = `샤오미폰\n꽝 확률 8% 감소\n10초마다 8% 확률로 제거`;
+                } else if (buff.type === 'cold_water') {
+                    buffName = `시원한물×${buff.level}`;
+                    buffTitle = `시원한 물 (${buff.level}개 중첩)\n영구 뽑기속도 +${buff.level * 2}%`;
+                }
+                
                 buffDiv.innerHTML = `
-                    <div class="buff-name">${buff.type === 'luck' ? '행운' : buff.type === 'speed' ? '속도' : '1339'}${buff.level}</div>
-                    <div class="buff-timer">${timeStr}</div>
+                    <div class="buff-name">${buffName}</div>
+                    <div class="buff-timer">${buff.type === 'cold_water' ? '영구' : timeStr}</div>
                 `;
-                buffDiv.title = `${buff.type === 'luck' ? '행운포션' : buff.type === 'speed' ? '속도포션' : '1339포션'}Ⅰ`.repeat(buff.level) + '\n남은 시간: ' + timeStr;
+                buffDiv.title = buffTitle;
                 container.appendChild(buffDiv);
             });
             
@@ -4281,6 +4441,9 @@
                 if (typeof renderOverlayProbability === 'function') renderOverlayProbability(true);
                 if (typeof renderBelowProbability === 'function') renderBelowProbability();
             }
+            
+            // 뽑기 속도가 변경될 수 있으므로 설정 통계 업데이트
+            updateSettingsStats();
         }
 
         // 버프 타이머 시작
@@ -4290,6 +4453,22 @@
             
             buffTimerInterval = setInterval(() => {
                 const now = Date.now();
+                
+                // 샤오미폰 버프 제거 로직 (10초마다 8% 확률로 제거)
+                activeBuffs.forEach((buff, index) => {
+                    if (buff.type === 'xiaomi_phone' && buff.endTime > now) {
+                        // 10초마다 체크 (버프가 생성된 시점부터 10초 단위로)
+                        const buffAge = now - (buff.endTime - (365 * 24 * 60 * 60 * 1000));
+                        if (buffAge > 0 && Math.floor(buffAge / 10000) > Math.floor((buffAge - 1000) / 10000)) {
+                            // 8% 확률로 제거
+                            if (Math.random() < 0.08) {
+                                activeBuffs.splice(index, 1);
+                                alert('샤오미폰 효과가 제거되었습니다!');
+                            }
+                        }
+                    }
+                });
+                
                 // 만료된 버프 제거
                 activeBuffs = activeBuffs.filter(buff => buff.endTime > now);
                 updateBuffDisplay();
@@ -4300,11 +4479,11 @@
          // 포션 사용
          function usePotion(type, level) {
              const now = Date.now();
-             let duration = 5 * 60 * 1000; // 기본 5분
+             let duration = 2 * 60 * 1000; // 기본 2분
              
-             // 1339포션은 10분
+             // 1339포션은 5분
              if (type === 'speed_boost') {
-                 duration = 10 * 60 * 1000;
+                 duration = 5 * 60 * 1000;
              }
              
              // 같은 타입의 다른 레벨 포션이 이미 활성화되어 있는지 확인
@@ -4328,16 +4507,19 @@
                  alert(`${type === 'luck' ? '행운포션' : type === 'speed' ? '속도포션' : '1339포션'}을 사용했습니다!`);
              }
              
-             updateBuffDisplay();
-             
-             // 확률 표시 즉시 업데이트
-             updateProbabilityTable();
-             if (typeof renderInlineProbability === 'function') renderInlineProbability();
-             if (typeof renderOverlayProbability === 'function') renderOverlayProbability(true);
-             if (typeof renderBelowProbability === 'function') renderBelowProbability();
-             
-             saveState();
-             return true;
+            updateBuffDisplay();
+            
+            // 확률 표시 즉시 업데이트
+            updateProbabilityTable();
+            if (typeof renderInlineProbability === 'function') renderInlineProbability();
+            if (typeof renderOverlayProbability === 'function') renderOverlayProbability(true);
+            if (typeof renderBelowProbability === 'function') renderBelowProbability();
+            
+            // 뽑기 속도 변경 시 설정 통계 업데이트
+            updateSettingsStats();
+            
+            saveState();
+            return true;
          }
 
          // 특수 아이템 사용
@@ -4373,10 +4555,36 @@
                  showLuckyBoxResult(luckCount, speedCount);
                  alert(`럭키박스를 사용했습니다! 행운포션Ⅱ ${luckCount}개, 속도포션Ⅱ ${speedCount}개를 획득했습니다!`);
                  return true;
-             } else if (effect === 'name_converter') {
-                 // 쓸데없는 변환기 효과
-                 convertSehoNames();
-                 alert('쓸데없는 변환기를 사용했습니다! 보관소의 세호 3개의 이름이 바뀝니다.');
+             } else if (effect === 'xiaomi_phone') {
+                 // 샤오미폰 효과
+                 const xiaomiBuff = {
+                     type: 'xiaomi_phone',
+                     endTime: Date.now() + (365 * 24 * 60 * 60 * 1000), // 1년 후 (실제로는 제거 로직에 의해 관리)
+                     level: 1,
+                     removeChance: 8 // 8% 확률로 제거
+                 };
+                 activeBuffs.push(xiaomiBuff);
+                 updateBuffDisplay();
+                 alert('샤오미폰을 사용했습니다! 꽝 확률이 8% 감소했습니다. (10초마다 8% 확률로 제거)');
+                 return true;
+             } else if (effect === 'cold_water') {
+                 // 시원한 물 효과
+                 const existingBuff = activeBuffs.find(b => b.type === 'cold_water');
+                 if (existingBuff) {
+                     // 기존 버프가 있으면 중첩
+                     existingBuff.level += 1;
+                 } else {
+                     // 새로운 버프 생성
+                     const coldWaterBuff = {
+                         type: 'cold_water',
+                         endTime: Date.now() + (365 * 24 * 60 * 60 * 1000), // 1년 후 (영구 효과)
+                         level: 1
+                     };
+                     activeBuffs.push(coldWaterBuff);
+                 }
+                 updateBuffDisplay();
+                 const currentLevel = existingBuff ? existingBuff.level : 1;
+                 alert(`시원한 물을 사용했습니다! 뽑기 속도가 영구적으로 ${currentLevel * 2}% 증가했습니다. (무제한 중첩 가능)`);
                  return true;
              }
              return false;
@@ -4391,13 +4599,22 @@
                 existing.count += quantity;
                 existing.date = now.toLocaleDateString('ko-KR');
                 existing.time = now.toLocaleTimeString('ko-KR');
+                // 보조배터리인 경우 사용 횟수 초기화
+                if (itemName === '보조배터리' && existing.usesLeft === undefined) {
+                    existing.usesLeft = 3;
+                }
             } else {
-                itemStorage.push({
+                const newItem = {
                     name: itemName,
                     count: quantity,
                     date: now.toLocaleDateString('ko-KR'),
                     time: now.toLocaleTimeString('ko-KR')
-                });
+                };
+                // 보조배터리인 경우 사용 횟수 설정
+                if (itemName === '보조배터리') {
+                    newItem.usesLeft = 3;
+                }
+                itemStorage.push(newItem);
             }
             
             updateItemStorageDisplay();
@@ -4424,9 +4641,16 @@
                  }
              } else if (itemData.type === 'special') {
                  if (useSpecialItem(itemData.effect, item)) {
-                     item.count--;
-                     if (item.count <= 0) {
-                         itemStorage.splice(index, 1);
+                     // 보조배터리인 경우 사용 횟수 확인
+                     if (item.name === '보조배터리' && item.usesLeft !== undefined) {
+                         if (item.usesLeft <= 0) {
+                             itemStorage.splice(index, 1);
+                         }
+                     } else {
+                         item.count--;
+                         if (item.count <= 0) {
+                             itemStorage.splice(index, 1);
+                         }
                      }
                      updateItemStorageDisplay();
                      saveState();
@@ -4473,9 +4697,9 @@
             if (item.effectType === 'rainbow') {
                 basePrice = 20000; // 무지갯빛 특별효과
             } else if (item.effectType === 'diamond') {
-                basePrice = 1250; // 다이아몬드색 특별효과
+                basePrice = 1750; // 다이아몬드색 특별효과
             } else if (item.effectType === 'golden') {
-                basePrice = 200; // 황금색 특별효과
+                basePrice = 250; // 황금색 특별효과
             } else if (item.effectType === 'sparkling') {
                 basePrice = 30; // 번쩍이는 특별효과
             } else if (item.effectType === 'shining') {
@@ -4613,61 +4837,7 @@
              }, 3000);
          }
 
-         // 세호 이름 변환
-         function convertSehoNames() {
-             if (storage.length === 0) return;
-             
-             const sehoNames = ['세호로리', '세호게이', '세호퍼리', '씹덕세호', '마죠이스트 세호', 
-                              '평범한 세호', 'TS세호', '쇼타세호', '에겐세호', '니거세호'];
-             
-             // 이름이 바뀐 아이템들 초기화
-             nameChangedItems = [];
-             
-             // 랜덤하게 3개 선택 (최대 storage.length개)
-             const maxItems = Math.min(3, storage.length);
-             const selectedIndices = [];
-             
-             while (selectedIndices.length < maxItems) {
-                 const randomIndex = Math.floor(Math.random() * storage.length);
-                 if (!selectedIndices.includes(randomIndex)) {
-                     selectedIndices.push(randomIndex);
-                 }
-             }
-             
-             selectedIndices.forEach(index => {
-                 const item = storage[index];
-                 if (item && item.name !== '꽝') {
-                     // 원본 이름에서 특별효과 제거
-                     const originalName = item.name.replace(/✨ 빛나는 |⚡ 번쩍이는 |🏆 황금색 |💎 다이아몬드색 |🌈 무지갯빛 |🌈/g, '');
-                     
-                     // 새로운 이름 선택
-                     const newName = sehoNames[Math.floor(Math.random() * sehoNames.length)];
-                     
-                     // 특별효과가 있다면 다시 추가
-                     let finalName = newName;
-                     if (item.effectType === 'shining') finalName = `✨ 빛나는 ${newName} ✨`;
-                     else if (item.effectType === 'sparkling') finalName = `⚡ 번쩍이는 ${newName} ⚡`;
-                     else if (item.effectType === 'golden') finalName = `🏆 황금색 ${newName} 🏆`;
-                     else if (item.effectType === 'diamond') finalName = `💎 다이아몬드색 ${newName} 💎`;
-                     else if (item.effectType === 'rainbow') finalName = `🌈 ${newName} 🌈`;
-                     
-                     item.name = finalName;
-                     nameChangedItems.push(index);
-                 }
-             });
-             
-             // 10초 후 이름 변경 효과 제거
-             if (nameChangeTimer) clearTimeout(nameChangeTimer);
-             nameChangeTimer = setTimeout(() => {
-                 nameChangedItems = [];
-                 updateStorageDisplay();
-             }, 10000);
-             
-             updateStorageDisplay();
-         }
 
   </script>
 </body>
 </html>
-
-
