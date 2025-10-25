@@ -58,6 +58,32 @@
         }
 
         /* 세호코인 & 버프 UI (우측 상단) */
+        #questButton {
+            position: fixed;
+            top: 84px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        #questButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+        #questButton:active {
+            transform: translateY(0);
+        }
+        
         #coinBuffContainer {
             position: fixed;
             top: 16px;
@@ -150,17 +176,10 @@
             width: auto;
             min-width: 320px;
             max-width: 600px;
+            height: auto;
             max-height: 70vh;
         }
-        /* 마우스 오버시 자동 확장 */
-        #settingsPanel:hover {
-            width: auto;
-            min-width: 320px;
-            max-width: 600px;
-            height: auto; /* 세로로 길게 펼침 */
-            max-height: 70vh;
-        }
-        #settingsPanel:hover #settingsContent { display: block; }
+        #settingsPanel.open #settingsContent { display: block; }
         #settingsHeader {
             display: flex;
             align-items: center;
@@ -993,6 +1012,13 @@
             margin-top: 8px;
             flex-wrap: wrap;
         }
+        
+        .code-input-container {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            gap: 8px;
+        }
 
         .theme-button {
             width: 30px;
@@ -1393,9 +1419,12 @@
         </div>
     </div>
 
+    <!-- 퀘스트 버튼 -->
+    <button id="questButton" onclick="openQuest()" title="퀘스트">📜</button>
+
     <!-- 설정 패널 -->
-    <div id="settingsPanel" class="collapsed" onclick="toggleSettingsPanel()">
-        <div id="settingsHeader">
+    <div id="settingsPanel" class="collapsed">
+        <div id="settingsHeader" onclick="toggleSettingsPanel()">
             <span class="title"></span>
             <span class="hamburger" aria-label="menu">
                 <span></span>
@@ -1404,13 +1433,18 @@
             </span>
             <span id="settingsChevron" style="display:none">▼</span>
         </div>
-        <div id="settingsContent">
+        <div id="settingsContent" onclick="event.stopPropagation()">
             <div class="settings-row"><span class="settings-key">총 뽑기 횟수</span><span class="settings-val" id="statTotalDraws">0</span></div>
             <div class="settings-row rarest"><span class="settings-key">가장 낮은 확률로 획득</span><span class="settings-val" id="statRarest">-</span></div>
             <div class="settings-row"><span class="settings-key">플레이 시간</span><span class="settings-val" id="statPlaytime">00:00:00</span></div>
             <div class="settings-row"><span class="settings-key">테마 변경</span></div>
             <div class="theme-selector" id="themeSelector">
                 <!-- 테마 버튼들이 여기에 동적으로 추가됩니다 -->
+            </div>
+            <div class="settings-row"><span class="settings-key">코드 사용</span></div>
+            <div class="code-input-container">
+                <input type="text" id="codeInput" placeholder="코드를 입력하세요" style="flex: 1; padding: 8px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 0.9em;">
+                <button onclick="redeemCode()" style="padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-left: 8px;">사용</button>
             </div>
             <button class="settings-reset" onclick="resetAllData()">초기화</button>
         </div>
@@ -1834,7 +1868,8 @@
                      itemStorage,
                      specialItemCount,
                      noCooldownCount,
-                     nameChangedItems
+                     nameChangedItems,
+                     usedCodes
                 };
                 localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
             } catch (e) { console.log('save failed'); }
@@ -1872,6 +1907,7 @@
                  if (typeof data.specialItemCount === 'number') specialItemCount = data.specialItemCount;
                  if (typeof data.noCooldownCount === 'number') noCooldownCount = data.noCooldownCount;
                  if (Array.isArray(data.nameChangedItems)) nameChangedItems = data.nameChangedItems;
+                 if (Array.isArray(data.usedCodes)) usedCodes = data.usedCodes;
                 
                 updateStorageDisplay();
                 initArtifactCarousel();
@@ -1945,7 +1981,13 @@
             if (winner && winner.name === '꽝') {
                 resultDisplay.textContent = '꽝';
                 resultDisplay.className = 'result-display miss';
+                
+                const prevDraws = totalDraws;
                 totalDraws += 1;
+                
+                // 기능 해금 알림
+                checkUnlockNotification(prevDraws, totalDraws);
+                
                  // 꽝이어도 세호 뽑기 횟수 증가 (트럼프카드 효과를 위해)
                  sehoDrawCount += 1;
                 updateSettingsStats();
@@ -1958,7 +2000,7 @@
                 isDrawing = false;
                 saveState();
                 return;
-             }
+            }
             
             // 세호를 뽑았을 때 세호 뽑기 횟수 증가
             if (winner && winner.name !== '꽝') {
@@ -2068,7 +2110,13 @@
             
              // 보관소에 추가 (원본 이름만 전달, effectType은 별도로)
              addToStorage(winner.name, effectType, winner);
+            
+            const prevDraws = totalDraws;
             totalDraws += 1;
+            
+            // 기능 해금 알림
+            checkUnlockNotification(prevDraws, totalDraws);
+            
             updateSettingsStats();
              updateDotStates(); // 도트 상태 업데이트
             saveState();
@@ -2565,6 +2613,15 @@
              // 주말 효과 사용
              if (noCooldownCount > 0) {
                  noCooldownCount--;
+                 
+                 // 주말 버프 업데이트 또는 제거
+                 if (noCooldownCount <= 0) {
+                     const weekendIndex = activeBuffs.findIndex(b => b.type === 'weekend');
+                     if (weekendIndex !== -1) {
+                         activeBuffs.splice(weekendIndex, 1);
+                     }
+                 }
+                 updateBuffDisplay();
              }
             
             // 강화 시작 사운드
@@ -3288,6 +3345,86 @@
             }
         }
 
+        // 퀘스트 열기 함수
+        function openQuest() {
+            alert('다음 업데이트를 기대해주세요!');
+        }
+
+        // 코드 사용 함수
+        function redeemCode() {
+            const input = document.getElementById('codeInput');
+            const code = input.value.trim().toUpperCase();
+            
+            if (!code) {
+                alert('코드를 입력해주세요!');
+                return;
+            }
+            
+            // 이미 사용한 코드 확인
+            if (usedCodes.includes(code)) {
+                alert('이미 사용한 코드입니다!');
+                input.value = '';
+                return;
+            }
+            
+            // 유효한 코드 확인
+            if (!redeemCodes[code]) {
+                alert('유효하지 않은 코드입니다!');
+                input.value = '';
+                return;
+            }
+            
+            const reward = redeemCodes[code];
+            
+            // 사용 기간 확인
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 시간 제외
+            
+            if (reward.startDate) {
+                const startDate = new Date(reward.startDate);
+                if (today < startDate) {
+                    alert('이 코드는 아직 사용할 수 없습니다.\n사용 가능 시작일: ' + reward.startDate);
+                    input.value = '';
+                    return;
+                }
+            }
+            
+            if (reward.endDate) {
+                const endDate = new Date(reward.endDate);
+                if (today > endDate) {
+                    alert('이 코드는 기간이 만료되었습니다.\n사용 가능 종료일: ' + reward.endDate);
+                    input.value = '';
+                    return;
+                }
+            }
+            
+            // 보상 지급
+            let rewardMessage = '🎁 코드 사용 완료!\n\n받은 보상:\n';
+            
+            if (reward.coins) {
+                sehoCoin += reward.coins;
+                rewardMessage += `💰 세호코인 ${reward.coins}개\n`;
+            }
+            
+            if (reward.items) {
+                reward.items.forEach(item => {
+                    addToItemStorage(item.name, item.quantity);
+                    rewardMessage += `📦 ${item.name} ${item.quantity}개\n`;
+                });
+            }
+            
+            // 사용한 코드 목록에 추가
+            usedCodes.push(code);
+            
+            // UI 업데이트
+            updateCoinDisplay();
+            updateItemStorageDisplay();
+            saveState();
+            
+            alert(rewardMessage);
+            input.value = '';
+        }
+
         function resetAllData() {
             if (!confirm('정말 초기화하시겠습니까? 모든 기록이 삭제됩니다.')) return;
             
@@ -3320,6 +3457,9 @@
              // 특수 아이템 초기화
              specialItemCount = 0;
              noCooldownCount = 0;
+             
+             // 코드 사용 내역 초기화
+             usedCodes = [];
              nameChangedItems = [];
              if (nameChangeTimer) clearTimeout(nameChangeTimer);
             
@@ -3370,6 +3510,7 @@
              if (speedBuff) {
                  const buffReduction = [0.075, 0.15, 0.30][speedBuff.level - 1];
                  totalReduction += buffReduction;
+                 console.log(`[속도포션] 레벨 ${speedBuff.level}, 감소율: ${buffReduction * 100}%`);
              }
              
              // 1339포션 효과 (15~50% 랜덤 감소)
@@ -3386,7 +3527,9 @@
                  totalReduction += coldWaterReduction;
              }
              
-             return Math.max(8, Math.round(base * (1 - totalReduction)));
+             const finalInterval = Math.max(8, Math.round(base * (1 - totalReduction)));
+             console.log(`[뽑기속도] 기본: ${base}ms, 감소율: ${(totalReduction * 100).toFixed(1)}%, 최종: ${finalInterval}ms`);
+             return finalInterval;
          }
 
         // 현재 뽑기 속도 계산 (뽑기 시작 후 다음 뽑기까지의 시간)
@@ -3530,6 +3673,23 @@
             attachProbabilityToggle('probListMain');
         }
 
+         // 기능 해금 알림
+         function checkUnlockNotification(prevDraws, currentDraws) {
+             // 유물 기능 해금 (50회)
+             if (prevDraws < 50 && currentDraws >= 50) {
+                 setTimeout(() => {
+                     alert('🎉 축하합니다! 총 50회 뽑기를 달성하여 유물 기능이 해금되었습니다!');
+                 }, 500);
+             }
+             
+             // 상점 기능 해금 (150회)
+             if (prevDraws < 150 && currentDraws >= 150) {
+                 setTimeout(() => {
+                     alert('🎉 축하합니다! 총 150회 뽑기를 달성하여 상점 기능이 해금되었습니다!');
+                 }, 500);
+             }
+         }
+         
          // 도트 상태 업데이트 (뽑기 횟수에 따른 잠금 해제)
          function updateDotStates() {
              // 아이템 보관소 (0번): 150회 이상
@@ -3567,6 +3727,17 @@
 
         // 화면 전환
         function goToScreen(screenIndex) {
+             // 유물 관련은 50회 이상
+             if ((screenIndex === 5 || screenIndex === 6) && totalDraws < 50) {
+                 alert('유물 관련 기능은 세호를 50회 이상 뽑아야 이용할 수 있습니다!');
+                 return;
+             }
+             
+             // 상점 관련은 150회 이상
+             if ((screenIndex === 0 || screenIndex === 1) && totalDraws < 150) {
+                 alert('상점 관련 기능은 세호를 150회 이상 뽑아야 이용할 수 있습니다!');
+                 return;
+             }
              
             currentScreen = screenIndex;
             const container = document.getElementById('mainContainer');
@@ -4322,6 +4493,37 @@
         // ========== 아이템 보관소 시스템 ==========
         
         let itemStorage = []; // 아이템 보관소 (나중에 구현)
+        let usedCodes = []; // 사용한 코드 목록
+        
+        // 코드 목록 (코드: 보상)
+        // 각 코드는 다음 형식을 가집니다:
+        // 'CODE': {
+        //     coins: 세호코인 수량,
+        //     items: [{ name: '아이템명', quantity: 수량 }],
+        //     startDate: '2024-01-01',  // 시작일 (선택사항)
+        //     endDate: '2024-12-31'     // 종료일 (선택사항)
+        // }
+        const redeemCodes = {
+            // 세호코인 200개 (일주일 제한)
+            'K7X9M': {
+                coins: 200,
+                endDate: '2025-11-01'
+            },
+            // 속도포션Ⅰ 10개 (일주일 제한)
+            'P3V5T': {
+                items: [
+                    { name: '속도포션Ⅰ', quantity: 10 }
+                ],
+                endDate: '2025-11-01'
+            },
+            // 행운포션Ⅰ 10개 (일주일 제한)
+            'H8N2Q': {
+                items: [
+                    { name: '행운포션Ⅰ', quantity: 10 }
+                ],
+                endDate: '2025-11-01'
+            }
+        };
         
         // 아이템 보관소 화면 업데이트
         function updateItemStorageDisplay() {
@@ -4409,25 +4611,37 @@
                 let buffTitle = '';
                 
                 if (buff.type === 'luck') {
+                    const luckReduction = [5, 10, 20][buff.level - 1];
                     buffName = `행운${buff.level}`;
-                    buffTitle = `행운포션${buff.level}\n남은 시간: ${timeStr}`;
+                    buffTitle = `행운포션 Lv.${buff.level}\n꽝 확률 ${luckReduction}% 감소\n남은 시간: ${timeStr}`;
                 } else if (buff.type === 'speed') {
+                    const speedReduction = [7.5, 15, 30][buff.level - 1];
                     buffName = `속도${buff.level}`;
-                    buffTitle = `속도포션${buff.level}\n남은 시간: ${timeStr}`;
+                    buffTitle = `속도포션 Lv.${buff.level}\n뽑기 속도 ${speedReduction}% 감소\n남은 시간: ${timeStr}`;
                 } else if (buff.type === 'speed_boost') {
                     buffName = '1339';
-                    buffTitle = `1339포션\n남은 시간: ${timeStr}`;
+                    buffTitle = `1339포션\n뽑기 속도 15~50% 감소\n남은 시간: ${timeStr}`;
                 } else if (buff.type === 'xiaomi_phone') {
                     buffName = '샤오미폰';
                     buffTitle = `샤오미폰\n꽝 확률 8% 감소\n10초마다 8% 확률로 제거`;
                 } else if (buff.type === 'cold_water') {
                     buffName = `시원한물×${buff.level}`;
                     buffTitle = `시원한 물 (${buff.level}개 중첩)\n영구 뽑기속도 +${buff.level * 2}%`;
+                } else if (buff.type === 'weekend') {
+                    buffName = '주말';
+                    buffTitle = `주말\n쿨타임 없음\n남은 뽑기: ${noCooldownCount}회`;
+                }
+                
+                let timerText = timeStr;
+                if (buff.type === 'cold_water') {
+                    timerText = '영구';
+                } else if (buff.type === 'weekend') {
+                    timerText = `${noCooldownCount}회`;
                 }
                 
                 buffDiv.innerHTML = `
                     <div class="buff-name">${buffName}</div>
-                    <div class="buff-timer">${buff.type === 'cold_water' ? '영구' : timeStr}</div>
+                    <div class="buff-timer">${timerText}</div>
                 `;
                 buffDiv.title = buffTitle;
                 container.appendChild(buffDiv);
@@ -4527,6 +4741,23 @@
              if (effect === 'remove_cooldown') {
                  // 주말 효과
                  noCooldownCount += 50;
+                 
+                 // 기존 주말 버프가 있으면 제거
+                 const existingIndex = activeBuffs.findIndex(b => b.type === 'weekend');
+                 if (existingIndex !== -1) {
+                     activeBuffs.splice(existingIndex, 1);
+                 }
+                 
+                 // 새로운 주말 버프 추가
+                 const weekendBuff = {
+                     type: 'weekend',
+                     endTime: Date.now() + (365 * 24 * 60 * 60 * 1000), // 임시 값 (카운트로 관리)
+                     level: 1,
+                     remainingDraws: noCooldownCount
+                 };
+                 activeBuffs.push(weekendBuff);
+                 updateBuffDisplay();
+                 
                  alert('주말을 사용했습니다! 다음 50회 뽑기에서 쿨타임이 삭제됩니다.');
                  return true;
              } else if (effect === 'refresh_shop') {
@@ -4841,3 +5072,4 @@
   </script>
 </body>
 </html>
+
