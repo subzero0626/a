@@ -2774,7 +2774,7 @@
             const miss = adjusted.find(p => p.name === '꽝');
                 if (miss) {
                     const totalWeight = adjusted.reduce((sum, p) => sum + p.weight, 0);
-                    const reductionPercent = 8 * level; // 레벨당 8%p (절대값)
+                    const reductionPercent = 3 * level; // 레벨당 3%p (절대값)
                     const reducedWeight = totalWeight * (reductionPercent / 100); // 전체 가중치의 8%
                     miss.weight = Math.max(0, miss.weight - reducedWeight);
                     // 줄어든 확률을 모든 세호에게 균등 분배
@@ -4107,7 +4107,7 @@
                 '럭키박스': '행운포션Ⅱ, 속도포션Ⅱ 랜덤 획득',
                 '용사의 심판': '다음 뽑기 특별효과 확률 20%',
                 '샤오미폰': '꽝 확률 8% 감소, 10초마다 8% 확률로 제거',
-                '시원한 물': '영구적으로 뽑기속도 +2% (무제한 중첩)'
+                '시원한 물': '영구적으로 뽑기속도 +1% (무제한 중첩)'
             };
 
             // 상점 아이템 설명 찾기
@@ -4657,7 +4657,7 @@
             });
         }
         const ARTIFACT_VALUES = {
-            BUJUK_SPECIAL_BONUS: [0, 0.15, 0.30, 0.50, 0.75, 1.25],
+            BUJUK_SPECIAL_BONUS: [0, 0.10, 0.25, 0.45, 0.70, 1.00],
             RELIC_COOLDOWN_REDUCTION: [0, 0.05, 0.10, 0.15, 0.20, 0.30],
             RAINBOW_BONUS: [0, 0.50, 1.00, 1.50, 2.00, 3.00],
             HAMMER_DESTRUCTION_REDUCTION: [0, 0.0025, 0.005, 0.01, 0.02, 0.035],
@@ -4731,12 +4731,13 @@
                     return `${baseStat} (+${seconds}초)`;
                 }
                 case '세호로리의 시간가속기': {
-                    const map = { 1: 10, 2: 25, 3: 50, 4: 65, 5: 80 };
-                    const reduction = map[Math.min(level, 5)] || 10;
+                    const map = { 1: 5, 2: 10, 3: 15, 4: 20, 5: 30 };
+                    const reduction = map[Math.min(level, 5)] || 5;
                     return `${baseStat} (${reduction}% 감소)`;
                 }
                 case '세호로리의 7목걸이': {
-                    const reduction = 8 * Math.min(level, 5);
+                    const map = { 1: 3, 2: 6, 3: 9, 4: 12, 5: 15 };
+                    const reduction = map[Math.min(level, 5)] || 3;
                     return `${baseStat} (${reduction}%p 감소)`;
                 }
                 default:
@@ -5526,12 +5527,11 @@
                 totalReduction += appliedReduction;
              }
              
-             // 시원한 물 효과 (영구 뽑기속도 증가)
-             const coldWaterBuff = activeBuffs.find(b => b.type === 'cold_water' && b.endTime > Date.now());
-             if (coldWaterBuff) {
-                 const coldWaterReduction = coldWaterBuff.level * 0.02; // 레벨당 2% 감소
-                 totalReduction += coldWaterReduction;
-             }
+            // 시원한 물 효과 (영구 뽑기속도 증가)
+            const coldWaterBuff = activeBuffs.find(b => b.type === 'cold_water' && b.endTime > Date.now());
+            if (coldWaterBuff) {
+                totalReduction += coldWaterBuff.reduction || 0;
+            }
              
              const finalInterval = Math.max(8, Math.round(base * (1 - totalReduction)));
              console.log(`[뽑기속도] 기본: ${base}ms, 감소율: ${(totalReduction * 100).toFixed(1)}%, 최종: ${finalInterval}ms`);
@@ -6679,10 +6679,11 @@
                     buffEmoji = '📱';
                     buffTagline = '꽝 확률 8% 감소';
                 } else if (buff.type === 'cold_water') {
-                    buffName = `시원한물×${buff.level}`;
-                    buffTitle = `시원한 물 (${buff.level}개 중첩)\n영구 뽑기속도 +${buff.level * 2}%`;
+                    const stacks = Math.round((buff.reduction || 0) * 100);
+                    buffName = `시원한물×${stacks}`;
+                    buffTitle = `시원한 물 (${stacks}회 중첩)\n영구 뽑기속도 +${stacks}%`;
                     buffEmoji = '💧';
-                    buffTagline = `뽑기속도 +${buff.level * 2}%`;
+                    buffTagline = `뽑기속도 +${stacks}%`;
                 } else if (buff.type === 'weekend') {
                     buffName = '주말';
                     buffTitle = `주말\n쿨타임 없음\n남은 뽑기: ${noCooldownCount}회`;
@@ -6855,6 +6856,8 @@
                 if (type === 'speed_boost') {
                     const appliedPercent = Math.round(newBuff.reduction * 100);
                     alert(`1339포션을 사용했습니다! 뽑기 속도가 ${appliedPercent}% 감소합니다!`);
+                } else if (type === 'cold_water') {
+                    alert('시원한 물을 사용했습니다! 뽑기 속도 1% 감소(영구 적용)');
                 } else {
                     alert(`${type === 'luck' ? '행운포션' : type === 'speed' ? '속도포션' : '1339포션'}을 사용했습니다!`);
                 }
@@ -6924,26 +6927,22 @@
                  updateBuffDisplay();
                  alert('샤오미폰을 사용했습니다! 꽝 확률이 8% 감소했습니다. (10초마다 8% 확률로 제거)');
                  return true;
-             } else if (effect === 'cold_water') {
-                 // 시원한 물 효과
-                 const existingBuff = activeBuffs.find(b => b.type === 'cold_water');
-                 if (existingBuff) {
-                     // 기존 버프가 있으면 중첩
-                    ensureBuffId(existingBuff);
-                     existingBuff.level += 1;
-                 } else {
-                     // 새로운 버프 생성
-                     const coldWaterBuff = {
-                         type: 'cold_water',
-                         endTime: Date.now() + (365 * 24 * 60 * 60 * 1000), // 1년 후 (영구 효과)
-                         level: 1
-                     };
+            } else if (effect === 'cold_water') {
+                let coldWaterBuff = activeBuffs.find(b => b.type === 'cold_water');
+                if (coldWaterBuff) {
+                    coldWaterBuff.reduction = (coldWaterBuff.reduction || 0) + 0.01;
+                } else {
+                    coldWaterBuff = {
+                        type: 'cold_water',
+                        endTime: Date.now() + (365 * 24 * 60 * 60 * 1000),
+                        reduction: 0.01
+                    };
                     ensureBuffId(coldWaterBuff);
-                     activeBuffs.push(coldWaterBuff);
-                 }
-                 updateBuffDisplay();
-                 const currentLevel = existingBuff ? existingBuff.level : 1;
-                 alert(`시원한 물을 사용했습니다! 뽑기 속도가 영구적으로 ${currentLevel * 2}% 증가했습니다. (무제한 중첩 가능)`);
+                    activeBuffs.push(coldWaterBuff);
+                }
+                updateBuffDisplay();
+                const currentStacks = Math.round((coldWaterBuff.reduction || 0) * 100);
+                alert(`시원한 물을 사용했습니다! 뽑기 속도가 영구적으로 ${currentStacks}% 감소됩니다. (무제한 중첩 가능)`);
                  return true;
              }
              return false;
