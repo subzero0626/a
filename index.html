@@ -214,6 +214,23 @@
             gap: 8px;
         }
 
+        .quest-item.completed {
+            border-color: rgba(34, 197, 94, 0.25);
+            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.12);
+        }
+
+        .quest-item.ready {
+            background: linear-gradient(145deg, #fff8d6 0%, #ffe8a3 100%);
+            border-color: rgba(250, 204, 21, 0.7);
+            box-shadow: 0 14px 26px rgba(250, 204, 21, 0.22);
+        }
+
+        .quest-item.claimed {
+            background: linear-gradient(145deg, #f0fff4 0%, #dcfce7 100%);
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 12px 22px rgba(34, 197, 94, 0.2);
+        }
+
         .quest-item-header {
             display: flex;
             align-items: center;
@@ -254,10 +271,52 @@
             transition: width 0.3s ease;
         }
 
+        .quest-item.ready .quest-progress-bar {
+            background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%);
+        }
+
+        .quest-item.claimed .quest-progress-bar {
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+        }
+
         .quest-progress-info {
             font-size: 0.8em;
             color: #8d6e63;
             font-weight: 600;
+        }
+
+        .quest-item.ready .quest-progress-info {
+            color: #b45309;
+        }
+
+        .quest-item.claimed .quest-progress-info {
+            color: #0f9d58;
+        }
+
+        .quest-claim-button {
+            display: none;
+            margin: 10px auto 0;
+            padding: 10px 22px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #facc15 0%, #f97316 100%);
+            color: #451a03;
+            font-weight: 800;
+            font-size: 0.95em;
+            cursor: pointer;
+            box-shadow: 0 12px 22px rgba(249, 115, 22, 0.28);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .quest-claim-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(249, 115, 22, 0.32);
+        }
+
+        .quest-item.ready .quest-claim-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .quest-empty-state {
@@ -896,6 +955,7 @@
             75% { box-shadow: 0 0 35px rgba(0, 191, 255, 0.9), 0 0 70px rgba(0, 191, 255, 0.6), 0 0 100px rgba(0, 191, 255, 0.25); }
             100% { box-shadow: 0 0 20px rgba(0, 191, 255, 0.5), 0 0 40px rgba(0, 191, 255, 0.3), 0 0 60px rgba(0, 191, 255, 0.1); }
         }
+
 
         @keyframes confetti {
             0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
@@ -2061,31 +2121,31 @@
         /* 기본 마우스 오버 효과 제거 - 강화된 아이템만 효과 적용 */
 
         .storage-item.diamond {
-            background: linear-gradient(155deg, rgba(236, 254, 255, 0.94) 0%, rgba(191, 219, 254, 0.94) 100%);
-            border-color: rgba(59, 130, 246, 0.35);
-            color: #1d4ed8;
-            box-shadow: 0 28px 44px rgba(59, 130, 246, 0.22);
+            background: linear-gradient(160deg, rgba(118, 185, 253, 0.73) 0%, rgba(83, 150, 247, 0.71) 48%, rgba(49, 106, 227, 0.69) 100%);
+            border-color: rgba(37, 99, 235, 0.5);
+            color: #e2f0ff;
+            box-shadow: 0 28px 46px rgba(37, 99, 235, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.6);
         }
 
         .storage-item.golden {
-            background: linear-gradient(155deg, rgba(255, 249, 196, 0.94) 0%, rgba(254, 243, 199, 0.94) 100%);
-            border-color: rgba(234, 179, 8, 0.38);
-            color: #a16207;
-            box-shadow: 0 28px 44px rgba(234, 179, 8, 0.25);
+            background: linear-gradient(155deg, #ffd700 0%, #fbbf24 100%);
+            border-color: rgba(217, 119, 6, 0.52);
+            color: #78350f;
+            box-shadow: 0 30px 48px rgba(217, 119, 6, 0.32);
         }
 
         .storage-item.sparkling {
-            background: linear-gradient(155deg, rgba(255, 247, 237, 0.95) 0%, rgba(254, 235, 200, 0.95) 100%);
-            border-color: rgba(251, 191, 36, 0.32);
-            color: #b45309;
-            box-shadow: 0 26px 42px rgba(251, 191, 36, 0.22);
+            background: linear-gradient(155deg, rgba(255, 224, 178, 0.98) 0%, rgba(253, 186, 116, 0.98) 100%);
+            border-color: rgba(251, 146, 60, 0.45);
+            color: #92400e;
+            box-shadow: 0 28px 44px rgba(251, 146, 60, 0.28);
         }
 
         .storage-item.shining {
-            background: linear-gradient(155deg, rgba(255, 250, 235, 0.95) 0%, rgba(254, 240, 199, 0.95) 100%);
-            border-color: rgba(253, 224, 71, 0.32);
-            color: #ca8a04;
-            box-shadow: 0 26px 42px rgba(253, 224, 71, 0.2);
+            background: linear-gradient(155deg, rgba(255, 242, 204, 0.96) 0%, rgba(254, 225, 120, 0.96) 100%);
+            border-color: rgba(234, 179, 8, 0.36);
+            color: #b45309;
+            box-shadow: 0 27px 42px rgba(234, 179, 8, 0.22);
         }
 
         .storage-item.rainbow {
@@ -2147,10 +2207,10 @@
             left: 14px;
             width: 30px;
             height: 30px;
-            background: rgba(248, 113, 113, 0.18);
-            border: 1px solid rgba(248, 113, 113, 0.4);
+            background: rgba(220, 38, 38, 0.92);
+            border: 1px solid rgba(185, 28, 28, 0.65);
             border-radius: 999px;
-            color: #b91c1c;
+            color: #fff1f2;
             font-size: 13px;
             cursor: pointer;
             display: none;
@@ -2158,11 +2218,11 @@
             align-items: center;
             transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
             z-index: 10;
-            box-shadow: 0 12px 22px rgba(248, 113, 113, 0.22);
+            box-shadow: 0 14px 26px rgba(220, 38, 38, 0.28);
         }
 
         .storage-item .sell-button:hover {
-            background: rgba(248, 113, 113, 0.28);
+            background: rgba(185, 28, 28, 0.95);
             border-color: rgba(248, 113, 113, 0.55);
             transform: translateY(-1px) scale(1.05);
         }
@@ -2504,6 +2564,9 @@
                     </button>
                     <div id="trumpCardInfo" style="margin-top: 10px; color: #64748b; font-size: 0.9em; text-align: center; display: none;">
                         <!-- 트럼프카드 정보가 여기에 표시됩니다 -->
+                    </div>
+                    <div id="goldenStatueInfo" style="margin-top: 6px; color: #875f1a; font-size: 0.88em; text-align: center; display: none;">
+                        <!-- 황금동상 정보가 여기에 표시됩니다 -->
                     </div>
                 </div>
             </div>
@@ -2910,25 +2973,87 @@
         }
         // 퀘스트 관련 상수 및 상태
         const QUEST_RESET_INTERVAL = 24 * 60 * 60 * 1000; // 24시간
-        const QUEST_PLACEHOLDER_DAILIES = [
-            {
-                id: 'daily_placeholder_1',
-                title: '퀘스트 준비중 ①',
-                description: '곧 새로운 일일 퀘스트가 추가될 예정입니다.',
-                reward: '보상 미정'
-            },
-            {
-                id: 'daily_placeholder_2',
-                title: '퀘스트 준비중 ②',
-                description: '업데이트 후 실제 퀘스트 내용이 표시됩니다.',
-                reward: '보상 미정'
-            },
-            {
-                id: 'daily_placeholder_3',
-                title: '퀘스트 준비중 ③',
-                description: '조금만 기다려 주세요!',
-                reward: '보상 미정'
-            }
+        const DAILY_QUEST_POOL = [
+            // 뽑기 횟수 퀘스트
+            { key: 'draw_100', type: 'draw', target: 100, title: '100회 뽑기', description: '세호 뽑기를 100회 진행하세요.', rewards: [
+                { type: 'coin', amount: 100, label: '세호코인 100개' },
+                { type: 'item', item: '행운포션Ⅰ', quantity: 8, label: '행운포션Ⅰ 8개' },
+                { type: 'item', item: '속도포션Ⅰ', quantity: 8, label: '속도포션Ⅰ 8개' }
+            ] },
+            { key: 'draw_125', type: 'draw', target: 125, title: '125회 뽑기', description: '세호 뽑기를 125회 진행하세요.', rewards: [
+                { type: 'coin', amount: 125, label: '세호코인 125개' },
+                { type: 'item', item: '행운포션Ⅰ', quantity: 10, label: '행운포션Ⅰ 10개' },
+                { type: 'item', item: '속도포션Ⅰ', quantity: 10, label: '속도포션Ⅰ 10개' }
+            ] },
+            { key: 'draw_150', type: 'draw', target: 150, title: '150회 뽑기', description: '세호 뽑기를 150회 진행하세요.', rewards: [
+                { type: 'coin', amount: 150, label: '세호코인 150개' },
+                { type: 'item', item: '행운포션Ⅰ', quantity: 12, label: '행운포션Ⅰ 12개' },
+                { type: 'item', item: '속도포션Ⅰ', quantity: 12, label: '속도포션Ⅰ 12개' }
+            ] },
+            { key: 'draw_200', type: 'draw', target: 200, title: '200회 뽑기', description: '세호 뽑기를 200회 진행하세요.', rewards: [
+                { type: 'coin', amount: 200, label: '세호코인 200개' },
+                { type: 'item', item: '행운포션Ⅰ', quantity: 14, label: '행운포션Ⅰ 14개' },
+                { type: 'item', item: '속도포션Ⅰ', quantity: 14, label: '속도포션Ⅰ 14개' }
+            ] },
+            { key: 'draw_225', type: 'draw', target: 225, title: '225회 뽑기', description: '세호 뽑기를 225회 진행하세요.', rewards: [
+                { type: 'coin', amount: 225, label: '세호코인 225개' },
+                { type: 'item', item: '행운포션Ⅱ', quantity: 6, label: '행운포션Ⅱ 6개' },
+                { type: 'item', item: '속도포션Ⅱ', quantity: 6, label: '속도포션Ⅱ 6개' }
+            ] },
+            { key: 'draw_250', type: 'draw', target: 250, title: '250회 뽑기', description: '세호 뽑기를 250회 진행하세요.', rewards: [
+                { type: 'coin', amount: 250, label: '세호코인 250개' },
+                { type: 'item', item: '행운포션Ⅱ', quantity: 7, label: '행운포션Ⅱ 7개' },
+                { type: 'item', item: '속도포션Ⅱ', quantity: 7, label: '속도포션Ⅱ 7개' }
+            ] },
+            { key: 'draw_275', type: 'draw', target: 275, title: '275회 뽑기', description: '세호 뽑기를 275회 진행하세요.', rewards: [
+                { type: 'coin', amount: 275, label: '세호코인 275개' },
+                { type: 'item', item: '행운포션Ⅱ', quantity: 8, label: '행운포션Ⅱ 8개' },
+                { type: 'item', item: '속도포션Ⅱ', quantity: 8, label: '속도포션Ⅱ 8개' }
+            ] },
+            { key: 'draw_300', type: 'draw', target: 300, title: '300회 뽑기', description: '세호 뽑기를 300회 진행하세요.', rewards: [
+                { type: 'coin', amount: 300, label: '세호코인 300개' },
+                { type: 'item', item: '행운포션Ⅱ', quantity: 9, label: '행운포션Ⅱ 9개' },
+                { type: 'item', item: '속도포션Ⅱ', quantity: 9, label: '속도포션Ⅱ 9개' }
+            ] },
+            // 특별효과 퀘스트
+            { key: 'effect_golden', type: 'golden_effect', target: 1, title: '황금색 세호 뽑기', description: '황금색 특별효과 세호를 1회 뽑으세요.', rewards: [
+                { type: 'coin', amount: 200, label: '세호코인 200개' },
+                { type: 'item', item: '행운포션Ⅰ', quantity: 15, label: '행운포션Ⅰ 15개' },
+                { type: 'item', item: '속도포션Ⅰ', quantity: 15, label: '속도포션Ⅰ 15개' }
+            ] },
+            { key: 'effect_diamond', type: 'diamond_effect', target: 1, title: '다이아몬드색 세호 뽑기', description: '다이아몬드색 특별효과 세호를 1회 뽑으세요.', rewards: [
+                { type: 'coin', amount: 750, label: '세호코인 750개' },
+                { type: 'item', item: '1339포션', quantity: 3, label: '1339포션 3개' },
+                { type: 'item', item: '행운포션Ⅲ', quantity: 6, label: '행운포션Ⅲ 6개' },
+                { type: 'item', item: '속도포션Ⅲ', quantity: 6, label: '속도포션Ⅲ 6개' }
+            ] },
+            // 상점 구매 퀘스트
+            { key: 'shop_buy_3', type: 'shop_purchase', target: 3, title: '상점 물품 3회 구매', description: '상점에서 물품을 3회 구매하세요.', rewards: [
+                { type: 'coin', amount: 100, label: '세호코인 100개' }
+            ] },
+            { key: 'shop_buy_5', type: 'shop_purchase', target: 5, title: '상점 물품 5회 구매', description: '상점에서 물품을 5회 구매하세요.', rewards: [
+                { type: 'coin', amount: 150, label: '세호코인 150개' }
+            ] },
+            { key: 'shop_buy_7', type: 'shop_purchase', target: 7, title: '상점 물품 7회 구매', description: '상점에서 물품을 7회 구매하세요.', rewards: [
+                { type: 'coin', amount: 200, label: '세호코인 200개' }
+            ] },
+            // 플레이타임 퀘스트
+            { key: 'playtime_20', type: 'playtime', target: 20, title: '20분 플레이하기', description: '총 20분 동안 게임을 플레이하세요.', rewards: [
+                { type: 'item', item: '행운포션Ⅰ', quantity: 10, label: '행운포션Ⅰ 10개' },
+                { type: 'item', item: '속도포션Ⅰ', quantity: 10, label: '속도포션Ⅰ 10개' }
+            ] },
+            { key: 'playtime_30', type: 'playtime', target: 30, title: '30분 플레이하기', description: '총 30분 동안 게임을 플레이하세요.', rewards: [
+                { type: 'item', item: '행운포션Ⅰ', quantity: 15, label: '행운포션Ⅰ 15개' },
+                { type: 'item', item: '속도포션Ⅰ', quantity: 15, label: '속도포션Ⅰ 15개' }
+            ] },
+            { key: 'playtime_45', type: 'playtime', target: 45, title: '45분 플레이하기', description: '총 45분 동안 게임을 플레이하세요.', rewards: [
+                { type: 'item', item: '행운포션Ⅰ', quantity: 22, label: '행운포션Ⅰ 22개' },
+                { type: 'item', item: '속도포션Ⅰ', quantity: 22, label: '속도포션Ⅰ 22개' }
+            ] },
+            { key: 'playtime_60', type: 'playtime', target: 60, title: '1시간 플레이하기', description: '총 1시간 동안 게임을 플레이하세요.', rewards: [
+                { type: 'item', item: '행운포션Ⅱ', quantity: 8, label: '행운포션Ⅱ 8개' },
+                { type: 'item', item: '속도포션Ⅱ', quantity: 8, label: '속도포션Ⅱ 8개' }
+            ] }
         ];
 
         const ARTIFACT_NAMES = [
@@ -2949,18 +3074,50 @@
             return `${prefix}_${Date.now()}_${random}`;
         }
 
-        function createPlaceholderDailyQuests() {
-            return QUEST_PLACEHOLDER_DAILIES.map(template => ({
-                id: template.id || generateQuestId('daily'),
-                title: template.title,
-                description: template.description,
-                reward: template.reward,
+        function randomizeQuestReward(rewardOptions) {
+            if (!Array.isArray(rewardOptions) || rewardOptions.length === 0) {
+                return { type: 'coin', amount: 50, label: '세호코인 50개' };
+            }
+            const index = Math.floor(Math.random() * rewardOptions.length);
+            const chosen = rewardOptions[index] || {};
+            const type = chosen.type || 'coin';
+            const amount = typeof chosen.amount === 'number' ? chosen.amount : 0;
+            const item = chosen.item || null;
+            const quantity = typeof chosen.quantity === 'number' ? chosen.quantity : 0;
+            const label = chosen.label ||
+                (type === 'coin'
+                    ? `세호코인 ${amount}개`
+                    : `${item || '아이템'} ${quantity}개`);
+            return { type, amount, item, quantity, label };
+        }
+
+        function createDailyQuestFromDefinition(definition) {
+            const rewards = Array.isArray(definition.rewards) ? definition.rewards : [];
+            const selectedReward = randomizeQuestReward(rewards);
+            return {
+                id: generateQuestId('daily'),
+                key: definition.key,
+                type: definition.type,
+                title: definition.title,
+                description: definition.description,
+                rewards,
+                selectedReward,
+                reward: selectedReward.label,
                 progress: {
                     current: 0,
-                    target: 1
+                    target: definition.target
                 },
                 completed: false
-            }));
+            };
+        }
+
+        function sampleDailyQuestDefinitions(count) {
+            const shuffled = Array.from(DAILY_QUEST_POOL);
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled.slice(0, Math.min(count, shuffled.length));
         }
 
         function createArtifactCardElement(artifactName) {
@@ -3034,9 +3191,10 @@
         function getDefaultQuestState() {
             return {
                 lastDailyReset: 0,
-                dailyQuests: createPlaceholderDailyQuests(),
+                dailyQuests: [],
                 eventQuests: [],
-                activeTab: 'daily'
+                activeTab: 'daily',
+                playtimeAnchorMs: 0
             };
         }
 
@@ -3089,6 +3247,7 @@
             saveState();
             startPlaytimeTicker();
              updateTrumpCardInfo(); // 트럼프카드 정보 업데이트
+             updateGoldenStatueInfo();
              initShop(); // 상점 초기화
              updateItemStorageDisplay(); // 아이템 보관소 초기화
             initQuestSystem();
@@ -3164,6 +3323,11 @@
         let startX = 0;
         let startY = 0;
         let artifactStorage = []; // 유물 저장소
+
+        function getDailyQuestDefinitionByKey(key) {
+            if (!key) return null;
+            return DAILY_QUEST_POOL.find(def => def.key === key) || null;
+        }
         let lastArtifactDraw = 0; // 마지막 유물 뽑기 시간
         let baseArtifactCooldown = 300; // 기본 유물 뽑기 쿨다운 (초)
         let totalDraws = 0; // 총 뽑기 횟수
@@ -3217,6 +3381,8 @@
                     updateStorageDisplay();
                     initArtifactCarousel();
                     updateSettingsStats();
+                    updateTrumpCardInfo();
+                    updateGoldenStatueInfo();
                     return;
                 }
                 const data = JSON.parse(raw);
@@ -3254,6 +3420,8 @@
                 updateStorageDisplay();
                 initArtifactCarousel();
                 updateSettingsStats();
+                updateTrumpCardInfo();
+                updateGoldenStatueInfo();
                 // 유물 뽑기 쿨다운 복구
                 const now = Date.now();
                 const remainingMs = getArtifactCooldown() * 1000 - (now - lastArtifactDraw);
@@ -3321,6 +3489,18 @@
                 }
             }, spinInterval);
         }
+        function handleGoldenStatueReward() {
+            const level = getArtifactLevel('세호로리의 황금동상');
+            if (level <= 0) return;
+            if (sehoDrawCount <= 0 || sehoDrawCount % 10 !== 0) return;
+            
+            const coins = ARTIFACT_VALUES.GOLDEN_STATUE_COINS[Math.min(level, 5)] || 0;
+            if (coins <= 0) return;
+            
+            sehoCoin += coins;
+            updateCoinDisplay();
+            updateGoldenStatueInfo();
+        }
         // 뽑기 완료
         function finishDraw() {
             const winner = getWeightedRandom(); // 가중치 기반 랜덤 선택
@@ -3341,6 +3521,9 @@
                 
                 sehoDrawCount += 1;
                 updateTrumpCardInfo();
+                handleGoldenStatueReward();
+                incrementQuestProgress('draw', 1);
+                updateGoldenStatueInfo();
                 updateSettingsStats();
                 updateDotStates();
                 
@@ -3355,6 +3538,9 @@
             // 세호 뽑기 횟수 및 트럼프카드 정보 업데이트
             sehoDrawCount += 1;
             updateTrumpCardInfo();
+            handleGoldenStatueReward();
+            incrementQuestProgress('draw', 1);
+            updateGoldenStatueInfo();
             
             // 유물 효과 적용
             const specialEffectBonus = getSpecialEffectBonus(winner.name);
@@ -3441,6 +3627,12 @@
                 resultDisplay.className = 'result-display sparkling';
             } else {
                 resultDisplay.className = 'result-display winner';
+            }
+
+            if (effectType === 'golden') {
+                incrementQuestProgress('golden_effect', 1);
+            } else if (effectType === 'diamond') {
+                incrementQuestProgress('diamond_effect', 1);
             }
             
             addToStorage(winner.name, effectType, winner);
@@ -3807,6 +3999,41 @@
             } else {
                 trumpCardInfo.style.display = 'none';
             }
+        }
+
+        function updateGoldenStatueInfo() {
+            const statueInfo = document.getElementById('goldenStatueInfo');
+            if (!statueInfo) return;
+            
+            const statueLevel = getArtifactLevel('세호로리의 황금동상');
+            if (statueLevel <= 0) {
+                statueInfo.style.display = 'none';
+                statueInfo.textContent = '';
+                return;
+            }
+            
+            const coins = ARTIFACT_VALUES.GOLDEN_STATUE_COINS[Math.min(statueLevel, 5)] || 0;
+            if (coins <= 0) {
+                statueInfo.style.display = 'none';
+                statueInfo.textContent = '';
+                return;
+            }
+            
+            const interval = 10;
+            const progress = sehoDrawCount % interval;
+            const remaining = progress === 0 ? interval : interval - progress;
+            
+            let message = `🪙 황금동상: ${interval}회마다 세호코인 ${coins}개 지급`;
+            if (remaining === interval) {
+                message += ` (다음 지급까지 ${interval}회)`;
+            } else if (remaining === 1) {
+                message += ` (다음 지급까지 1회 남음)`;
+            } else {
+                message += ` (다음 지급까지 ${remaining}회)`;
+            }
+            
+            statueInfo.textContent = message;
+            statueInfo.style.display = 'block';
         }
 
         // 강화 확률 계산 (유물 효과 포함)
@@ -4623,6 +4850,7 @@
             updateArtifactDisplay();
             // 트럼프카드 정보 업데이트
             updateTrumpCardInfo();
+            updateGoldenStatueInfo();
             saveState();
         }
         
@@ -4698,41 +4926,74 @@
             }
 
             questState.lastDailyReset = typeof questState.lastDailyReset === 'number' ? questState.lastDailyReset : 0;
-            questState.dailyQuests = Array.isArray(questState.dailyQuests) ? questState.dailyQuests : createPlaceholderDailyQuests();
+            questState.dailyQuests = Array.isArray(questState.dailyQuests) ? questState.dailyQuests : [];
             questState.eventQuests = Array.isArray(questState.eventQuests) ? questState.eventQuests : [];
             questState.activeTab = questState.activeTab === 'event' ? 'event' : 'daily';
+            questState.playtimeAnchorMs = typeof questState.playtimeAnchorMs === 'number' ? questState.playtimeAnchorMs : 0;
 
-            // 누락된 필드 초기화
-            questState.dailyQuests = questState.dailyQuests.map(quest => ({
-                id: quest.id || generateQuestId('daily'),
-                title: quest.title || '미정 퀘스트',
-                description: quest.description || '곧 업데이트될 예정입니다.',
-                reward: quest.reward || '보상 미정',
-                progress: {
-                    current: quest.progress && typeof quest.progress.current === 'number' ? quest.progress.current : 0,
-                    target: quest.progress && typeof quest.progress.target === 'number' && quest.progress.target > 0 ? quest.progress.target : 1
-                },
-                completed: Boolean(quest.completed)
-            }));
+            const normalizeQuest = (quest, prefix, defaultDesc) => {
+                const definition = getDailyQuestDefinitionByKey(quest && quest.key);
+                const current = quest && quest.progress && typeof quest.progress.current === 'number' ? quest.progress.current : 0;
+                const target = quest && quest.progress && typeof quest.progress.target === 'number' && quest.progress.target > 0 ? quest.progress.target : 1;
+                const clampedCurrent = Math.min(Math.max(current, 0), target);
+                let rewards = Array.isArray(quest && quest.rewards) ? quest.rewards : [];
+                if ((!rewards || rewards.length === 0) && definition && Array.isArray(definition.rewards)) {
+                    rewards = definition.rewards;
+                }
 
-            questState.eventQuests = questState.eventQuests.map(quest => ({
-                id: quest.id || generateQuestId('event'),
-                title: quest.title || '이벤트 퀘스트',
-                description: quest.description || '추후 공개될 이벤트 퀘스트입니다.',
-                reward: quest.reward || '보상 미정',
-                progress: {
-                    current: quest.progress && typeof quest.progress.current === 'number' ? quest.progress.current : 0,
-                    target: quest.progress && typeof quest.progress.target === 'number' && quest.progress.target > 0 ? quest.progress.target : 1
-                },
-                completed: Boolean(quest.completed)
-            }));
+                const rewardMatchesDefinition = (candidate) => {
+                    if (!candidate || !rewards || rewards.length === 0) return false;
+                    return rewards.some(option => {
+                        if (option.label && candidate.label && option.label === candidate.label) {
+                            return true;
+                        }
+                        if (option.type !== candidate.type) return false;
+                        if (option.type === 'coin') {
+                            return Number(option.amount) === Number(candidate.amount);
+                        }
+                        if (option.type === 'item') {
+                            return option.item === candidate.item && Number(option.quantity) === Number(candidate.quantity);
+                        }
+                        return false;
+                    });
+                };
+
+                let selectedReward = quest && quest.selectedReward ? quest.selectedReward : null;
+                if (!selectedReward || !selectedReward.label || !rewardMatchesDefinition(selectedReward)) {
+                    selectedReward = randomizeQuestReward(rewards);
+                }
+
+                return {
+                    id: quest && quest.id ? quest.id : generateQuestId(prefix),
+                    key: quest && quest.key ? quest.key : (quest && quest.type ? `${quest.type}_${Math.random().toString(36).slice(2, 8)}` : `${prefix}_unknown`),
+                    type: quest && quest.type ? quest.type : 'unknown',
+                    title: quest && quest.title ? quest.title : (prefix === 'daily' ? '미정 퀘스트' : '이벤트 퀘스트'),
+                    description: quest && quest.description ? quest.description : defaultDesc,
+                    rewards,
+                    selectedReward,
+                    reward: selectedReward && selectedReward.label ? selectedReward.label : (quest && quest.reward ? quest.reward : '보상 미정'),
+                    progress: {
+                        current: clampedCurrent,
+                        target
+                    },
+                    completed: Boolean(quest && quest.completed)
+                };
+            };
+
+            questState.dailyQuests = questState.dailyQuests.map(quest =>
+                normalizeQuest(quest, 'daily', '곧 업데이트될 예정입니다.')
+            );
+
+            questState.eventQuests = questState.eventQuests.map(quest =>
+                normalizeQuest(quest, 'event', '추후 공개될 이벤트 퀘스트입니다.')
+            );
         }
         function generateDailyQuests() {
-            // 추후 실제 퀘스트 데이터로 대체 예정
-            return createPlaceholderDailyQuests();
+            return sampleDailyQuestDefinitions(3).map(createDailyQuestFromDefinition);
         }
         function resetDailyQuests(anchorTime = Date.now()) {
             questState.lastDailyReset = anchorTime;
+            questState.playtimeAnchorMs = getActivePlaytimeMs();
             questState.dailyQuests = generateDailyQuests();
             saveState();
             renderDailyQuests();
@@ -4742,6 +5003,11 @@
             const now = Date.now();
 
             if (!questState.lastDailyReset) {
+                resetDailyQuests(now);
+                return;
+            }
+
+            if (!questState.dailyQuests || questState.dailyQuests.length === 0 || questState.dailyQuests.every(quest => !quest.type || quest.type === 'unknown')) {
                 resetDailyQuests(now);
                 return;
             }
@@ -4771,20 +5037,33 @@
             const listHTML = questState.dailyQuests.map(quest => {
                 const target = Math.max(quest.progress?.target || 1, 1);
                 const current = Math.max(Math.min(quest.progress?.current || 0, target), 0);
-                const percent = Math.round((current / target) * 100);
+                const percent = quest.completed ? 100 : Math.round((current / target) * 100);
                 const clampedPercent = Math.min(Math.max(percent, 0), 100);
+                const isCompleted = Boolean(quest.completed);
+                const isClaimed = Boolean(quest.claimed);
+                const isReady = isCompleted && !isClaimed;
+                const rewardLabel = quest.selectedReward?.label || quest.reward || '보상 미정';
+                const progressInfo = isClaimed ? '보상 수령 완료' : (isCompleted ? '완료' : `${current} / ${target}`);
+                const claimButton = isReady
+                    ? `<button class="quest-claim-button" onclick="claimQuestReward('${quest.id}', 'daily')">보상 받기</button>`
+                    : '';
+                const classes = ['quest-item'];
+                if (isCompleted) classes.push('completed');
+                if (isReady) classes.push('ready');
+                if (isClaimed) classes.push('claimed');
 
                 return `
-                    <div class="quest-item" data-quest-id="${quest.id}">
+                    <div class="${classes.join(' ')}" data-quest-id="${quest.id}">
                         <div class="quest-item-header">
                             <div class="quest-item-title">${quest.title}</div>
-                            <div class="quest-item-reward">${quest.reward}</div>
+                            <div class="quest-item-reward">${rewardLabel}</div>
                         </div>
                         <div class="quest-item-desc">${quest.description}</div>
                         <div class="quest-progress">
                             <div class="quest-progress-bar" style="width: ${clampedPercent}%"></div>
                         </div>
-                        <div class="quest-progress-info">${current} / ${target}</div>
+                        <div class="quest-progress-info">${progressInfo}</div>
+                        ${claimButton}
                     </div>
                 `;
             }).join('');
@@ -4803,20 +5082,33 @@
             const listHTML = questState.eventQuests.map(quest => {
                 const target = Math.max(quest.progress?.target || 1, 1);
                 const current = Math.max(Math.min(quest.progress?.current || 0, target), 0);
-                const percent = Math.round((current / target) * 100);
+                const percent = quest.completed ? 100 : Math.round((current / target) * 100);
                 const clampedPercent = Math.min(Math.max(percent, 0), 100);
+                const isCompleted = Boolean(quest.completed);
+                const isClaimed = Boolean(quest.claimed);
+                const isReady = isCompleted && !isClaimed;
+                const rewardLabel = quest.selectedReward?.label || quest.reward || '보상 미정';
+                const progressInfo = isClaimed ? '보상 수령 완료' : (isCompleted ? '완료' : `${current} / ${target}`);
+                const claimButton = isReady
+                    ? `<button class="quest-claim-button" onclick="claimQuestReward('${quest.id}', 'event')">보상 받기</button>`
+                    : '';
+                const classes = ['quest-item'];
+                if (isCompleted) classes.push('completed');
+                if (isReady) classes.push('ready');
+                if (isClaimed) classes.push('claimed');
 
                 return `
-                    <div class="quest-item" data-quest-id="${quest.id}">
+                    <div class="${classes.join(' ')}" data-quest-id="${quest.id}">
                         <div class="quest-item-header">
                             <div class="quest-item-title">${quest.title}</div>
-                            <div class="quest-item-reward">${quest.reward}</div>
+                            <div class="quest-item-reward">${rewardLabel}</div>
                         </div>
                         <div class="quest-item-desc">${quest.description}</div>
                         <div class="quest-progress">
                             <div class="quest-progress-bar" style="width: ${clampedPercent}%"></div>
                         </div>
-                        <div class="quest-progress-info">${current} / ${target}</div>
+                        <div class="quest-progress-info">${progressInfo}</div>
+                        ${claimButton}
                     </div>
                 `;
             }).join('');
@@ -4826,6 +5118,133 @@
 
         function renderQuestEmptyState(message) {
             return `<div class="quest-empty-state">${message}</div>`;
+        }
+
+        function getActivePlaytimeMs() {
+            const currentTime = Date.now();
+            const accumulatedPaused = pausedTime || 0;
+            const ongoingPaused = lastPauseTime && lastPauseTime > 0 ? (currentTime - lastPauseTime) : 0;
+            return Math.max(0, currentTime - startTime - accumulatedPaused - ongoingPaused);
+        }
+
+        function commitQuestProgressChanges(changedDaily, changedEvent) {
+            if (changedDaily) renderDailyQuests();
+            if (changedEvent) renderEventQuests();
+            if (changedDaily || changedEvent) saveState();
+        }
+
+        function incrementQuestProgress(type, amount = 1) {
+            if (!type) return;
+            sanitizeQuestState();
+
+            let changedDaily = false;
+            let changedEvent = false;
+
+            const applyIncrement = (quest) => {
+                if (quest.type !== type || quest.completed) return false;
+                const target = Math.max(quest.progress.target || 1, 1);
+                const current = Math.max(quest.progress.current || 0, 0);
+
+                const newCurrent = Math.min(current + amount, target);
+                if (newCurrent === current) return false;
+
+                quest.progress.current = newCurrent;
+                if (newCurrent >= target) quest.completed = true;
+                return true;
+            };
+
+            questState.dailyQuests.forEach(quest => {
+                if (applyIncrement(quest)) changedDaily = true;
+            });
+
+            questState.eventQuests.forEach(quest => {
+                if (applyIncrement(quest)) changedEvent = true;
+            });
+
+            commitQuestProgressChanges(changedDaily, changedEvent);
+        }
+
+        function updatePlaytimeQuestProgress() {
+            sanitizeQuestState();
+
+            const activeMs = getActivePlaytimeMs();
+            const anchor = typeof questState.playtimeAnchorMs === 'number' ? questState.playtimeAnchorMs : 0;
+            const elapsedMinutes = Math.max(0, Math.floor((activeMs - anchor) / 60000));
+
+            let changedDaily = false;
+            let changedEvent = false;
+
+            const applyElapsed = (quest) => {
+                if (quest.type !== 'playtime' || quest.completed) return false;
+                const target = Math.max(quest.progress.target || 1, 1);
+                const newCurrent = Math.min(elapsedMinutes, target);
+                if (newCurrent === quest.progress.current) return false;
+                quest.progress.current = newCurrent;
+                if (newCurrent >= target) quest.completed = true;
+                return true;
+            };
+
+            questState.dailyQuests.forEach(quest => {
+                if (applyElapsed(quest)) changedDaily = true;
+            });
+
+            questState.eventQuests.forEach(quest => {
+                if (applyElapsed(quest)) changedEvent = true;
+            });
+
+            commitQuestProgressChanges(changedDaily, changedEvent);
+        }
+
+        function applyQuestReward(reward) {
+            if (!reward || typeof reward !== 'object') return;
+            if (reward.type === 'coin') {
+                const amount = Math.max(0, Number(reward.amount) || 0);
+                if (amount > 0) {
+                    sehoCoin += amount;
+                    updateCoinDisplay();
+                }
+            } else if (reward.type === 'item') {
+                const itemName = reward.item;
+                const quantity = Math.max(1, Number(reward.quantity) || 0);
+                if (itemName && quantity > 0) {
+                    // quest 상태는 이미 업데이트 되었으므로 추가 저장이 중복되지 않도록 주의
+                    addToItemStorage(itemName, quantity);
+                }
+            }
+        }
+
+        function claimQuestReward(questId, questType = 'daily') {
+            sanitizeQuestState();
+            const isEvent = questType === 'event';
+            const questList = isEvent ? questState.eventQuests : questState.dailyQuests;
+            if (!Array.isArray(questList)) return;
+
+            const quest = questList.find(q => q.id === questId);
+            if (!quest) return;
+            if (!quest.completed) {
+                alert('아직 완료되지 않은 퀘스트입니다.');
+                return;
+            }
+            if (quest.claimed) {
+                alert('이미 보상을 수령한 퀘스트입니다.');
+                return;
+            }
+
+            const reward = quest.selectedReward || randomizeQuestReward(quest.rewards);
+            quest.selectedReward = reward;
+            quest.reward = reward.label || quest.reward || '보상 미정';
+            quest.claimed = true;
+
+            applyQuestReward(reward);
+            const rewardLabel = reward.label ||
+                (reward.type === 'coin'
+                    ? `세호코인 ${Number(reward.amount || 0).toLocaleString()}개`
+                    : `${reward.item || '아이템'} ${reward.quantity || 0}개`);
+
+            alert(`🎁 보상을 수령했습니다!\n${rewardLabel}`);
+
+            saveState();
+            renderQuestContent();
         }
 
         function updateQuestTabButtons() {
@@ -4872,6 +5291,12 @@
             if (!timerEl) return;
 
             ensureDailyQuests();
+            updatePlaytimeQuestProgress();
+
+            if (questState.activeTab === 'event') {
+                timerEl.textContent = '???';
+                return;
+            }
 
             const now = Date.now();
             const nextReset = (questState.lastDailyReset || now) + QUEST_RESET_INTERVAL;
@@ -4918,7 +5343,8 @@
                 lastDailyReset: questState.lastDailyReset,
                 dailyQuests: questState.dailyQuests,
                 eventQuests: questState.eventQuests,
-                activeTab: questState.activeTab
+                activeTab: questState.activeTab,
+                playtimeAnchorMs: questState.playtimeAnchorMs
             };
         }
         // 코드 사용 함수
@@ -5039,6 +5465,9 @@
             stopQuestTimer();
             questState = getDefaultQuestState();
             sanitizeQuestState();
+            
+            updateTrumpCardInfo();
+            updateGoldenStatueInfo();
             
             // 화면 업데이트
             updateStorageDisplay();
@@ -6023,6 +6452,7 @@
             
             // 구매 기록 추가
             purchasedInCurrentShop.push(itemIndex);
+            incrementQuestProgress('shop_purchase', 1);
             
              // 아이템 타입에 따라 처리
              if (item.type === 'potion') {
@@ -6834,4 +7264,3 @@
   </script>
 </body>
 </html>
-
