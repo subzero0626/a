@@ -38,13 +38,15 @@
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 50px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.92) 0%, rgba(236, 243, 255, 0.92) 100%);
+            border-radius: 24px;
+            padding: 48px 54px;
+            box-shadow: 0 32px 60px rgba(15, 23, 42, 0.14);
             text-align: center;
             max-width: 600px;
             width: 95%;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            backdrop-filter: blur(8px);
         }
 
         .navigation-dots {
@@ -385,7 +387,7 @@
             border: 1px solid rgba(148, 163, 184, 0.4);
             background: linear-gradient(135deg, rgba(241, 245, 249, 0.9), rgba(226, 232, 240, 0.85));
             color: #0f172a;
-            cursor: default;
+            cursor: pointer;
             width: 100%;
             min-height: 64px;
             box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
@@ -425,12 +427,12 @@
             transform: rotateY(-180deg);
         }
 
-        .buff-icon:hover .buff-front {
+        .buff-icon.flipped .buff-front {
             opacity: 0;
             transform: rotateY(180deg);
         }
 
-        .buff-icon:hover .buff-back {
+        .buff-icon.flipped .buff-back {
             opacity: 1;
             transform: rotateY(0deg);
         }
@@ -738,99 +740,103 @@
 
 
         h1 {
-            color: #333;
-            margin-bottom: 40px;
-            font-size: 3em;
-            font-weight: bold;
+            color: #0f172a;
+            margin-bottom: 36px;
+            font-size: 2.85em;
+            font-weight: 800;
+            letter-spacing: -0.01em;
         }
 
         .draw-area {
             margin: 40px 0;
+            padding: 32px 38px;
+            background: linear-gradient(145deg, rgba(248, 250, 252, 0.88) 0%, rgba(226, 232, 240, 0.78) 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 24px 40px rgba(15, 23, 42, 0.12);
         }
 
         .result-display {
-            background: #f8f9fa;
-            border: 3px dashed #dee2e6;
-            border-radius: 15px;
-            padding: 50px 30px;
-            margin: 30px 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(241, 245, 249, 0.92) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            border-radius: 20px;
+            padding: 48px 30px;
+            margin: 24px 0 28px;
             min-height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8em;
-            color: #6c757d;
-            transition: all 0.3s ease;
+            font-size: 1.9em;
+            color: #475569;
+            transition: all 0.35s ease;
+            box-shadow: 0 24px 45px rgba(15, 23, 42, 0.12);
         }
 
         .result-display.reset {
-            font-size: 1.2em;
-            color: #6c757d;
-            background: #f8f9fa;
-            border-color: #dee2e6;
+            font-size: 1.3em;
+            color: #64748b;
+            background: transparent;
+            border-color: rgba(148, 163, 184, 0.22);
         }
         .result-display.miss {
-            background: white;
-            border-color: #dee2e6;
-            color: #333;
-            font-weight: bold;
-            font-size: 2.5em;
-            animation: pulse 0.5s ease-in-out;
+            background: transparent;
+            font-weight: 700;
+            font-size: 2.3em;
+            animation: pulse 0.55s ease-in-out;
         }
 
         .result-display.winner {
-            background: white;
-            border-color: #dee2e6;
-            color: #333;
-            font-weight: bold;
-            font-size: 2.5em;
-            animation: pulse 0.5s ease-in-out;
+            background: transparent;
+            font-weight: 700;
+            font-size: 2.4em;
+            animation: pulse 0.55s ease-in-out;
         }
 
         .result-display.shining {
-            background: #fff3cd;
-            border-color: #ffc107;
-            color: #f0ad4e;
-            font-weight: bold;
-            font-size: 2.5em;
-            animation: pulse 0.5s ease-in-out;
+            background: linear-gradient(135deg, #fff4d1 0%, #ffdd8c 100%);
+            border: 1px solid rgba(245, 196, 74, 0.45);
+            color: #b45309;
+            font-weight: 700;
+            font-size: 2.4em;
+            animation: pulse 0.55s ease-in-out;
         }
 
         .result-display.sparkling {
-            background: #ffeaa7;
-            border-color: #f39c12;
-            color: #e67e22;
-            font-weight: bold;
-            font-size: 2.5em;
-            animation: pulse 0.5s ease-in-out;
+            background: linear-gradient(135deg, #ffe3a3 0%, #ffb347 100%);
+            border: 1px solid rgba(249, 115, 22, 0.45);
+            color: #9a3412;
+            font-weight: 700;
+            font-size: 2.4em;
+            animation: pulse 0.55s ease-in-out;
+            box-shadow: 0 0 26px rgba(249, 115, 22, 0.35);
         }
 
         .result-display.golden {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            border: 3px solid #b8860b;
-            color: #8b4513;
-            font-weight: bold;
-            font-size: 2.5em;
+            background: linear-gradient(135deg, #ffd700 0%, #ffb200 35%, #d97706 100%);
+            border: 1px solid rgba(217, 119, 6, 0.6);
+            color: #5f370e;
+            font-weight: 800;
+            font-size: 2.45em;
             animation: goldenGlow 2s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 40px rgba(217, 119, 6, 0.55);
         }
         .result-display.diamond {
-            background: linear-gradient(135deg, #b9f2ff 0%, #87ceeb 50%, #00bfff 100%);
-            border: 3px solid #4682b4;
-            color: #191970;
-            font-weight: bold;
-            font-size: 2.5em;
+            background: linear-gradient(135deg, #bae6fd 0%, #67e8f9 40%, #38bdf8 100%);
+            border: 1px solid rgba(14, 165, 233, 0.5);
+            color: #0c4a6e;
+            font-weight: 800;
+            font-size: 2.45em;
             animation: diamondSparkle 2s ease-in-out infinite;
-            box-shadow: 0 0 25px rgba(0, 191, 255, 0.6);
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.55);
         }
         .result-display.rainbow {
             background: #ff4d4d; /* 더 진한 시작 색 */
-            border: none; /* 테두리 제거 */
+            border: 1px solid rgba(255,255,255,0.5); /* 은은한 라인 */
             color: #000000; /* 글자색 검정 고정 */
-            font-weight: bold;
+            font-weight: 800;
             font-size: 2.5em;
             animation: rainbowCycle 1.6s linear infinite, rainbowAura 1.6s ease-in-out infinite alternate, rainbowSparkle 0.7s ease-in-out infinite alternate;
-            box-shadow: 0 0 22px rgba(255,255,255,0.35);
+            box-shadow: 0 0 26px rgba(255,255,255,0.45);
             position: relative;
         }
 
@@ -926,31 +932,35 @@
         }
 
         .draw-button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
+            background: linear-gradient(120deg, #fb923c 0%, #f97316 100%);
+            color: #ffffff;
             border: none;
-            padding: 20px 50px;
-            font-size: 1.4em;
-            border-radius: 50px;
-      cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            padding: 18px 48px;
+            font-size: 1.35em;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+            box-shadow: 0 18px 35px rgba(249, 115, 22, 0.32);
             margin: 15px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
         }
 
         .draw-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 24px 45px rgba(249, 115, 22, 0.36);
+            filter: brightness(1.03);
         }
 
         .draw-button:active {
-            transform: translateY(0);
+            transform: translateY(-1px);
         }
 
         .draw-button[disabled], .draw-button.disabled {
-            background: #adb5bd;
+            background: linear-gradient(120deg, #cbd5f5 0%, #a5b4fc 100%);
             cursor: not-allowed;
             box-shadow: none;
+            color: #475569;
         }
 
         /* 접이식 패널 공통 스타일 */
@@ -1055,7 +1065,7 @@
         }
         .artifact-grid { 
             display: grid;
-            grid-template-columns: repeat(5, 130px);
+            grid-template-columns: repeat(6, 130px);
             column-gap: 8px;
             row-gap: 12px;
             width: 100%;
@@ -1130,6 +1140,22 @@
         }
         .artifact-card.level-3 .artifact-back {
             background: linear-gradient(135deg, #6a1b9a 0%, #8e24aa 100%);
+        }
+        .artifact-card.level-4 .artifact-front {
+            background: linear-gradient(135deg, #ffe1e1 0%, #ffb3c1 100%);
+            border-color: rgba(244, 114, 182, 0.6);
+            color: #991b1b;
+        }
+        .artifact-card.level-4 .artifact-back {
+            background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
+        }
+        .artifact-card.level-5 .artifact-front {
+            background: linear-gradient(135deg, #fff7d6 0%, #fde68a 100%);
+            border-color: rgba(250, 204, 21, 0.65);
+            color: #92400e;
+        }
+        .artifact-card.level-5 .artifact-back {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
         }
         .artifact-level-badge {
             position: absolute;
@@ -1575,14 +1601,18 @@
 
         /* 보관소 기본 스타일 */
         .storage-container .container {
-            max-width: 600px;
+            max-width: 640px;
             width: 95%;
+            padding: 52px 48px;
+            background: linear-gradient(155deg, rgba(248, 250, 252, 0.95) 0%, rgba(229, 234, 246, 0.9) 100%);
+            box-shadow: 0 34px 60px rgba(15, 23, 42, 0.14);
         }
 
         .storage-list {
             max-height: 600px;
             overflow-y: auto;
-            margin-top: 20px;
+            margin-top: 24px;
+            padding-right: 6px;
         }
 
         /* 아이템 보관소 전용 스타일 */
@@ -1965,54 +1995,63 @@
             margin-bottom: 15px;
         }
         .storage-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #28a745;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.95) 100%);
+            padding: 18px 16px 56px;
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
             width: 240px;
             min-width: 240px;
-            transition: all 0.3s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
             position: relative;
+            box-shadow: 0 20px 36px rgba(15, 23, 42, 0.12);
         }
 
         /* 보관소 아이템 선택 시 살짝 연해 보이도록 */
-        .storage-item.selected { filter: brightness(1.08) saturate(0.9); }
+        .storage-item.selected { transform: translateY(-4px); box-shadow: 0 26px 46px rgba(30, 64, 175, 0.18); border-color: rgba(99, 102, 241, 0.35); }
         /* 오버 시에도 연해 보이도록 */
-        .storage-item:hover { filter: brightness(1.08) saturate(0.9); }
+        .storage-item:hover { transform: translateY(-4px); box-shadow: 0 26px 46px rgba(30, 64, 175, 0.18); border-color: rgba(99, 102, 241, 0.28); }
 
         /* 보관소 아이템 내 액션 버튼들 */
         .storage-item .action-btn {
             position: absolute;
-            bottom: 8px;
-            padding: 6px 10px;
-            font-size: 0.85em;
-            font-weight: 800;
-            border-radius: 8px;
-            color: #fff;
+            bottom: 12px;
+            padding: 7px 12px;
+            font-size: 0.82em;
+            font-weight: 700;
+            border-radius: 999px;
+            color: #0f172a;
             cursor: pointer;
             user-select: none;
             display: none; /* 기본 숨김 */
+            background: rgba(248, 250, 252, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.18);
         }
         .storage-item .action-back {
-            left: 10px;
-            background: #dc3545; /* 빨간색 */
+            left: 16px;
+            color: #b91c1c;
+            border-color: rgba(248, 113, 113, 0.35);
+            background: rgba(254, 226, 226, 0.9);
         }
         .storage-item .action-upgrade {
-            right: 10px;
-            background: #28a745; /* 초록색 */
+            right: 16px;
+            color: #1d4ed8;
+            border-color: rgba(99, 102, 241, 0.4);
+            background: rgba(224, 231, 255, 0.92);
         }
         .storage-item .enhance-info {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            bottom: 42px; /* 버튼들 위에 표시 */
-            background: rgba(0,0,0,0.65);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 0.8em;
+            bottom: 50px; /* 버튼들 위에 표시 */
+            background: rgba(15, 23, 42, 0.8);
+            color: #f8fafc;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.78em;
             white-space: nowrap;
             display: none; /* 기본 숨김 */
+            box-shadow: 0 16px 30px rgba(15, 23, 42, 0.3);
         }
 
         /* 오버 시 컨트롤과 정보 표시 */
@@ -2022,107 +2061,110 @@
         /* 기본 마우스 오버 효과 제거 - 강화된 아이템만 효과 적용 */
 
         .storage-item.diamond {
-            background: linear-gradient(135deg, #b9f2ff 0%, #87ceeb 50%, #00bfff 100%);
-            border-left-color: #4682b4;
-            color: #191970;
-            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+            background: linear-gradient(155deg, rgba(236, 254, 255, 0.94) 0%, rgba(191, 219, 254, 0.94) 100%);
+            border-color: rgba(59, 130, 246, 0.35);
+            color: #1d4ed8;
+            box-shadow: 0 28px 44px rgba(59, 130, 246, 0.22);
         }
 
         .storage-item.golden {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            border-left-color: #b8860b;
-            color: #8b4513;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(155deg, rgba(255, 249, 196, 0.94) 0%, rgba(254, 243, 199, 0.94) 100%);
+            border-color: rgba(234, 179, 8, 0.38);
+            color: #a16207;
+            box-shadow: 0 28px 44px rgba(234, 179, 8, 0.25);
         }
 
         .storage-item.sparkling {
-            background: #ffeaa7;
-            border-left-color: #f39c12;
-            color: #e67e22;
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+            background: linear-gradient(155deg, rgba(255, 247, 237, 0.95) 0%, rgba(254, 235, 200, 0.95) 100%);
+            border-color: rgba(251, 191, 36, 0.32);
+            color: #b45309;
+            box-shadow: 0 26px 42px rgba(251, 191, 36, 0.22);
         }
 
         .storage-item.shining {
-            background: #fff3cd;
-            border-left-color: #ffc107;
-            color: #f0ad4e;
-            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+            background: linear-gradient(155deg, rgba(255, 250, 235, 0.95) 0%, rgba(254, 240, 199, 0.95) 100%);
+            border-color: rgba(253, 224, 71, 0.32);
+            color: #ca8a04;
+            box-shadow: 0 26px 42px rgba(253, 224, 71, 0.2);
         }
 
         .storage-item.rainbow {
-            background: #ffe3e8; /* 조금 더 연한 파스텔톤 */
-            border-left-color: #ced4da; /* 연한 회색 구분선 */
-            color: #2b2d42;
-            animation: rainbowCycle 1.8s linear infinite;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-            filter: brightness(1.03) saturate(0.7);
+            background: linear-gradient(150deg, rgba(250, 245, 255, 0.96) 0%, rgba(236, 254, 255, 0.96) 50%, rgba(255, 240, 245, 0.96) 100%);
+            border-color: rgba(165, 180, 252, 0.4);
+            color: #374151;
+            animation: rainbowCycle 2.4s linear infinite;
+            box-shadow: 0 26px 42px rgba(165, 180, 252, 0.28);
+            filter: brightness(1);
         }
 
         .storage-item .name {
-            font-weight: bold;
-            font-size: 1.4em;
-            color: #333;
+            font-weight: 800;
+            font-size: 1.32em;
+            color: #1e293b;
             word-break: break-word;
         }
 
         .storage-item .item-description {
             font-size: 0.9em;
-            color: #666;
+            color: #475569;
             font-style: italic;
-            margin-top: 2px;
-            margin-bottom: 4px;
-            line-height: 1.2;
+            margin-top: 4px;
+            margin-bottom: 6px;
+            line-height: 1.25;
             word-break: break-word;
         }
 
         .storage-item .probability {
-            color: #007bff;
+            color: #4c1d95;
             font-size: 0.9em;
-            margin-top: 4px;
-            font-weight: bold;
+            margin-top: 6px;
+            font-weight: 700;
         }
 
         .storage-item .time {
-            color: #6c757d;
+            color: #64748b;
             font-size: 0.85em;
-            margin-top: 4px;
+            margin-top: 6px;
         }
         .storage-item .count {
             position: absolute;
-            bottom: 8px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: bold;
-            min-width: 20px;
+            bottom: 14px;
+            right: 16px;
+            background: rgba(79, 70, 229, 0.12);
+            color: #312e81;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.82em;
+            font-weight: 700;
+            min-width: 24px;
             text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.25);
         }
 
         .storage-item .sell-button {
             position: absolute;
-            top: 8px;
-            left: 8px;
-            width: 24px;
-            height: 24px;
-            background: #dc3545;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            font-size: 12px;
+            top: 14px;
+            left: 14px;
+            width: 30px;
+            height: 30px;
+            background: rgba(248, 113, 113, 0.18);
+            border: 1px solid rgba(248, 113, 113, 0.4);
+            border-radius: 999px;
+            color: #b91c1c;
+            font-size: 13px;
             cursor: pointer;
             display: none;
             justify-content: center;
             align-items: center;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
             z-index: 10;
+            box-shadow: 0 12px 22px rgba(248, 113, 113, 0.22);
         }
 
         .storage-item .sell-button:hover {
-            background: #c82333;
-            transform: scale(1.1);
+            background: rgba(248, 113, 113, 0.28);
+            border-color: rgba(248, 113, 113, 0.55);
+            transform: translateY(-1px) scale(1.05);
         }
 
         .storage-item:hover .sell-button {
@@ -2130,33 +2172,37 @@
         }
 
         .clear-storage {
-            background: #dc3545;
-      color: white;
-      border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+            background: linear-gradient(120deg, #f87171 0%, #ef4444 100%);
+            color: #ffffff;
+            border: none;
+            padding: 15px 34px;
+            border-radius: 999px;
             cursor: pointer;
-            margin-top: 25px;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
+            margin-top: 28px;
+            font-size: 1.05em;
+            font-weight: 700;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 18px 32px rgba(239, 68, 68, 0.26);
         }
 
         .clear-storage:hover {
-            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 24px 40px rgba(239, 68, 68, 0.3);
         }
 
         /* 강화 확률/파괴 확률 하단 좌측 표시 */
         .storage-item .enhance-stats {
             position: absolute;
-            bottom: 8px;
-            left: 10px;
-            background: rgba(0,0,0,0.6);
-            color: #fff;
-            padding: 6px 8px;
-            border-radius: 8px;
-            font-size: 0.8em;
+            bottom: 12px;
+            left: 16px;
+            background: rgba(15, 23, 42, 0.84);
+            color: #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.78em;
             line-height: 1.2;
             display: none;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.28);
         }
          .storage-item:hover .enhance-stats { display: block; }
 
@@ -2456,7 +2502,7 @@
                     <button id="drawButton" class="draw-button" onclick="startDraw()">
                         🎯 뽑기 시작!
                     </button>
-                    <div id="trumpCardInfo" style="margin-top: 10px; color: #adb5bd; font-size: 0.9em; text-align: center; display: none;">
+                    <div id="trumpCardInfo" style="margin-top: 10px; color: #64748b; font-size: 0.9em; text-align: center; display: none;">
                         <!-- 트럼프카드 정보가 여기에 표시됩니다 -->
                     </div>
                 </div>
@@ -2485,8 +2531,8 @@
                 <div class="draw-area">
                     <div class="result-display reset" id="artifactResult">유물 뽑기를 준비해주세요!</div>
                     <button class="draw-button" id="artifactDrawButton" onclick="startArtifactDraw()">🏺 유물 뽑기</button>
-                    <div id="artifactCooldown" style="margin-top: 10px; color: #6c757d; font-size: 0.9em;"></div>
-                    <div style="margin-top: 15px; color: #adb5bd; font-size: 0.8em; text-align: center; line-height: 1.4;">
+                    <div id="artifactCooldown" style="margin-top: 10px; color: #475569; font-size: 0.9em;"></div>
+                    <div style="margin-top: 15px; color: #94a3b8; font-size: 0.82em; text-align: center; line-height: 1.45;">
                         (유물을 뽑을 확률은 50%이고, 유물별 확률은 모두 균일합니다)
                     </div>
                 </div>
@@ -2747,6 +2793,8 @@
         // 세호코인 & 버프 관련 변수
         let sehoCoin = 0; // 초기 세호코인
         let activeBuffs = []; // 활성 버프 목록 { type, level, endTime }
+        let nextBuffId = 1; // 버프 고유 ID 시퀀스
+        const buffFlipStates = {}; // 버프 카드 플립 상태
         let purchasedThemes = []; // 구매한 테마 목록
          let currentTheme = 'default'; // 현재 테마
          let specialItemCount = 0; // 용사의 심판 개수
@@ -2758,22 +2806,99 @@
             return activeBuffs.find(buff => buff.type === 'weekend');
         }
 
+        function getArtifactLevel(artifactName) {
+            if (!artifactName) return 0;
+            const artifact = artifactStorage.find(item => item.name === artifactName);
+            const level = artifact ? artifact.level || 0 : 0;
+            return Math.max(0, Math.min(5, level));
+        }
+
         function syncWeekendBuffState() {
             const weekendBuff = getWeekendBuff();
             if (weekendBuff) {
+                ensureBuffId(weekendBuff);
                 weekendBuff.remainingDraws = noCooldownCount;
                 if (noCooldownCount <= 0) {
                     activeBuffs = activeBuffs.filter(buff => buff.type !== 'weekend');
                 }
             } else if (noCooldownCount > 0) {
                 // recreate buff if count persists but buff missing (data healed)
-                activeBuffs.push({
+                const recreated = {
                     type: 'weekend',
                     endTime: Date.now() + (365 * 24 * 60 * 60 * 1000),
                     level: 1,
                     remainingDraws: noCooldownCount
-                });
+                };
+                ensureBuffId(recreated);
+                activeBuffs.push(recreated);
             }
+        }
+
+        function ensureBuffId(buff) {
+            if (!buff || typeof buff !== 'object') return null;
+            if (typeof buff.id === 'string') {
+                const match = buff.id.match(/^buff-(\d+)$/);
+                if (match) {
+                    const num = parseInt(match[1], 10);
+                    if (!isNaN(num) && num >= nextBuffId) {
+                        nextBuffId = num + 1;
+                    }
+                }
+                return buff.id;
+            }
+            const newId = `buff-${nextBuffId++}`;
+            buff.id = newId;
+            return newId;
+        }
+
+        function generateSpeedBoostReduction() {
+            return 0.15 + Math.random() * 0.35; // 15% ~ 50%
+        }
+
+        function ensureSpeedBoostReduction(buff) {
+            if (!buff || buff.type !== 'speed_boost') return null;
+            if (typeof buff.reduction !== 'number' || !isFinite(buff.reduction)) {
+                buff.reduction = generateSpeedBoostReduction();
+            }
+            return buff.reduction;
+        }
+
+        function initializeBuffIds() {
+            let changed = false;
+            activeBuffs.forEach(buff => {
+                const prevId = buff.id;
+                const currentId = ensureBuffId(buff);
+                if (!prevId && currentId) {
+                    changed = true;
+                }
+                if (buff.type === 'speed_boost') {
+                    const prevReduction = buff.reduction;
+                    const ensured = ensureSpeedBoostReduction(buff);
+                    if (ensured !== prevReduction) {
+                        changed = true;
+                    }
+                }
+            });
+            cleanupBuffFlipStates();
+            return changed;
+        }
+
+        function cleanupBuffFlipStates() {
+            const activeIds = new Set(
+                activeBuffs
+                    .map(buff => ensureBuffId(buff))
+                    .filter(Boolean)
+            );
+            Object.keys(buffFlipStates).forEach(id => {
+                if (!activeIds.has(id)) {
+                    delete buffFlipStates[id];
+                }
+            });
+        }
+
+        function resetBuffFlipStates() {
+            Object.keys(buffFlipStates).forEach(id => delete buffFlipStates[id]);
+            nextBuffId = 1;
         }
 
         function consumeWeekendCharge() {
@@ -2812,7 +2937,8 @@
             '쇼타세호의 부적', '에겐세호의 부적', '니거세호의 부적',
             '세호로리의 시간가속기', '세호로리의 7목걸이',
             '세호로리의 유물석', '세호로리의 무지갯빛 보석',
-            '세호로리의 신성한 망치', '세호로리의 트럼프카드'
+            '세호로리의 신성한 망치', '세호로리의 트럼프카드',
+            '세호로리의 황금동상', '세호로리의 봇짐', '세호로리의 물약 제조술책'
         ];
 
         function generateQuestId(prefix = 'quest') {
@@ -2958,6 +3084,9 @@
              goToScreen(3); // 랜덤뽑기 화면(가운데)으로 시작
             updateProbabilityTable(); // 확률표 초기화
             loadState(); // 저장된 상태 불러오기
+            sehoCoin = 0;
+            updateCoinDisplay();
+            saveState();
             startPlaytimeTicker();
              updateTrumpCardInfo(); // 트럼프카드 정보 업데이트
              initShop(); // 상점 초기화
@@ -3036,7 +3165,7 @@
         let startY = 0;
         let artifactStorage = []; // 유물 저장소
         let lastArtifactDraw = 0; // 마지막 유물 뽑기 시간
-        let baseArtifactCooldown = 180; // 기본 유물 뽑기 쿨다운 (초)
+        let baseArtifactCooldown = 300; // 기본 유물 뽑기 쿨다운 (초)
         let totalDraws = 0; // 총 뽑기 횟수
         let rarestItem = null; // { name, realProbabilityNum }
         let startTime = Date.now();
@@ -3113,6 +3242,7 @@
                 sanitizeThemeState();
                  if (Array.isArray(data.usedCodes)) usedCodes = data.usedCodes;
                 syncWeekendBuffState();
+                const buffStateChanged = initializeBuffIds();
                 if (data.questState) {
                     questState = {
                         ...getDefaultQuestState(),
@@ -3128,6 +3258,9 @@
                 const now = Date.now();
                 const remainingMs = getArtifactCooldown() * 1000 - (now - lastArtifactDraw);
                 if (remainingMs > 0) startArtifactCooldown();
+                if (buffStateChanged) {
+                    saveState();
+                }
             } catch (e) { console.log('load failed'); }
         }
 
@@ -3191,44 +3324,37 @@
         // 뽑기 완료
         function finishDraw() {
             const winner = getWeightedRandom(); // 가중치 기반 랜덤 선택
-            
             const resultDisplay = document.getElementById('resultDisplay');
             
             if (noCooldownCount > 0) {
                 consumeWeekendCharge();
             }
             
-             // 꽝 처리: 통계 증가만 하고 종료 (트럼프카드 효과 발동 시에는 꽝이 나올 수 없음)
+            // 꽝 처리: 통계 증가만 하고 종료
             if (winner && winner.name === '꽝') {
                 resultDisplay.textContent = '꽝';
                 resultDisplay.className = 'result-display miss';
                 
                 const prevDraws = totalDraws;
                 totalDraws += 1;
-                
-                // 기능 해금 알림
                 checkUnlockNotification(prevDraws, totalDraws);
                 
-                 // 꽝이어도 세호 뽑기 횟수 증가 (트럼프카드 효과를 위해)
-                 sehoDrawCount += 1;
+                sehoDrawCount += 1;
+                updateTrumpCardInfo();
                 updateSettingsStats();
-                 updateDotStates(); // 도트 상태 업데이트
-                 // 트럼프카드 정보 업데이트
-                 updateTrumpCardInfo();
+                updateDotStates();
+                
                 const button = document.getElementById('drawButton');
                 button.textContent = '🎯 뽑기 시작!';
                 button.disabled = false;
                 isDrawing = false;
                 saveState();
                 return;
-             }
-            
-            // 세호를 뽑았을 때 세호 뽑기 횟수 증가
-            if (winner && winner.name !== '꽝') {
-                sehoDrawCount += 1;
-                // 트럼프카드 정보 업데이트
-                updateTrumpCardInfo();
             }
+            
+            // 세호 뽑기 횟수 및 트럼프카드 정보 업데이트
+            sehoDrawCount += 1;
+            updateTrumpCardInfo();
             
             // 유물 효과 적용
             const specialEffectBonus = getSpecialEffectBonus(winner.name);
@@ -3243,27 +3369,17 @@
             let effectType = 'normal';
             let displayText = winner.name;
             
-            // 꽝 처리: 효과 없음, 보관소 저장 안 함
-            if (winner.name === '꽝') {
-                resultDisplay.textContent = '꽝';
-                resultDisplay.className = 'result-display miss';
-                const button = document.getElementById('drawButton');
-                button.textContent = '🎯 뽑기 시작!';
-                button.disabled = false;
-                isDrawing = false;
-                return;
-            }
-            
-            // 트럼프카드 효과 확인 (세호를 뽑았을 때만)
+            // 트럼프카드 효과 확인
             const isGuaranteedSpecial = shouldGuaranteeSpecialEffect();
             
             if (isGuaranteedSpecial) {
-                // 트럼프카드 효과 발동: 원래 특별효과 비율을 유지하면서 일반 세호만 제외
-                const totalSpecialChance = 0.0002 * (1 + rainbowBonus) + 0.002 * (1 + specialEffectBonus) + 
-                                         0.01 * (1 + specialEffectBonus) + 0.2 * (1 + specialEffectBonus) + 
-                                         0.05 * (1 + specialEffectBonus);
+                const totalSpecialChance =
+                    0.0002 * (1 + rainbowBonus) +
+                    0.002 * (1 + specialEffectBonus) +
+                    0.01 * (1 + specialEffectBonus) +
+                    0.2 * (1 + specialEffectBonus) +
+                    0.05 * (1 + specialEffectBonus);
                 
-                // 특별효과 비율을 100%로 정규화
                 const normalizedRainbow = (0.0002 * (1 + rainbowBonus)) / totalSpecialChance;
                 const normalizedDiamond = (0.002 * (1 + specialEffectBonus)) / totalSpecialChance;
                 const normalizedGolden = (0.01 * (1 + specialEffectBonus)) / totalSpecialChance;
@@ -3290,28 +3406,26 @@
                     displayText = `번쩍이는 ${winner.name}`;
                 }
             } else {
-                // 일반 뽑기: 원래 확률대로
-            if (random5 < 0.0002 * (1 + rainbowBonus)) {
-                effectType = 'rainbow';
-                displayText = `무지갯빛 ${winner.name}`;
-            } else if (random4 < 0.002 * (1 + specialEffectBonus)) {
-                effectType = 'diamond';
-                displayText = `다이아몬드색 ${winner.name}`;
-            } else if (random3 < 0.01 * (1 + specialEffectBonus)) {
-                effectType = 'golden';
-                displayText = `황금색 ${winner.name}`;
-            } else if (random1 < 0.2 * (1 + specialEffectBonus)) {
-                effectType = 'shining';
-                displayText = `빛나는 ${winner.name}`;
-            } else if (random2 < 0.05 * (1 + specialEffectBonus)) {
-                effectType = 'sparkling';
-                displayText = `번쩍이는 ${winner.name}`;
+                if (random5 < 0.0002 * (1 + rainbowBonus)) {
+                    effectType = 'rainbow';
+                    displayText = `무지갯빛 ${winner.name}`;
+                } else if (random4 < 0.002 * (1 + specialEffectBonus)) {
+                    effectType = 'diamond';
+                    displayText = `다이아몬드색 ${winner.name}`;
+                } else if (random3 < 0.01 * (1 + specialEffectBonus)) {
+                    effectType = 'golden';
+                    displayText = `황금색 ${winner.name}`;
+                } else if (random1 < 0.2 * (1 + specialEffectBonus)) {
+                    effectType = 'shining';
+                    displayText = `빛나는 ${winner.name}`;
+                } else if (random2 < 0.05 * (1 + specialEffectBonus)) {
+                    effectType = 'sparkling';
+                    displayText = `번쩍이는 ${winner.name}`;
                 }
             }
             
             resultDisplay.textContent = displayText;
             
-            // 효과에 따른 클래스 설정
             if (effectType === 'rainbow') {
                 resultDisplay.className = 'result-display rainbow';
                 playRainbowSound();
@@ -3329,24 +3443,19 @@
                 resultDisplay.className = 'result-display winner';
             }
             
-             // 보관소에 추가 (원본 이름만 전달, effectType은 별도로)
-             addToStorage(winner.name, effectType, winner);
+            addToStorage(winner.name, effectType, winner);
             
             const prevDraws = totalDraws;
             totalDraws += 1;
-            
-            // 기능 해금 알림
             checkUnlockNotification(prevDraws, totalDraws);
             
             updateSettingsStats();
-             updateDotStates(); // 도트 상태 업데이트
+            updateDotStates();
             saveState();
             
-            // 화면들 동기화 갱신
             renderBelowProbability();
             updateStorageDisplay();
             
-            // 버튼 상태 복원
             const button = document.getElementById('drawButton');
             button.textContent = '🎯 뽑기 시작!';
             button.disabled = false;
@@ -3427,7 +3536,7 @@
                 date: now.toLocaleDateString('ko-KR'),
                 effectType: effectType,
                 baseProbability: baseProbability,
-                realProbability: realProbability,
+                    realProbability: realProbability,
                 count: 1,
                 enhanceLevel: 0
             });
@@ -3436,8 +3545,8 @@
             // 용사의 심판 효과 사용
             if (specialItemCount > 0) {
                 specialItemCount--;
-            }
-            
+        }
+
             updateStorageDisplay();
             saveState();
         }
@@ -3589,15 +3698,19 @@
                             const now = Date.now();
                             if (now - lastEnhancementTime < enhancementCooldown) {
                                 const remainingTime = Math.ceil((enhancementCooldown - (now - lastEnhancementTime)) / 1000);
-                                alert(`강화 쿨타임 중입니다. ${remainingTime}초 후에 다시 시도해주세요.`);
-                                return;
-                            }
+                                upgBtn.disabled = true;
+                                upgBtn.style.opacity = '0.5';
+                                upgBtn.style.cursor = 'not-allowed';
+                                upgBtn.style.backgroundColor = '#adb5bd';
+                                upgBtn.textContent = remainingTime > 0 ? `쿨타임 (${remainingTime}s)` : '쿨타임';
+                            } else {
                                 upgBtn.disabled = false;
                                 upgBtn.style.opacity = '1';
                                 upgBtn.style.cursor = 'pointer';
                                 upgBtn.style.backgroundColor = '#28a745';
                                 upgBtn.textContent = '강화하기';
                                 upgBtn.onclick = (e) => { performUpgrade(originalIndex); e.stopPropagation(); };
+                            }
                         }
                     }
                     row.appendChild(div);
@@ -3651,25 +3764,23 @@
 
         // 세호로리의 신성한 망치 유물 효과 확인
         function getHammerArtifactEffect() {
-            const hammer = artifactStorage.find(item => item.name === '세호로리의 신성한 망치');
-            return hammer ? hammer.level : 0;
+            return getArtifactLevel('세호로리의 신성한 망치');
         }
 
         // 세호로리의 트럼프카드 유물 효과 확인
         function getTrumpCardArtifactEffect() {
-            const trumpCard = artifactStorage.find(item => item.name === '세호로리의 트럼프카드');
-            return trumpCard ? trumpCard.level : 0;
+            return getArtifactLevel('세호로리의 트럼프카드');
         }
 
         // 트럼프카드 효과로 특별효과 보장 여부 확인
         function shouldGuaranteeSpecialEffect() {
             const trumpLevel = getTrumpCardArtifactEffect();
             if (trumpLevel === 0) return false;
-            
-            // 레벨별 보장 횟수: 25회/15회/10회
-            const guaranteeInterval = trumpLevel === 1 ? 25 : trumpLevel === 2 ? 15 : 10;
-            // 1번째, 26번째, 51번째... 에서 발동 (0이 아닌 1부터 시작)
-            return sehoDrawCount > 0 && sehoDrawCount % guaranteeInterval === 1;
+            const intervals = ARTIFACT_VALUES.TRUMP_GUARANTEE_INTERVAL;
+            const guaranteeInterval = intervals[Math.min(trumpLevel, 5)] || 0;
+            if (guaranteeInterval <= 0) return false;
+            const upcomingDrawCount = totalDraws + 1;
+            return upcomingDrawCount > 0 && upcomingDrawCount % guaranteeInterval === 0;
         }
         // 트럼프카드 정보 업데이트
         function updateTrumpCardInfo() {
@@ -3677,13 +3788,20 @@
             const trumpLevel = getTrumpCardArtifactEffect();
             
             if (trumpLevel > 0) {
-                const guaranteeInterval = trumpLevel === 1 ? 25 : trumpLevel === 2 ? 15 : 10;
-                const nextGuarantee = guaranteeInterval - ((sehoDrawCount - 1) % guaranteeInterval);
-                
-                if (nextGuarantee === 1) {
-                    trumpCardInfo.innerHTML = `🎴 트럼프카드 효과: 준비 완료! 다음 뽑기에서 특별효과 보장`;
+                const intervals = ARTIFACT_VALUES.TRUMP_GUARANTEE_INTERVAL;
+                const guaranteeInterval = intervals[Math.min(trumpLevel, 5)] || 0;
+                if (guaranteeInterval > 0) {
+                    const drawsCompleted = totalDraws;
+                    const progress = drawsCompleted % guaranteeInterval;
+                    const nextGuarantee = guaranteeInterval - progress;
+                    
+                    if (nextGuarantee === 1) {
+                        trumpCardInfo.innerHTML = `🎴 트럼프카드 효과: 준비 완료! 다음 뽑기에서 특별효과 보장`;
+                    } else {
+                        trumpCardInfo.innerHTML = `🎴 트럼프카드 효과: ${nextGuarantee}회 후 특별효과 보장`;
+                    }
                 } else {
-                    trumpCardInfo.innerHTML = `🎴 트럼프카드 효과: ${nextGuarantee}회 후 특별효과 보장`;
+                    trumpCardInfo.innerHTML = `🎴 트럼프카드 효과: 활성화됨`;
                 }
                 trumpCardInfo.style.display = 'block';
             } else {
@@ -3697,13 +3815,12 @@
             const baseFail = 1 - baseSuccess;
             const baseDestroy = baseFail * 0.10;
             
-            const hammerLevel = getHammerArtifactEffect();
+            const hammerLevel = getArtifactLevel('세호로리의 신성한 망치');
             let finalSuccess = baseSuccess;
             let finalDestroy = baseDestroy;
             
             if (hammerLevel > 0) {
-                // 파괴확률 감소량 계산: 레벨별 고정 수치 0.5%/1%/2%
-                const destroyReduction = hammerLevel === 1 ? 0.005 : hammerLevel === 2 ? 0.01 : 0.02;
+                const destroyReduction = ARTIFACT_VALUES.HAMMER_DESTRUCTION_REDUCTION[Math.min(hammerLevel, 5)] || 0;
                 const reducedDestroy = Math.max(0, baseDestroy - destroyReduction);
                 const destroyReductionAmount = baseDestroy - reducedDestroy;
                 
@@ -4284,12 +4401,12 @@
                     if (nameEl) nameEl.textContent = artifactName;
                     if (backHeading) backHeading.textContent = artifactName;
 
-                    card.classList.remove('owned', 'locked', 'level-1', 'level-2', 'level-3', 'flipped');
+                    card.classList.remove('owned', 'locked', 'level-1', 'level-2', 'level-3', 'level-4', 'level-5', 'flipped');
 
                 const ownedArtifact = artifactStorage.find(item => item.name === artifactName);
                 if (ownedArtifact) {
                         const level = ownedArtifact.level || 1;
-                        const levelClass = `level-${Math.min(level, 3)}`;
+                        const levelClass = `level-${Math.min(level, 5)}`;
                         card.classList.add('owned', levelClass);
                         if (levelBadge) levelBadge.textContent = `Lv. ${level}`;
                         if (statusEl) {
@@ -4312,6 +4429,17 @@
                 });
             });
         }
+        const ARTIFACT_VALUES = {
+            BUJUK_SPECIAL_BONUS: [0, 0.15, 0.30, 0.50, 0.75, 1.25],
+            RELIC_COOLDOWN_REDUCTION: [0, 0.05, 0.10, 0.15, 0.20, 0.30],
+            RAINBOW_BONUS: [0, 0.50, 1.00, 1.50, 2.00, 3.00],
+            HAMMER_DESTRUCTION_REDUCTION: [0, 0.0025, 0.005, 0.01, 0.02, 0.035],
+            TRUMP_GUARANTEE_INTERVAL: [0, 30, 25, 20, 15, 7],
+            GOLDEN_STATUE_COINS: [0, 5, 10, 20, 30, 50],
+            BUNDLE_MINUTE_REDUCTION: [0, 1, 2, 3, 4, 5],
+            POTION_DURATION_BONUS: [0, 10, 20, 30, 40, 60]
+        };
+
         // 유물 능력치 반환
         function getArtifactStats(artifactName, level) {
             const baseStats = {
@@ -4329,64 +4457,64 @@
                 '세호로리의 유물석': '유물 뽑기 대기시간 감소',
                 '세호로리의 무지갯빛 보석': '무지갯빛 확률 증가',
                 '세호로리의 신성한 망치': '강화 파괴확률 감소',
-                '세호로리의 트럼프카드': '세호 특별효과 보장'
+                '세호로리의 트럼프카드': '세호 특별효과 보장',
+                '세호로리의 황금동상': '10회 뽑기당 세호코인 지급',
+                '세호로리의 봇짐': '상점 갱신 시간 단축',
+                '세호로리의 물약 제조술책': '행운/속도 포션 지속시간 증가'
             };
             
             const baseStat = baseStats[artifactName] || '알 수 없는 능력';
             
             if (level === 0) {
                 return '획득하지 않음';
-            } else if (level === 1) {
-            if (artifactName === '세호로리의 트럼프카드') {
-                return baseStat + ' (25회마다 특별효과 보장)';
-            }
-                if (artifactName.includes('부적')) {
-                    return baseStat + ' (15% 증가)';
-                } else if (artifactName === '세호로리의 시간가속기') {
-                    return baseStat + ' (10% 감소)';
-                } else if (artifactName === '세호로리의 7목걸이') {
-                    return baseStat + ' (8% 감소)';
-                } else if (artifactName === '세호로리의 유물석') {
-                    return baseStat + ' (유물뽑기 시간 10% 감소)';
-                } else if (artifactName === '세호로리의 무지갯빛 보석') {
-                    return baseStat + ' (75% 증가)';
-                }
-                return baseStat + ' (레벨 1)';
-            } else if (level === 2) {
-            if (artifactName === '세호로리의 트럼프카드') {
-                return baseStat + ' (15회마다 특별효과 보장)';
-            }
-                if (artifactName.includes('부적')) {
-                    return baseStat + ' (30% 증가)';
-                } else if (artifactName === '세호로리의 시간가속기') {
-                    return baseStat + ' (25% 감소)';
-                } else if (artifactName === '세호로리의 7목걸이') {
-                    return baseStat + ' (16% 감소)';
-                } else if (artifactName === '세호로리의 유물석') {
-                    return baseStat + ' (유물뽑기 시간 20% 감소)';
-                } else if (artifactName === '세호로리의 무지갯빛 보석') {
-                    return baseStat + ' (150% 증가)';
-                }
-                return baseStat + ' (레벨 2)';
-            } else if (level === 3) {
-            if (artifactName === '세호로리의 트럼프카드') {
-                return baseStat + ' (10회마다 특별효과 보장)';
-            }
-                if (artifactName.includes('부적')) {
-                    return baseStat + ' (45% 증가)';
-                } else if (artifactName === '세호로리의 시간가속기') {
-                    return baseStat + ' (50% 감소)';
-                } else if (artifactName === '세호로리의 7목걸이') {
-                    return baseStat + ' (24% 감소)';
-                } else if (artifactName === '세호로리의 유물석') {
-                    return baseStat + ' (유물뽑기 시간 30% 감소)';
-                } else if (artifactName === '세호로리의 무지갯빛 보석') {
-                    return baseStat + ' (225% 증가)';
-                }
-                return baseStat + ' (레벨 3)';
             }
             
-            return baseStat;
+            if (artifactName.includes('부적')) {
+                const bonus = ARTIFACT_VALUES.BUJUK_SPECIAL_BONUS[Math.min(level, 5)];
+                return `${baseStat} (${Math.round(bonus * 100)}% 증가)`;
+            }
+
+            switch (artifactName) {
+                case '세호로리의 유물석': {
+                    const reduction = ARTIFACT_VALUES.RELIC_COOLDOWN_REDUCTION[Math.min(level, 5)];
+                    return `${baseStat} (${Math.round(reduction * 100)}% 감소)`;
+                }
+                case '세호로리의 무지갯빛 보석': {
+                    const bonus = ARTIFACT_VALUES.RAINBOW_BONUS[Math.min(level, 5)];
+                    return `${baseStat} (${Math.round(bonus * 100)}% 증가)`;
+                }
+                case '세호로리의 신성한 망치': {
+                    const reduction = ARTIFACT_VALUES.HAMMER_DESTRUCTION_REDUCTION[Math.min(level, 5)];
+                    return `${baseStat} (${(reduction * 100).toFixed(2)}%p 감소)`;
+                }
+                case '세호로리의 트럼프카드': {
+                    const interval = ARTIFACT_VALUES.TRUMP_GUARANTEE_INTERVAL[Math.min(level, 5)];
+                    return `${baseStat} (${interval}회마다 특별효과 보장)`;
+                }
+                case '세호로리의 황금동상': {
+                    const coins = ARTIFACT_VALUES.GOLDEN_STATUE_COINS[Math.min(level, 5)];
+                    return `${baseStat} (10회 뽑기마다 ${coins} 세호코인)`;
+                }
+                case '세호로리의 봇짐': {
+                    const minutes = ARTIFACT_VALUES.BUNDLE_MINUTE_REDUCTION[Math.min(level, 5)];
+                    return `${baseStat} (${minutes}분 감소)`;
+                }
+                case '세호로리의 물약 제조술책': {
+                    const seconds = ARTIFACT_VALUES.POTION_DURATION_BONUS[Math.min(level, 5)];
+                    return `${baseStat} (+${seconds}초)`;
+                }
+                case '세호로리의 시간가속기': {
+                    const map = { 1: 10, 2: 25, 3: 50, 4: 65, 5: 80 };
+                    const reduction = map[Math.min(level, 5)] || 10;
+                    return `${baseStat} (${reduction}% 감소)`;
+                }
+                case '세호로리의 7목걸이': {
+                    const reduction = 8 * Math.min(level, 5);
+                    return `${baseStat} (${reduction}%p 감소)`;
+                }
+                default:
+                    return `${baseStat} (레벨 ${level})`;
+            }
         }
 
         function toggleArtifactPanel() {
@@ -4475,8 +4603,8 @@
             
             if (existingArtifact) {
                 // 같은 유물이 있으면 레벨 증가 (최대 3레벨)
-                if (existingArtifact.level < 3) {
-                    existingArtifact.level = (existingArtifact.level || 1) + 1;
+                if (existingArtifact.level < 5) {
+                    existingArtifact.level = Math.min(5, (existingArtifact.level || 1) + 1);
                     existingArtifact.count = (existingArtifact.count || 1) + 1;
                 } else {
                     // 이미 최대 레벨이면 개수만 증가
@@ -4891,6 +5019,7 @@
             // 세호코인 & 버프 관련 데이터 초기화
             sehoCoin = 0;
             activeBuffs = [];
+            resetBuffFlipStates();
             purchasedThemes = [];
             currentTheme = 'default';
             
@@ -4934,11 +5063,10 @@
         
         // 유물 효과 계산 함수들
         function getArtifactCooldown() {
-            const artifact = artifactStorage.find(item => item.name === '세호로리의 유물석');
-            if (!artifact) return baseArtifactCooldown;
-            
-            const reduction = artifact.level * 0.1; // 레벨당 10% 감소
-            return Math.max(10, baseArtifactCooldown * (1 - reduction)); // 최소 10초
+            const level = getArtifactLevel('세호로리의 유물석');
+            const reductions = ARTIFACT_VALUES.RELIC_COOLDOWN_REDUCTION;
+            const reduction = reductions[Math.min(level, 5)] || 0;
+            return Math.max(10, Math.round(baseArtifactCooldown * (1 - reduction)));
         }
         
 
@@ -4948,11 +5076,10 @@
              let totalReduction = 0;
              
              // 유물 시간가속기 효과
-             const speedArtifact = artifactStorage.find(item => item.name === '세호로리의 시간가속기');
-             if (speedArtifact) {
-                 const lv = speedArtifact.level || 1;
-            const map = { 1: 0.10, 2: 0.25, 3: 0.50 };
-                 totalReduction += map[lv] || 0.10;
+             const speedLevel = getArtifactLevel('세호로리의 시간가속기');
+             if (speedLevel > 0) {
+                 const map = { 1: 0.10, 2: 0.25, 3: 0.50, 4: 0.65, 5: 0.80 };
+                 totalReduction += map[Math.min(speedLevel, 5)] || 0;
              }
              
              // 속도 포션 효과
@@ -4966,8 +5093,8 @@
              // 1339포션 효과 (15~50% 랜덤 감소)
              const speedBoostBuff = activeBuffs.find(b => b.type === 'speed_boost' && b.endTime > Date.now());
              if (speedBoostBuff) {
-                 const randomReduction = 0.15 + Math.random() * 0.35; // 15%~50%
-                 totalReduction += randomReduction;
+                const appliedReduction = ensureSpeedBoostReduction(speedBoostBuff) || 0;
+                totalReduction += appliedReduction;
              }
              
              // 시원한 물 효과 (영구 뽑기속도 증가)
@@ -4992,30 +5119,22 @@
         function getSpecialEffectBonus(participantName) {
             // 해당 세호의 부적만 적용
             const amuletName = `${participantName}의 부적`;
-            const artifact = artifactStorage.find(item => item.name === amuletName);
-            
-            if (!artifact) return 0;
-            
-            // 레벨별 특별효과 확률 증가: 10%, 30%, 50%
-            const level = artifact.level;
-            if (level === 1) return 0.10; // 10%
-            if (level === 2) return 0.30; // 30%
-            if (level === 3) return 0.50; // 50%
-            return 0;
+            const level = getArtifactLevel(amuletName);
+            const bonus = ARTIFACT_VALUES.BUJUK_SPECIAL_BONUS[Math.min(level, 5)] || 0;
+            return bonus;
         }
         
         function getRainbowBonus() {
-            const artifact = artifactStorage.find(item => item.name === '세호로리의 무지갯빛 보석');
-            if (!artifact) return 0;
-            
-            return artifact.level * 0.75; // 레벨당 75% 증가
+            const level = getArtifactLevel('세호로리의 무지갯빛 보석');
+            const bonus = ARTIFACT_VALUES.RAINBOW_BONUS[Math.min(level, 5)] || 0;
+            return bonus;
         }
         
         // 사용 가능한 유물 목록 반환 (3레벨 달성한 유물 제외)
         function getAvailableArtifacts() {
             return ARTIFACT_NAMES.filter(artifactName => {
                 const artifact = artifactStorage.find(item => item.name === artifactName);
-                return !artifact || artifact.level < 3;
+                return !artifact || artifact.level < 5;
             });
         }
 
@@ -5157,53 +5276,39 @@
 
          // 도트 상태 업데이트 (뽑기 횟수에 따른 잠금 해제)
          function updateDotStates() {
-             // 아이템 보관소 (0번): 150회 이상
-             const dot0 = document.getElementById('dot-0');
-             if (totalDraws >= 150) {
-                 dot0.classList.remove('locked');
-             } else {
-                 dot0.classList.add('locked');
-             }
-             
-             // 상점 (1번): 150회 이상
-             const dot1 = document.getElementById('dot-1');
-             if (totalDraws >= 150) {
-                 dot1.classList.remove('locked');
-             } else {
-                 dot1.classList.add('locked');
-             }
-             
-             // 유물 뽑기 (5번): 75회 이상
-             const dot5 = document.getElementById('dot-5');
-             if (totalDraws >= 75) {
-                 dot5.classList.remove('locked');
-             } else {
-                 dot5.classList.add('locked');
-             }
-             
-             // 유물 컬렉션 (6번): 75회 이상
-             const dot6 = document.getElementById('dot-6');
-             if (totalDraws >= 75) {
-                 dot6.classList.remove('locked');
-             } else {
-                 dot6.classList.add('locked');
-             }
+            const dot0 = document.getElementById('dot-0');
+            if (dot0) {
+                dot0.classList.toggle('locked', totalDraws < 150);
+            }
+            
+            const dot1 = document.getElementById('dot-1');
+            if (dot1) {
+                dot1.classList.toggle('locked', totalDraws < 150);
+            }
+            
+            const dot5 = document.getElementById('dot-5');
+            if (dot5) {
+                dot5.classList.toggle('locked', totalDraws < 75);
+            }
+            
+            const dot6 = document.getElementById('dot-6');
+            if (dot6) {
+                dot6.classList.toggle('locked', totalDraws < 75);
+            }
         }
 
         // 화면 전환
         function goToScreen(screenIndex) {
-             // 유물 관련은 75회 이상
-             if ((screenIndex === 5 || screenIndex === 6) && totalDraws < 75) {
-                 alert('유물 관련 기능은 세호를 75회 이상 뽑아야 이용할 수 있습니다!');
-                 return;
-             }
-             
-             // 상점 관련은 150회 이상
-             if ((screenIndex === 0 || screenIndex === 1) && totalDraws < 150) {
-                 alert('상점 관련 기능은 세호를 150회 이상 뽑아야 이용할 수 있습니다!');
-                 return;
-             }
-             
+            if ((screenIndex === 5 || screenIndex === 6) && totalDraws < 75) {
+                alert('유물 관련 기능은 세호를 75회 이상 뽑아야 이용할 수 있습니다!');
+                return;
+            }
+            
+            if ((screenIndex === 0 || screenIndex === 1) && totalDraws < 150) {
+                alert('상점 관련 기능은 세호를 150회 이상 뽑아야 이용할 수 있습니다!');
+                return;
+            }
+            
             currentScreen = screenIndex;
             const container = document.getElementById('mainContainer');
             container.style.transform = `translateX(-${screenIndex * 100}vw)`;
@@ -5707,7 +5812,11 @@
         // 상점 물품 갱신 (랜덤 3개 선택)
         function refreshShop() {
             const now = Date.now();
-            shopRefreshTime = now + 20 * 60 * 1000; // 20분 후
+            const bundleLevel = getArtifactLevel('세호로리의 봇짐');
+            const minuteReduction = ARTIFACT_VALUES.BUNDLE_MINUTE_REDUCTION[Math.min(bundleLevel, 5)] || 0;
+            const baseMinutes = 20;
+            const actualMinutes = Math.max(1, baseMinutes - minuteReduction);
+            shopRefreshTime = now + actualMinutes * 60 * 1000;
             
             shopItems = [];
             purchasedInCurrentShop = []; // 구매 기록 초기화
@@ -5802,6 +5911,7 @@
             }
             
             updateShopDisplay();
+            updateShopTimer(Math.max(0, shopRefreshTime - now));
             saveState();
         }
         // 상점 화면 업데이트
@@ -5837,10 +5947,10 @@
                      if (item.type === 'potion') {
                          if (item.effect === 'luck') {
                              const reduction = [5, 10, 20][item.level - 1];
-                             description = `5분동안 꽝 확률 ${reduction}% 감소`;
+                            description = `2분동안 꽝 확률 ${reduction}% 감소`;
                          } else if (item.effect === 'speed') {
                              const reduction = [7.5, 15, 30][item.level - 1];
-                             description = `5분동안 뽑기 속도 ${reduction}% 감소`;
+                            description = `2분동안 뽑기 속도 ${reduction}% 감소`;
                          } else if (item.effect === 'speed_boost') {
                              description = `10분동안 뽑기 속도 15~50% 감소`;
                          }
@@ -5948,6 +6058,22 @@
         // 상점 타이머 시작
         function startShopTimer() {
             if (shopTimerInterval) clearInterval(shopTimerInterval);
+
+            const bundleLevel = getArtifactLevel('세호로리의 봇짐');
+            const minuteReduction = ARTIFACT_VALUES.BUNDLE_MINUTE_REDUCTION[Math.min(bundleLevel, 5)] || 0;
+            const baseMinutes = 20;
+            const actualMinutes = Math.max(1, baseMinutes - minuteReduction);
+            const maxIntervalMs = actualMinutes * 60 * 1000;
+            const nowInitial = Date.now();
+            if (shopRefreshTime <= 0) {
+                shopRefreshTime = nowInitial + maxIntervalMs;
+            } else {
+                const remainingInitial = shopRefreshTime - nowInitial;
+                if (remainingInitial > maxIntervalMs) {
+                    shopRefreshTime = nowInitial + maxIntervalMs;
+                }
+            }
+            updateShopTimer(Math.max(0, shopRefreshTime - nowInitial));
             
             shopTimerInterval = setInterval(() => {
                 const now = Date.now();
@@ -6077,14 +6203,18 @@
             const now = Date.now();
             let visibleBuffCount = 0;
             const totalBefore = activeBuffs.length;
+            const visibleBuffIds = new Set();
 
             syncWeekendBuffState();
+            cleanupBuffFlipStates();
 
             activeBuffs.forEach((buff) => {
+                const buffId = ensureBuffId(buff);
                 const remaining = Math.max(0, buff.endTime - now);
                 if (remaining === 0) return; // 만료된 버프는 표시하지 않음
                 
                 visibleBuffCount += 1;
+                visibleBuffIds.add(buffId);
                 const minutes = Math.floor(remaining / 60000);
                 const seconds = Math.floor((remaining % 60000) / 1000);
                 const timeStr = `${minutes}:${String(seconds).padStart(2, '0')}`;
@@ -6107,10 +6237,12 @@
                     buffEmoji = '⚡';
                     buffTagline = `뽑기 속도 ${speedReduction}% 향상`;
                 } else if (buff.type === 'speed_boost') {
+                    const appliedReduction = ensureSpeedBoostReduction(buff) || 0;
+                    const appliedPercent = Math.round(appliedReduction * 100);
                     buffName = '1339';
-                    buffTitle = `1339포션\n뽑기 속도 15~50% 감소\n남은 시간: ${timeStr}`;
+                    buffTitle = `1339포션\n뽑기 속도 ${appliedPercent}% 감소\n남은 시간: ${timeStr}`;
                     buffEmoji = '🚀';
-                    buffTagline = '랜덤 속도 버프';
+                    buffTagline = `뽑기 속도 ${appliedPercent}% 감소`;
                 } else if (buff.type === 'xiaomi_phone') {
                     buffName = '샤오미폰';
                     buffTitle = `샤오미폰\n꽝 확률 8% 감소\n10초마다 8% 확률로 제거`;
@@ -6149,6 +6281,7 @@
 
                 const buffDiv = document.createElement('div');
                 buffDiv.className = `buff-icon ${buff.type}`;
+                buffDiv.dataset.buffId = buffId;
                 buffDiv.innerHTML = `
                     <div class="buff-face buff-front">
                         <span class="buff-name">${buffName}</span>
@@ -6159,8 +6292,37 @@
                         <div class="buff-detail-content">${detailHtml}</div>
                     </div>
                 `;
+                const isFlipped = !!buffFlipStates[buffId];
+                if (isFlipped) {
+                    buffDiv.classList.add('flipped');
+                }
+                buffDiv.setAttribute('role', 'button');
+                buffDiv.setAttribute('tabindex', '0');
+                buffDiv.setAttribute('aria-pressed', isFlipped ? 'true' : 'false');
+                const toggleFlip = () => {
+                    const flipped = !buffFlipStates[buffId];
+                    buffFlipStates[buffId] = flipped;
+                    buffDiv.classList.toggle('flipped', flipped);
+                    buffDiv.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+                };
+                buffDiv.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    toggleFlip();
+                });
+                buffDiv.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        toggleFlip();
+                    }
+                });
                 buffDiv.title = buffTitle;
                 container.appendChild(buffDiv);
+            });
+
+            Object.keys(buffFlipStates).forEach(id => {
+                if (!visibleBuffIds.has(id)) {
+                    delete buffFlipStates[id];
+                }
             });
 
             if (visibleBuffCount === 0) {
@@ -6215,10 +6377,14 @@
          function usePotion(type, level) {
              const now = Date.now();
              let duration = 2 * 60 * 1000; // 기본 2분
+            const potionBookLevel = getArtifactLevel('세호로리의 물약 제조술책');
+            const potionBonusSeconds = ARTIFACT_VALUES.POTION_DURATION_BONUS[Math.min(potionBookLevel, 5)] || 0;
              
              // 1339포션은 5분
              if (type === 'speed_boost') {
                  duration = 5 * 60 * 1000;
+            } else if (type === 'luck' || type === 'speed') {
+                duration += potionBonusSeconds * 1000;
              }
              
              // 같은 타입의 다른 레벨 포션이 이미 활성화되어 있는지 확인
@@ -6231,15 +6397,38 @@
              // 같은 레벨의 포션이 있으면 시간만 연장
              const existingSameLevel = activeBuffs.find(b => b.type === type && b.level === level && b.endTime > now);
              if (existingSameLevel) {
-                 existingSameLevel.endTime = Math.max(existingSameLevel.endTime, now) + duration;
-                 alert(`같은 포션을 사용했습니다! 지속시간이 ${Math.floor(duration / 60000)}분 연장되었습니다.`);
+                ensureBuffId(existingSameLevel);
+                const extendedMillis = duration;
+                const extendMinutes = Math.floor(extendedMillis / 60000);
+                const extendSeconds = Math.floor((extendedMillis % 60000) / 1000);
+                const extendText = extendSeconds > 0
+                    ? `${extendMinutes > 0 ? `${extendMinutes}분 ` : ''}${extendSeconds}초`
+                    : `${extendMinutes}분`;
+                if (type === 'speed_boost') {
+                    const currentReduction = ensureSpeedBoostReduction(existingSameLevel) || generateSpeedBoostReduction();
+                    existingSameLevel.endTime = Math.max(existingSameLevel.endTime, now) + duration;
+                    alert(`같은 포션을 사용했습니다! 지속시간이 ${extendText} 연장되었습니다. 현재 감소율: ${Math.round(currentReduction * 100)}%`);
+                } else {
+                    existingSameLevel.endTime = Math.max(existingSameLevel.endTime, now) + duration;
+                    alert(`같은 포션을 사용했습니다! 지속시간이 ${extendText} 연장되었습니다.`);
+                }
              } else {
-                 activeBuffs.push({
+                const newBuff = {
                      type: type,
                      level: level,
                      endTime: now + duration
-                 });
-                 alert(`${type === 'luck' ? '행운포션' : type === 'speed' ? '속도포션' : '1339포션'}을 사용했습니다!`);
+                };
+                if (type === 'speed_boost') {
+                    newBuff.reduction = generateSpeedBoostReduction();
+                }
+                ensureBuffId(newBuff);
+                if (type === 'speed_boost') {
+                    const appliedPercent = Math.round(newBuff.reduction * 100);
+                    alert(`1339포션을 사용했습니다! 뽑기 속도가 ${appliedPercent}% 감소합니다!`);
+                } else {
+                    alert(`${type === 'luck' ? '행운포션' : type === 'speed' ? '속도포션' : '1339포션'}을 사용했습니다!`);
+                }
+                activeBuffs.push(newBuff);
              }
              
             updateBuffDisplay();
@@ -6300,6 +6489,7 @@
                      level: 1,
                      removeChance: 8 // 8% 확률로 제거
                  };
+                ensureBuffId(xiaomiBuff);
                  activeBuffs.push(xiaomiBuff);
                  updateBuffDisplay();
                  alert('샤오미폰을 사용했습니다! 꽝 확률이 8% 감소했습니다. (10초마다 8% 확률로 제거)');
@@ -6309,6 +6499,7 @@
                  const existingBuff = activeBuffs.find(b => b.type === 'cold_water');
                  if (existingBuff) {
                      // 기존 버프가 있으면 중첩
+                    ensureBuffId(existingBuff);
                      existingBuff.level += 1;
                  } else {
                      // 새로운 버프 생성
@@ -6317,6 +6508,7 @@
                          endTime: Date.now() + (365 * 24 * 60 * 60 * 1000), // 1년 후 (영구 효과)
                          level: 1
                      };
+                    ensureBuffId(coldWaterBuff);
                      activeBuffs.push(coldWaterBuff);
                  }
                  updateBuffDisplay();
@@ -6642,3 +6834,4 @@
   </script>
 </body>
 </html>
+
