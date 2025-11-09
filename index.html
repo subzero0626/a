@@ -21,16 +21,163 @@
             overflow: hidden;
         }
 
+        #appLayoutRoot {
+            position: relative;
+            width: var(--app-layout-width, 100vw);
+            height: var(--app-layout-height, 100vh);
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        :root {
+            --app-layout-width: 100vw;
+            --app-layout-height: 100vh;
+        }
+
+        body.is-mobile {
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        body.is-mobile #appLayoutRoot {
+            width: var(--app-layout-width);
+            height: var(--app-layout-height);
+            aspect-ratio: 9 / 16;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        body.is-mobile #coinBuffContainer {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            transform-origin: top right;
+        }
+
+        body.is-mobile #settingsPanel {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            transform-origin: top left;
+        }
+
+        body.is-mobile .navigation-dots {
+            position: fixed;
+            bottom: 12px;
+            transform: scale(0.85);
+        }
+
+        body.is-mobile #questOverlay {
+            position: fixed;
+            inset: 0;
+            padding: 12px;
+        }
+
+        body.is-mobile .screen {
+            padding: 10px;
+        }
+
+        body.is-mobile .container,
+        body.is-mobile .shop-container {
+            max-height: calc(100% - 28px);
+            width: 86%;
+            padding: 28px 24px;
+            overflow-y: auto;
+        }
+
+        body.is-mobile .container h1,
+        body.is-mobile .shop-container h2 {
+            font-size: 1.4em;
+        }
+
+        #hudDrawerPanel {
+            display: none;
+        }
+
+        body.is-mobile #hudDrawerPanel {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.92), rgba(59, 130, 246, 0.88));
+            z-index: 2050;
+            border-radius: 0 0 28px 28px;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 24px 40px rgba(15, 23, 42, 0.25);
+        }
+
+        body.is-mobile.hud-drawer-open #hudDrawerPanel {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #hudSwipeHandle {
+            display: none;
+        }
+
+        body.is-mobile #hudSwipeHandle {
+            display: block;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 999px;
+            z-index: 2052;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        body.is-mobile.hud-drawer-open #hudSwipeHandle {
+            opacity: 0;
+            transform: translate(-50%, -12px);
+            pointer-events: none;
+        }
+
+        body.is-mobile .hud-drawer-item {
+            --hud-scale: 0.8;
+            --hud-open-scale: var(--hud-scale);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        body.is-mobile:not(.hud-drawer-open) .hud-drawer-item {
+            transform: translateY(-160px) scale(var(--hud-scale));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body.is-mobile.hud-drawer-open .hud-drawer-item {
+            transform: translateY(0) scale(var(--hud-open-scale));
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        body.is-mobile.hud-drawer-open #coinBuffContainer {
+            --hud-open-scale: 0.6;
+        }
+
+        body.is-mobile.hud-drawer-open #settingsPanel {
+            --hud-open-scale: 0.6;
+        }
+
         .main-container {
             display: flex;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             transition: transform 0.3s ease;
         }
 
         .screen {
-            min-width: 100vw;
-            height: 100vh;
+            min-width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -57,6 +204,12 @@
             display: flex;
             gap: 10px;
             z-index: 1000;
+        }
+
+        body.is-mobile .navigation-dots {
+            top: auto;
+            bottom: 24px;
+            transform: translate(-50%, 0);
         }
 
         /* 세호코인 & 버프 UI (우측 상단) */
@@ -813,6 +966,9 @@
             border-radius: 24px;
             border: 1px solid rgba(148, 163, 184, 0.25);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 24px 40px rgba(15, 23, 42, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .result-display {
@@ -829,6 +985,7 @@
             color: #475569;
             transition: all 0.35s ease;
             box-shadow: 0 24px 45px rgba(15, 23, 42, 0.12);
+            width: min(420px, 100%);
         }
 
         .result-display.reset {
@@ -989,6 +1146,13 @@
         .confetti:nth-child(5n) {
             background: #96ceb4;
             animation-delay: 2s;
+        }
+
+        .draw-area .draw-button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: min(280px, 100%);
         }
 
         .draw-button {
@@ -2118,6 +2282,54 @@
         .storage-item:hover .action-btn { display: block; }
         .storage-item:hover .enhance-info { display: block; }
 
+        body.is-mobile #storageContent {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 14px;
+        }
+
+        body.is-mobile #storageContent .storage-item {
+            width: 100%;
+            min-width: 0;
+            padding: 12px 12px 28px;
+            border-radius: 14px;
+            font-size: 0.78em;
+        }
+
+        body.is-mobile #storageContent .storage-item .storage-item-name {
+            font-size: 1.1em;
+        }
+
+        body.is-mobile #storageContent .storage-item .action-btn {
+            padding: 5px 10px;
+            font-size: 1em;
+        }
+
+        body.is-mobile #storageContent .storage-item .count {
+            font-size: 0.95em;
+            padding: 4px 10px;
+        }
+
+        body.is-mobile #storageContent .storage-item .enhance-stats {
+            bottom: 34px;
+            left: 12px;
+        }
+
+        body.is-mobile #storageContent .storage-item .enhance-info {
+            bottom: 64px;
+        }
+
+        body:not(.is-mobile) #storageContent {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        body:not(.is-mobile) #storageContent .storage-row {
+            display: flex;
+            gap: 15px;
+        }
+
         /* 기본 마우스 오버 효과 제거 - 강화된 아이템만 효과 적용 */
 
         .storage-item.diamond {
@@ -2405,8 +2617,9 @@
   </style>
 </head>
 <body>
+    <div id="appLayoutRoot">
     <!-- 세호코인 & 버프 UI -->
-    <div id="coinBuffContainer">
+    <div id="coinBuffContainer" class="hud-drawer-item">
         <div class="buff-panel">
                     <div class="buff-panel-header">
                         <span class="buff-panel-title">활성 버프</span>
@@ -2449,7 +2662,7 @@
     </div>
 
     <!-- 설정 패널 -->
-    <div id="settingsPanel" class="collapsed">
+    <div id="settingsPanel" class="collapsed hud-drawer-item">
         <button type="button" class="settings-toggle" onclick="toggleSettingsPanel()" aria-label="설정 열기">⚙️</button>
         <div class="settings-card" onclick="event.stopPropagation()">
             <div class="settings-header">
@@ -2492,6 +2705,8 @@
             <button class="settings-reset" onclick="resetAllData()">초기화</button>
         </div>
     </div>
+    <div id="hudDrawerPanel" aria-hidden="true"></div>
+    <div id="hudSwipeHandle" aria-hidden="true"></div>
     <div class="main-container" id="mainContainer">
         <!-- 아이템 보관소 화면 (맨 왼쪽) -->
         <div class="screen storage-container item-storage-screen">
@@ -2623,7 +2838,76 @@
          <div class="dot" id="dot-5" onclick="goToScreen(5)"></div>
          <div class="dot" id="dot-6" onclick="goToScreen(6)"></div>
     </div>
+    </div>
   <script>
+        const TARGET_ASPECT_RATIO = 9 / 16;
+        const MOBILE_BREAKPOINT = 960;
+        let layoutUpdateFrame = null;
+
+        function detectMobileDevice() {
+            const ua = navigator.userAgent || '';
+            const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+            const hasTouch = typeof navigator !== 'undefined' && (navigator.maxTouchPoints || 0) > 1;
+            const narrowViewport = Math.min(window.innerWidth, window.innerHeight) <= MOBILE_BREAKPOINT;
+            return isMobileUA || (hasTouch && narrowViewport);
+        }
+
+        function getPreferredLayoutMode() {
+            return detectMobileDevice() ? 'mobile' : 'desktop';
+        }
+
+        function applyResponsiveLayout() {
+            if (!document.body) return;
+            const targetMode = getPreferredLayoutMode();
+            const isMobile = targetMode === 'mobile';
+            document.body.classList.toggle('is-mobile', isMobile);
+            document.body.dataset.deviceMode = targetMode;
+            if (!isMobile) {
+                document.body.classList.remove('hud-drawer-open');
+            }
+            const html = document.documentElement;
+            if (isMobile) {
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+                const maxWidth = viewportWidth * 0.9;
+                const maxHeight = viewportHeight * 0.9;
+                let layoutHeight = Math.min(maxHeight, viewportWidth / TARGET_ASPECT_RATIO);
+                let layoutWidth = layoutHeight * TARGET_ASPECT_RATIO;
+                if (layoutWidth > maxWidth) {
+                    layoutWidth = maxWidth;
+                    layoutHeight = layoutWidth / TARGET_ASPECT_RATIO;
+                }
+                html.style.setProperty('--app-layout-width', `${layoutWidth}px`);
+                html.style.setProperty('--app-layout-height', `${layoutHeight}px`);
+            } else {
+                html.style.removeProperty('--app-layout-width');
+                html.style.removeProperty('--app-layout-height');
+            }
+        }
+
+        function queueResponsiveLayout() {
+            if (layoutUpdateFrame) {
+                cancelAnimationFrame(layoutUpdateFrame);
+            }
+            layoutUpdateFrame = requestAnimationFrame(() => {
+                layoutUpdateFrame = null;
+                applyResponsiveLayout();
+            });
+        }
+
+        window.addEventListener('resize', queueResponsiveLayout);
+        window.addEventListener('orientationchange', queueResponsiveLayout);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyResponsiveLayout();
+            const hudPanel = document.getElementById('hudDrawerPanel');
+            if (hudPanel) {
+                hudPanel.addEventListener('click', () => {
+                    document.body.classList.remove('hud-drawer-open');
+                });
+            }
+        });
+
         // 소수 표시 포맷터: 유한소수는 끝자리까지, 무한소수는 소수 3자리 + '...'
         function formatFiniteOrEllipsis(value, maxCheckDecimals = 12) {
             const num = Number(value);
@@ -2635,6 +2919,34 @@
                 if (Math.abs(scaled - Math.round(scaled)) < 1e-9) {
                     const fixed = num.toFixed(k);
                     return fixed.replace(/\.?0+$/, '');
+                }
+            }
+            const fixed = Math.abs(num).toFixed(12);
+            if (!fixed.includes('.')) return String(num);
+            const [intPartStr, rawDecimal] = fixed.split('.');
+            let decimals = rawDecimal.replace(/0+$/, '');
+            if (!decimals) {
+                return (num < 0 ? '-' : '') + intPartStr;
+            }
+            for (let len = 1; len <= Math.min(6, Math.floor(decimals.length / 2)); len++) {
+                const pattern = decimals.slice(0, len);
+                if (/^0+$/.test(pattern)) continue;
+                let isRepeating = true;
+                for (let i = 0; i < decimals.length; i += len) {
+                    const segment = decimals.slice(i, i + len);
+                    const expected = pattern.slice(0, segment.length);
+                    if (segment !== expected) {
+                        isRepeating = false;
+                        break;
+                    }
+                }
+                if (isRepeating) {
+                    const sign = num < 0 ? '-' : '';
+                    const trimmedPattern = pattern.replace(/0+$/, '') || pattern;
+                    const result = trimmedPattern
+                        ? `${sign}${intPartStr}.${trimmedPattern}`
+                        : `${sign}${intPartStr}`;
+                    return result.replace(/\.$/, '');
                 }
             }
             return num.toFixed(3) + '...';
@@ -2864,6 +3176,7 @@
          let noCooldownCount = 0; // 주말 효과 카운터
          let nameChangedItems = []; // 이름이 바뀐 아이템들 (변환기 효과)
          let nameChangeTimer = null; // 이름 변경 효과 타이머
+        let claimedQuestIds = new Set();
 
         function getWeekendBuff() {
             return activeBuffs.find(buff => buff.type === 'weekend');
@@ -3107,7 +3420,8 @@
                     current: 0,
                     target: definition.target
                 },
-                completed: false
+                completed: false,
+                claimed: false
             };
         }
 
@@ -3366,6 +3680,7 @@
                      noCooldownCount,
                     nameChangedItems,
                     usedCodes,
+                    claimedQuestIds: Array.from(claimedQuestIds),
                     questState: getQuestStateSnapshot()
                 };
                 localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
@@ -3407,6 +3722,11 @@
                  if (Array.isArray(data.nameChangedItems)) nameChangedItems = data.nameChangedItems;
                 sanitizeThemeState();
                  if (Array.isArray(data.usedCodes)) usedCodes = data.usedCodes;
+                if (Array.isArray(data.claimedQuestIds)) {
+                    claimedQuestIds = new Set(data.claimedQuestIds);
+                } else {
+                    claimedQuestIds = new Set();
+                }
                 syncWeekendBuffState();
                 const buffStateChanged = initializeBuffIds();
                 if (data.questState) {
@@ -3429,6 +3749,7 @@
                 if (buffStateChanged) {
                     saveState();
                 }
+                queueResponsiveLayout();
             } catch (e) { console.log('load failed'); }
         }
 
@@ -3682,6 +4003,8 @@
                 realProbabilityNum = baseProbabilityNum * 0.2 * (1 + specialEffectBonus);
             } else if (effectType === 'sparkling') {
                 realProbabilityNum = baseProbabilityNum * 0.05 * (1 + specialEffectBonus);
+            } else {
+                realProbabilityNum = baseProbabilityNum;
             }
             const realProbability = formatFiniteOrEllipsis(realProbabilityNum);
             // 레어도 갱신 (가장 낮은 실확률)
@@ -4977,7 +5300,8 @@
                         current: clampedCurrent,
                         target
                     },
-                    completed: Boolean(quest && quest.completed)
+                    completed: Boolean(quest && quest.completed),
+                    claimed: Boolean(quest && quest.claimed) || (quest && quest.id && claimedQuestIds.has(quest.id))
                 };
             };
 
@@ -4988,6 +5312,15 @@
             questState.eventQuests = questState.eventQuests.map(quest =>
                 normalizeQuest(quest, 'event', '추후 공개될 이벤트 퀘스트입니다.')
             );
+
+            // ensure claimedQuestIds stays in sync with existing quests
+            const existingClaimedIds = new Set();
+            [...questState.dailyQuests, ...questState.eventQuests].forEach(quest => {
+                if (quest.claimed && quest.id) {
+                    existingClaimedIds.add(quest.id);
+                }
+            });
+            claimedQuestIds = existingClaimedIds;
         }
         function generateDailyQuests() {
             return sampleDailyQuestDefinitions(3).map(createDailyQuestFromDefinition);
@@ -4996,6 +5329,11 @@
             questState.lastDailyReset = anchorTime;
             questState.playtimeAnchorMs = getActivePlaytimeMs();
             questState.dailyQuests = generateDailyQuests();
+            const remainingClaimed = new Set();
+            questState.eventQuests
+                .filter(quest => quest && quest.claimed && quest.id)
+                .forEach(quest => remainingClaimed.add(quest.id));
+            claimedQuestIds = remainingClaimed;
             saveState();
             renderDailyQuests();
         }
@@ -5235,6 +5573,9 @@
             quest.selectedReward = reward;
             quest.reward = reward.label || quest.reward || '보상 미정';
             quest.claimed = true;
+            if (quest.id) {
+                claimedQuestIds.add(quest.id);
+            }
 
             applyQuestReward(reward);
             const rewardLabel = reward.label ||
@@ -5739,8 +6080,11 @@
             }
             
             currentScreen = screenIndex;
+            if (screenIndex !== 3) {
+                document.body.classList.remove('hud-drawer-open');
+            }
             const container = document.getElementById('mainContainer');
-            container.style.transform = `translateX(-${screenIndex * 100}vw)`;
+            container.style.transform = `translateX(-${screenIndex * 100}%)`;
             
             // 도트 업데이트
             document.querySelectorAll('.dot').forEach((dot, index) => {
@@ -5771,6 +6115,19 @@
             const diffX = startX - endX;
             const diffY = startY - endY;
             
+            if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 40) {
+                if (document.body.classList.contains('is-mobile')) {
+                    if (diffY < -40) {
+                        document.body.classList.add('hud-drawer-open');
+                    } else if (diffY > 40) {
+                        document.body.classList.remove('hud-drawer-open');
+                    }
+                }
+                startX = 0;
+                startY = 0;
+                return;
+            }
+
             // 수평 스와이프가 수직 스와이프보다 클 때만 처리
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
                 if (diffX > 0) {
