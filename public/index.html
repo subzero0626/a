@@ -4198,64 +4198,44 @@
 
         // 상태 저장/불러오기 (서버 API 사용)
         async function saveState() {
-            if (!authToken && !isGuestMode) {
-                // 로그인하지 않은 경우 localStorage 사용 (기존 방식)
+            const data = {
+                storage,
+                artifactStorage,
+                lastArtifactDraw,
+                totalDraws,
+                rarestItem,
+                startTime,
+                pausedTime,
+                sehoDrawCount,
+                shopItems,
+                shopRefreshTime,
+                purchasedInCurrentShop,
+                sehoCoin,
+                activeBuffs,
+                purchasedThemes,
+                currentTheme,
+                itemStorage,
+                specialItemCount,
+                noCooldownCount,
+                nameChangedItems,
+                usedCodes,
+                claimedQuestIds: Array.from(claimedQuestIds),
+                questState: getQuestStateSnapshot()
+            };
+            
+            // 게스트 모드이거나 로그인하지 않은 경우 localStorage 사용
+            if (!authToken || isGuestMode) {
                 try {
-                    const data = {
-                        storage,
-                        artifactStorage,
-                        lastArtifactDraw,
-                        totalDraws,
-                        rarestItem,
-                        startTime,
-                        pausedTime,
-                        sehoDrawCount,
-                        shopItems,
-                        shopRefreshTime,
-                        purchasedInCurrentShop,
-                        sehoCoin,
-                        activeBuffs,
-                        purchasedThemes,
-                        currentTheme,
-                        itemStorage,
-                        specialItemCount,
-                        noCooldownCount,
-                        nameChangedItems,
-                        usedCodes,
-                        claimedQuestIds: Array.from(claimedQuestIds),
-                        questState: getQuestStateSnapshot()
-                    };
                     localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
-                } catch (e) { console.log('save failed'); }
+                    console.log('게임 데이터 localStorage에 저장 완료');
+                } catch (e) { 
+                    console.error('localStorage 저장 실패:', e); 
+                }
                 return;
             }
             
+            // 로그인한 경우 서버 API로 저장 시도
             try {
-                const data = {
-                    storage,
-                    artifactStorage,
-                    lastArtifactDraw,
-                    totalDraws,
-                    rarestItem,
-                    startTime,
-                    pausedTime,
-                    sehoDrawCount,
-                    shopItems,
-                    shopRefreshTime,
-                    purchasedInCurrentShop,
-                    sehoCoin,
-                    activeBuffs,
-                    purchasedThemes,
-                    currentTheme,
-                    itemStorage,
-                    specialItemCount,
-                    noCooldownCount,
-                    nameChangedItems,
-                    usedCodes,
-                    claimedQuestIds: Array.from(claimedQuestIds),
-                    questState: getQuestStateSnapshot()
-                };
-                
                 const response = await fetch(`${API_BASE_URL}/api/game-data`, {
                     method: 'POST',
                     headers: {
@@ -4266,20 +4246,37 @@
                 });
                 
                 if (!response.ok) {
-                    console.error('게임 데이터 저장 실패');
+                    console.error('서버 저장 실패, localStorage에 백업 저장 시도');
+                    // 서버 저장 실패 시 localStorage에 백업 저장
+                    try {
+                        localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
+                        console.log('게임 데이터 localStorage에 백업 저장 완료');
+                    } catch (e) {
+                        console.error('백업 저장도 실패:', e);
+                    }
+                } else {
+                    console.log('게임 데이터 서버에 저장 완료');
                 }
             } catch (error) {
                 console.error('게임 데이터 저장 오류:', error);
+                // 네트워크 오류 등으로 서버 저장 실패 시 localStorage에 백업 저장
+                try {
+                    localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
+                    console.log('네트워크 오류로 localStorage에 백업 저장 완료');
+                } catch (e) {
+                    console.error('백업 저장도 실패:', e);
+                }
             }
         }
 
         // 상태 불러오기 (서버 API 사용)
         async function loadState() {
-            if (!authToken && !isGuestMode) {
-                // 로그인하지 않은 경우 localStorage 사용 (기존 방식)
+            // 게스트 모드이거나 로그인하지 않은 경우 localStorage 사용
+            if (!authToken || isGuestMode) {
                 try {
                     const raw = localStorage.getItem('sehorory_state_v1');
                     if (!raw) {
+                        console.log('저장된 게임 데이터가 없습니다.');
                         updateStorageDisplay();
                         initArtifactCarousel();
                         updateSettingsStats();
@@ -4288,9 +4285,10 @@
                         return;
                     }
                     const data = JSON.parse(raw);
+                    console.log('localStorage에서 게임 데이터 불러오기 완료');
                     loadGameData(data);
                 } catch (e) { 
-                    console.log('load failed'); 
+                    console.error('localStorage 불러오기 실패:', e); 
                     updateStorageDisplay();
                     initArtifactCarousel();
                     updateSettingsStats();
@@ -4298,27 +4296,79 @@
                 return;
             }
             
+            // 로그인한 경우 서버 API에서 불러오기 시도
             try {
                 const response = await fetch(`${API_BASE_URL}/api/game-data`, {
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
                 
                 if (!response.ok) {
-                    console.error('게임 데이터 불러오기 실패');
+                    console.error('서버에서 게임 데이터 불러오기 실패, localStorage에서 시도');
+                    // 서버 불러오기 실패 시 localStorage에서 백업 불러오기
+                    try {
+                        const raw = localStorage.getItem('sehorory_state_v1');
+                        if (raw) {
+                            const data = JSON.parse(raw);
+                            console.log('localStorage에서 백업 데이터 불러오기 완료');
+                            loadGameData(data);
+                        } else {
+                            updateStorageDisplay();
+                            initArtifactCarousel();
+                            updateSettingsStats();
+                        }
+                    } catch (e) {
+                        console.error('백업 불러오기도 실패:', e);
+                        updateStorageDisplay();
+                        initArtifactCarousel();
+                        updateSettingsStats();
+                    }
                     return;
                 }
                 
                 const result = await response.json();
                 if (result.gameData) {
+                    console.log('서버에서 게임 데이터 불러오기 완료');
                     loadGameData(result.gameData);
                 } else {
-                    // 서버에 데이터가 없으면 기본 상태 유지
+                    // 서버에 데이터가 없으면 localStorage에서 시도
+                    try {
+                        const raw = localStorage.getItem('sehorory_state_v1');
+                        if (raw) {
+                            const data = JSON.parse(raw);
+                            console.log('서버 데이터 없음, localStorage에서 불러오기 완료');
+                            loadGameData(data);
+                        } else {
+                            updateStorageDisplay();
+                            initArtifactCarousel();
+                            updateSettingsStats();
+                        }
+                    } catch (e) {
+                        console.error('localStorage 불러오기 실패:', e);
+                        updateStorageDisplay();
+                        initArtifactCarousel();
+                        updateSettingsStats();
+                    }
+                }
+            } catch (error) {
+                console.error('게임 데이터 불러오기 오류:', error);
+                // 네트워크 오류 등으로 서버 불러오기 실패 시 localStorage에서 백업 불러오기
+                try {
+                    const raw = localStorage.getItem('sehorory_state_v1');
+                    if (raw) {
+                        const data = JSON.parse(raw);
+                        console.log('네트워크 오류로 localStorage에서 백업 불러오기 완료');
+                        loadGameData(data);
+                    } else {
+                        updateStorageDisplay();
+                        initArtifactCarousel();
+                        updateSettingsStats();
+                    }
+                } catch (e) {
+                    console.error('백업 불러오기도 실패:', e);
                     updateStorageDisplay();
                     initArtifactCarousel();
                     updateSettingsStats();
                 }
-            } catch (error) {
-                console.error('게임 데이터 불러오기 오류:', error);
             }
         }
 
