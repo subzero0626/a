@@ -915,6 +915,26 @@
             font-size: 0.8em;
             color: #6c757d;
         }
+        .settings-logout {
+            margin-top: 6px;
+            width: 100%;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .settings-logout:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 15px 24px rgba(239, 68, 68, 0.3);
+        }
         .settings-reset {
             margin-top: 6px;
             width: 100%;
@@ -930,6 +950,21 @@
         .settings-reset:hover {
             transform: translateY(-1px);
             box-shadow: 0 15px 24px rgba(255, 107, 107, 0.3);
+        }
+        .settings-user-info {
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(66, 165, 245, 0.1) 0%, rgba(25, 118, 210, 0.1) 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(66, 165, 245, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .settings-user-info-text {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.95em;
         }
 
         .dot {
@@ -2721,6 +2756,28 @@
             transform: translateY(0);
         }
 
+        .login-guest-button {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.2) 0%, rgba(100, 116, 139, 0.2) 100%);
+            color: #64748b;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .login-guest-button:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.3) 0%, rgba(100, 116, 139, 0.3) 100%);
+        }
+
+        .login-guest-button:active {
+            transform: translateY(0);
+        }
+
         .login-error {
             color: #ef4444;
             font-size: 0.9em;
@@ -2738,11 +2795,11 @@
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             z-index: 9999;
-            display: none;
+            display: none !important; /* 설정 패널에서 관리하므로 항상 숨김 */
         }
 
         .user-info.show {
-            display: block;
+            display: none !important; /* 설정 패널에서 관리하므로 항상 숨김 */
         }
 
         .user-info-text {
@@ -2784,6 +2841,7 @@
                 <input type="text" id="loginUsername" class="login-input" placeholder="아이디" autocomplete="username">
                 <input type="password" id="loginPassword" class="login-input" placeholder="비밀번호" autocomplete="current-password">
                 <button class="login-button" onclick="handleLogin()">로그인</button>
+                <button class="login-guest-button" onclick="handleGuestLogin()">👤 게스트로 로그인</button>
                 <div id="loginError" class="login-error"></div>
             </div>
             <div id="registerForm" class="login-form" style="display: none;">
@@ -2886,6 +2944,12 @@
                 </div>
                 <div class="settings-helper">코드를 입력하고 보상을 받아보세요.</div>
             </div>
+            <div id="settingsUserInfo" class="settings-user-info" style="display: none;">
+                <span class="settings-user-info-text" id="settingsUserInfoText"></span>
+            </div>
+            <button id="settingsLogoutBtn" class="settings-logout" onclick="handleLogout()" style="display: none;">
+                🚪 로그아웃
+            </button>
             <button class="settings-reset" onclick="resetAllData()">초기화</button>
         </div>
     </div>
@@ -3859,6 +3923,7 @@
         const API_BASE_URL = window.location.origin; // Railway 배포 시 자동으로 설정됨
         let authToken = localStorage.getItem('authToken') || null;
         let currentUser = null;
+        let isGuestMode = false; // 게스트 모드 플래그
 
         // 로그인 탭 전환
         function switchLoginTab(tab) {
@@ -3927,6 +3992,37 @@
             }
         }
 
+        // 게스트 로그인
+        function handleGuestLogin() {
+            // 랜덤 4자리 숫자 생성
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const guestUsername = `사용자${randomNum}`;
+            
+            // 게스트 모드 설정
+            isGuestMode = true;
+            authToken = null; // 게스트는 토큰 없음
+            currentUser = {
+                id: `guest_${Date.now()}`,
+                username: guestUsername,
+                isGuest: true
+            };
+            
+            // localStorage에 게스트 정보 저장 (임시)
+            localStorage.setItem('guestMode', 'true');
+            localStorage.setItem('guestUsername', guestUsername);
+            
+            // 로그인 모달 숨기기
+            document.getElementById('loginOverlay').classList.add('hidden');
+            const appRoot = document.getElementById('appLayoutRoot');
+            if (appRoot) appRoot.style.display = 'block';
+            
+            // 사용자 정보 업데이트
+            updateUserInfo();
+            
+            // 게임 데이터 불러오기 (localStorage만 사용)
+            loadState();
+        }
+
         // 로그인
         async function handleLogin() {
             const username = document.getElementById('loginUsername').value.trim();
@@ -3955,9 +4051,12 @@
                 }
                 
                 // 로그인 성공
+                isGuestMode = false; // 일반 로그인 모드
                 authToken = data.token;
                 currentUser = data.user;
                 localStorage.setItem('authToken', authToken);
+                localStorage.removeItem('guestMode'); // 게스트 모드 제거
+                localStorage.removeItem('guestUsername');
                 
                 // 로그인 모달 숨기기
                 document.getElementById('loginOverlay').classList.add('hidden');
@@ -3986,9 +4085,32 @@
             totalDraws = 0;
             // ... 기타 변수 초기화
             
+            // 게스트 모드 초기화
+            isGuestMode = false;
+            localStorage.removeItem('guestMode');
+            localStorage.removeItem('guestUsername');
+            
+            // 설정 패널의 사용자 정보 숨기기
+            const settingsUserInfo = document.getElementById('settingsUserInfo');
+            const settingsLogoutBtn = document.getElementById('settingsLogoutBtn');
+            if (settingsUserInfo) settingsUserInfo.style.display = 'none';
+            if (settingsLogoutBtn) settingsLogoutBtn.style.display = 'none';
+            
+            // 우측 상단 사용자 정보 숨기기 (이미 CSS로 숨김 처리됨)
+            const userInfoTop = document.getElementById('userInfo');
+            if (userInfoTop) userInfoTop.classList.remove('show');
+            
             // 로그인 모달 표시
             document.getElementById('loginOverlay').classList.remove('hidden');
-            document.getElementById('userInfo').classList.remove('show');
+            const appRoot = document.getElementById('appLayoutRoot');
+            if (appRoot) appRoot.style.display = 'none';
+            
+            // 설정 패널 닫기
+            const settingsPanel = document.getElementById('settingsPanel');
+            if (settingsPanel) {
+                settingsPanel.classList.remove('open');
+                settingsPanel.classList.add('collapsed');
+            }
             
             // 화면 초기화
             updateStorageDisplay();
@@ -3998,13 +4120,59 @@
         // 사용자 정보 업데이트
         function updateUserInfo() {
             if (currentUser) {
-                document.getElementById('userInfoText').textContent = `👤 ${currentUser.username}`;
-                document.getElementById('userInfo').classList.add('show');
+                // 우측 상단 사용자 정보 숨기기 (설정 패널에서 관리)
+                const userInfoTop = document.getElementById('userInfo');
+                if (userInfoTop) {
+                    userInfoTop.classList.remove('show');
+                }
+                
+                // 설정 패널에 사용자 정보 표시
+                const settingsUserInfo = document.getElementById('settingsUserInfo');
+                const settingsUserInfoText = document.getElementById('settingsUserInfoText');
+                const settingsLogoutBtn = document.getElementById('settingsLogoutBtn');
+                
+                if (settingsUserInfo && settingsUserInfoText) {
+                    // 게스트 모드 표시
+                    const displayName = isGuestMode ? `👤 ${currentUser.username} (게스트)` : `👤 ${currentUser.username}`;
+                    settingsUserInfoText.textContent = displayName;
+                    settingsUserInfo.style.display = 'flex';
+                }
+                
+                if (settingsLogoutBtn) {
+                    settingsLogoutBtn.style.display = 'flex';
+                }
+            } else {
+                // 로그아웃 상태일 때 설정 패널에서 숨기기
+                const settingsUserInfo = document.getElementById('settingsUserInfo');
+                const settingsLogoutBtn = document.getElementById('settingsLogoutBtn');
+                
+                if (settingsUserInfo) {
+                    settingsUserInfo.style.display = 'none';
+                }
+                
+                if (settingsLogoutBtn) {
+                    settingsLogoutBtn.style.display = 'none';
+                }
             }
         }
 
         // 토큰 검증
         async function verifyToken() {
+            // 게스트 모드 체크
+            const guestMode = localStorage.getItem('guestMode');
+            const guestUsername = localStorage.getItem('guestUsername');
+            
+            if (guestMode === 'true' && guestUsername) {
+                // 게스트 모드 복원
+                isGuestMode = true;
+                currentUser = {
+                    id: `guest_${Date.now()}`,
+                    username: guestUsername,
+                    isGuest: true
+                };
+                return true;
+            }
+            
             if (!authToken) return false;
             
             try {
@@ -4019,6 +4187,7 @@
                 }
                 
                 const data = await response.json();
+                isGuestMode = false;
                 currentUser = data.user;
                 return true;
             } catch (error) {
@@ -4029,7 +4198,7 @@
 
         // 상태 저장/불러오기 (서버 API 사용)
         async function saveState() {
-            if (!authToken) {
+            if (!authToken && !isGuestMode) {
                 // 로그인하지 않은 경우 localStorage 사용 (기존 방식)
                 try {
                     const data = {
@@ -4106,7 +4275,7 @@
 
         // 상태 불러오기 (서버 API 사용)
         async function loadState() {
-            if (!authToken) {
+            if (!authToken && !isGuestMode) {
                 // 로그인하지 않은 경우 localStorage 사용 (기존 방식)
                 try {
                     const raw = localStorage.getItem('sehorory_state_v1');
